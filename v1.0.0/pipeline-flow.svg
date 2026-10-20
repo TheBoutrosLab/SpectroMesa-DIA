@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="640" viewBox="0 0 1480 640" role="img" aria-labelledby="figure-title figure-description">
+  <title id="figure-title">DIA pipeline workflow</title>
+  <desc id="figure-description">Sample mzML files enter MSFragger search, EasyPQP library generation, and DIA-NN quantitation. Search idXML files pass to MSBooster, Percolator, and ProtLoom validation. Unfiltered ProtLoom idXML files and cohort PSM and peptide reports pass to EasyPQP. The resulting library TSV passes to DIA-NN. A target-decoy database feeds search and validation.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #183044; }
+      .name { font-size: 20px; font-weight: 700; }
+      .tool { font-size: 16px; fill: #3e5868; }
+      .small { font-size: 14px; fill: #536b79; }
+      .handoff { font-size: 13px; font-weight: 700; fill: #334d5b; }
+      .card { fill: #fff; stroke: #c4d4dc; stroke-width: 1.5; }
+      .arrow { fill: none; stroke: #52758a; stroke-width: 3; marker-end: url(#arrowhead); }
+      .input { fill: none; stroke: #159a89; stroke-width: 2.5; marker-end: url(#tealhead); }
+      .bus { fill: none; stroke: #159a89; stroke-width: 2.5; }
+    </style>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#52758a"/></marker>
+    <marker id="tealhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#159a89"/></marker>
+  </defs>
+  <rect width="1480" height="640" fill="#f7fafb"/>
+
+  <rect x="50" y="34" width="1380" height="96" rx="16" class="card"/>
+  <rect x="50" y="34" width="9" height="96" rx="4" fill="#159a89"/>
+  <text x="78" y="73" class="name">Sample mzML files</text>
+  <text x="78" y="102" class="tool">Input CSV: sample_name, fraction_id, path</text>
+  <path d="M185 130 V183 H1295" class="bus"/>
+  <path d="M185 183 V260" class="input"/>
+  <path d="M925 183 V260" class="input"/>
+  <path d="M1295 183 V260" class="input"/>
+  <text x="570" y="172" class="handoff" style="fill:#158675">mzML files</text>
+
+  <rect x="50" y="260" width="270" height="170" rx="16" class="card"/>
+  <rect x="50" y="260" width="270" height="9" rx="4" fill="#3174a4"/>
+  <text x="72" y="307" class="name">Search</text>
+  <text x="72" y="338" class="tool">search-ProteomicDIA</text>
+  <text x="72" y="373" class="small">MSFragger</text>
+  <text x="72" y="400" class="small">mzML → idXML</text>
+
+  <rect x="420" y="260" width="270" height="170" rx="16" class="card"/>
+  <rect x="420" y="260" width="270" height="9" rx="4" fill="#775ca6"/>
+  <text x="442" y="307" class="name">Validate PSMs</text>
+  <text x="442" y="338" class="tool">validate-ProteomicPSM</text>
+  <text x="442" y="373" class="small">MSBooster → Percolator</text>
+  <text x="442" y="400" class="small">→ ProtLoom</text>
+
+  <rect x="790" y="260" width="270" height="170" rx="16" class="card"/>
+  <rect x="790" y="260" width="270" height="9" rx="4" fill="#b87832"/>
+  <text x="812" y="307" class="name">Generate library</text>
+  <text x="812" y="338" class="tool">generate-Proteomic-</text>
+  <text x="812" y="360" class="tool">SpectralLibrary</text>
+  <text x="812" y="400" class="small">EasyPQP → library TSV</text>
+
+  <rect x="1160" y="260" width="270" height="170" rx="16" class="card"/>
+  <rect x="1160" y="260" width="270" height="9" rx="4" fill="#26907f"/>
+  <text x="1182" y="307" class="name">Quantitate DIA</text>
+  <text x="1182" y="338" class="tool">quantitate-ProteomicDIA</text>
+  <text x="1182" y="373" class="small">DIA-NN</text>
+  <text x="1182" y="400" class="small">mzML + library TSV</text>
+
+  <path d="M320 355 H410" class="arrow"/>
+  <text x="338" y="338" class="handoff">idXML</text>
+  <path d="M690 355 H780" class="arrow"/>
+  <text x="699" y="315" class="handoff">ProtLoom</text>
+  <text x="699" y="335" class="handoff">idXML + TSVs</text>
+  <path d="M1060 355 H1150" class="arrow"/>
+  <text x="1071" y="338" class="handoff">library TSV</text>
+
+  <rect x="50" y="505" width="640" height="97" rx="16" class="card"/>
+  <rect x="50" y="505" width="9" height="97" rx="4" fill="#159a89"/>
+  <text x="78" y="544" class="name">Target-decoy database</text>
+  <text x="78" y="573" class="tool">FASTA for search and PSM validation</text>
+  <path d="M185 505 V440" class="input"/>
+  <path d="M555 505 V440" class="input"/>
+</svg>
