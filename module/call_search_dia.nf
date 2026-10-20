@@ -1,5 +1,4 @@
 process call_search_dia {
-    cpus params.search_ProteomicDIA.subworkflow_cpus ?: 1
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'search-ProteomicDIA-*'
     input:
         tuple path(inputCsv), val(records), path(configJson)

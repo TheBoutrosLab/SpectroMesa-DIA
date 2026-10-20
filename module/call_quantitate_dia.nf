@@ -1,5 +1,4 @@
 process call_quantitate_dia {
-    cpus params.quantitate_ProteomicDIA.subworkflow_cpus ?: 1
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'quantitate-ProteomicDIA-*'
     input:
         tuple path(inputCsv), path(libraryTsv), path(configJson)

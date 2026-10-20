@@ -1,5 +1,4 @@
 process call_validate_psm {
-    cpus params.validate_ProteomicPSM.subworkflow_cpus ?: 1
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'validate-ProteomicPSM-*'
     input:
         tuple val(records), path(inputCsv), path(mzmlCsv), path(configJson)

@@ -1,5 +1,4 @@
 process call_spectral_library {
-    cpus params.generate_ProteomicSpectralLibrary.subworkflow_cpus ?: 1
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'generate-ProteomicSpectralLibrary-*'
     input:
         tuple val(records), path(idxmlCsv), path(mzmlCsv), path(psmTsv), path(peptideTsv), path(configJson)

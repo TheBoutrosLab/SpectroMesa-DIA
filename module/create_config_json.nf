@@ -8,6 +8,6 @@ process create_config_json {
     exec:
         file("${task.workDir}/${name}.json").text =
             JsonOutput.prettyPrint(JsonOutput.toJson(
-                (options ?: [:]).findAll { key, value -> key != 'subworkflow_cpus' }
+                (options ?: [:])
             ))
 }

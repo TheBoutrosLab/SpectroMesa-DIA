@@ -20,10 +20,28 @@ This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates 
    export NXF_VER=24.10.6
    export NXF_SYNTAX_PARSER=v1
    export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-ProteomicDIA-work
-   nextflow run main.nf -c /path/to/run.config
+   nextflow run main.nf -c /path/to/run.config -profile pines
    ```
 
-The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. The parent launches each child with `child_profile` (`standard` by default). Make sure the selected child profile's container runtime is available. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
+The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. Select `-profile pines` for a 64 CPU, 500 GB node or `-profile boutroslab_aws` for a 32 CPU, 128 GB node. These profiles set resource budgets, while `child_profile` (`standard` by default) selects the container runtime in each child. Make sure the selected child profile's runtime is available. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
+
+### Resource profiles
+
+| Profile | Node budget | Parent launch processes | Child allocations |
+| --- | --- | --- | --- |
+| `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger 24 CPUs/128 GB; MSBooster and major ProtLoom tasks double their default requests; EasyPQP library 8 CPUs/64 GB; DIA-NN 32 CPUs/256 GB. |
+| `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | Child defaults, except DIA-NN requests 16 CPUs/96 GB. |
+
+Parent CSV and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and explicit CPU and memory requests for every child process. The parent translates those requests into the child pipelines' existing resource update format and passes them through each child's parameter JSON. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
+
+For a profile outside the repository, copy [pines.json](config/resource_profiles/pines.json) or [boutroslab_aws.json](config/resource_profiles/boutroslab_aws.json) to a directory you control, rename it `<name>.json`, and edit its budget and allocations. Set these values in your run config:
+
+```groovy
+params.compute_profile = 'my_cluster'
+params.additional_resource_profile_dir = '/path/to/resource_profiles'
+```
+
+Run with `-c /path/to/run.config`; a matching Nextflow `-profile` entry is not required. `additional_resource_profile_dir` can contain multiple directories separated by the operating system's PATH separator (`:` on Linux/macOS). Lookup checks those directories from left to right, then the bundled `config/resource_profiles` directory. Missing directories or missing files in one location are skipped. Relative directories resolve from the launch directory. A profile file found earlier takes precedence over a file of the same name found later. To add a bundled profile, add its name to [config/profiles.config](config/profiles.config) and create `config/resource_profiles/<name>.json`. The shared parent process requests usually do not need to change.
 
 ## Inputs
 
@@ -60,14 +78,15 @@ Set shared values once at the root of the run config. `methods.setup()` derives 
 | `output_dir` | Required | Root directory for published results and logs. |
 | `dataset_id` | `cohort` | Name of this cohort's result directory. |
 | `child_profile` | `standard` | Nextflow profile applied to each child pipeline run. |
+| `compute_profile` | Set by `-profile pines` or `-profile boutroslab_aws` | Resource profile name; set directly to select a profile from `additional_resource_profile_dir`. |
+| `additional_resource_profile_dir` | None | Optional PATH-style list of directories containing `<compute_profile>.json` files. |
 
-Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked **set by metapipeline** are supplied by `methods.setup()` or the child-call process; do not repeat them in a run config. `subworkflow_cpus` controls the parent process that launches a child run, while the child's own resource settings control its internal processes.
+Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked **set by metapipeline** are supplied by `methods.setup()` or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in [config/resources.json](config/resources.json), while each child's resource handler controls its internal processes.
 
 ### `search_ProteomicDIA` — MSFragger search
 
 | Parameter | Default | Purpose |
 | --- | --- | --- |
-| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
 
 The `MSFragger` block uses native `fragger.params` keys. The values below are in [config/template.config](config/template.config); other defaults come from the [search pipeline configuration](external/search-ProteomicDIA/config/default.config).
 
@@ -117,7 +136,6 @@ The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gi
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
-| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
 | `run_percolator` | Fixed: `true` | Run MSBooster then Percolator. |
 | `percolator_workflow` | Fixed: `msbooster` | Run MSBooster then Percolator. |
 | `run_protloom` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
@@ -159,7 +177,6 @@ See the [validation pipeline parameters](external/validate-ProteomicPSM/README.m
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
-| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
 | `fractionated` | Fixed: `false` | Current workflow accepts one mzML per sample. |
 | `idxml_score_type` | `ProtLoom PEP` | Score read from each unfiltered ProtLoom idXML hit. |
 | `easypqp_score_type` | Metapipeline default: `PEP` | Meaning of the selected score. |
@@ -171,7 +188,6 @@ See the [library pipeline parameter reference](external/generate-ProteomicSpectr
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
-| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
 | `diann_qvalue` | Child default: `0.01` | Main report precursor q-value cutoff. |
 | `diann_matrix_qvalue` | Child default: `0.01` | Quantitation matrix q-value cutoff. |
 | `diann_fragment_interference_removal` | Child default: `false` | Whether to correct fragment elution curves for interference. |

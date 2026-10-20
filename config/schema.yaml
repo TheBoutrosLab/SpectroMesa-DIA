@@ -43,6 +43,16 @@ child_profile:
   type: 'String'
   required: true
   help: 'Nextflow profile for each component pipeline'
+compute_profile:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'Resource profile name; built-in names are pines and boutroslab_aws'
+additional_resource_profile_dir:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'Optional PATH-style list of directories searched before bundled resource profiles'
 search_ProteomicDIA:
   type: 'Namespace'
   required: true
