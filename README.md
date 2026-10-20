@@ -1,4 +1,4 @@
-# metapipeline-DIA
+# metapipeline-ProteomicDIA
 
 This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster, Percolator, and ProtLoom, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
 
@@ -19,7 +19,7 @@ This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates 
    ```bash
    export NXF_VER=24.10.6
    export NXF_SYNTAX_PARSER=v1
-   export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-DIA-work
+   export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-ProteomicDIA-work
    nextflow run main.nf -c /path/to/run.config
    ```
 
@@ -190,14 +190,14 @@ See [config/template.config](config/template.config) for an editable run configu
 Versioned child pipeline directories and the handoff CSVs are published at:
 
 ```text
-<output_dir>/metapipeline-DIA-1.0.0/<dataset_id>/
+<output_dir>/metapipeline-ProteomicDIA-1.0.0/<dataset_id>/
 ├── main_workflow/
 │   ├── search-ProteomicDIA-<version>/
 │   ├── validate-ProteomicPSM-<version>/
 │   ├── generate-ProteomicSpectralLibrary-<version>/
 │   ├── quantitate-ProteomicDIA-<version>/
 │   └── manifests/
-└── log-metapipeline-DIA-1.0.0-<timestamp>/
+└── log-metapipeline-ProteomicDIA-1.0.0-<timestamp>/
 ```
 
 The metapipeline creates each stage's input CSV in `manifests/`. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
