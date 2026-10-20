@@ -1,0 +1,13 @@
+---
+global:
+  temp_dir: ./test/work
+  nf_config: test/global.config
+  remove_temp: false
+  clean_logs: true
+cases:
+  - name: test_integration_MSFragger_ProtLoom_DIANN
+    message: Integration of MSFragger, ProtLoom, spectral library generation, and DIA-NN
+    nf_script: main.nf
+    nf_config: test/test_integration_MSFragger_ProtLoom_DIANN/test.config
+    skip: false
+    verbose: true

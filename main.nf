@@ -1,121 +1,93 @@
 #!/usr/bin/env nextflow
+nextflow.enable.dsl = 2
 
-nextflow.enable.dsl=2
+include { create_config_json } from './module/create_config_json.nf'
+include { create_search_csv } from './module/create_search_csv.nf'
+include { call_search_dia } from './module/call_search_dia.nf'
+include { create_validation_csv } from './module/create_validation_csv.nf'
+include { call_validate_psm } from './module/call_validate_psm.nf'
+include { create_library_csv } from './module/create_library_csv.nf'
+include { call_spectral_library } from './module/call_spectral_library.nf'
+include { create_quantitation_csv } from './module/create_quantitation_csv.nf'
+include { call_quantitate_dia } from './module/call_quantitate_dia.nf'
 
-// Include processes and workflows here
-include { run_validate_PipeVal } from './external/pipeline-Nextflow-module/modules/PipeVal/validate/main.nf'
-
-include { generate_standard_filename } from './external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
-include { indexFile } from './external/pipeline-Nextflow-module/modules/common/indexFile/main.nf'
-
-// Add this pipeline's custom modules here
-include { run_command_Tool } from './module/EXAMPLE_checksum.nf'
-
-// include { tool_name_command_name } from './module/module-name'
-
-// Log info here
-log.info """\
-        ======================================
-        T E M P L A T E - N F  P I P E L I N E
-        ======================================
-        Boutros Lab
-
-        Current Configuration:
-        - pipeline:
-            name: ${workflow.manifest.name}
-            version: ${workflow.manifest.version}
-
-        - input:
-            input a: ${params.variable_name}
-            ...
-
-        - output:
-            output a: ${params.output_path}
-            ...
-
-        - options:
-            option a: ${params.option_name}
-            ...
-
-        Tools Used:
-            tool a: ${params.docker_image_name}
-
-        ------------------------------------
-        Starting workflow...
-        ------------------------------------
-        """
-        .stripIndent()
-
-// Establish input channels here
-Channel
-    .fromList(params.samples_to_process)
-    .map { sample ->
-        return tuple(sample.id, sample.path, sample.sample_type)
+// Current child pipelines accept one mzML per sample. Retain fraction_id in
+// the records for future multi-fraction support.
+def readMzMLCsv(String inputCsv) {
+    def csv = file(inputCsv)
+    if (!csv.isFile()) error "Input CSV does not exist: ${csv}"
+    if (csv.readLines().findAll { it.trim() }.size() < 2) {
+        error "Input CSV has no data rows: ${csv}"
     }
-    .set { samplesToProcessChannel }
 
-Channel
-    .fromList(params.samples_to_process)
-    .map{ it -> [it['path'], indexFile(it['path'])] }
-    .flatten()
-    .set { files_to_validate_ch }
+    return Channel.fromPath(csv).splitCsv(header: true).toList().map { records ->
+        if (!records || records[0].keySet() != (['sample_name', 'fraction_id', 'path'] as Set)) {
+            error 'Input CSV must have exactly sample_name,fraction_id,path columns and at least one row'
+        }
+        def seenSamples = [] as Set
+        def seenNames = [] as Set
+        def seenPaths = [] as Set
+        records.collect { row ->
+            def sample = row.sample_name?.trim()
+            def fraction = row.fraction_id?.trim()
+            if (!(sample ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
+                !(fraction ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/)) {
+                error "Invalid sample_name or fraction_id: ${row}"
+            }
+            if (!seenSamples.add(sample)) {
+                error "Multiple fractions for sample '${sample}' are not supported yet"
+            }
+            def raw = row.path?.trim()
+            if (!raw) error "Missing mzML path for ${sample}"
+            def mzml = file(raw.startsWith('/') ? raw : "${csv.parent}/${raw}")
+            if (!mzml.isFile() || !mzml.name.toLowerCase().endsWith('.mzml')) {
+                error "Missing or invalid mzML for ${sample}: ${mzml}"
+            }
+            if (mzml.baseName.contains('.') || !seenNames.add(mzml.name.toLowerCase()) ||
+                !seenPaths.add(mzml.toRealPath().toString())) {
+                error "mzML basenames and paths must be unique, with no dots before .mzML: ${mzml}"
+            }
+            tuple(sample, fraction, mzml.toRealPath().toString())
+        }
+    }
+}
 
-// These are a few potential channels that can be mixed in
-
-/*
-Channel
-    .from(
-        params.reference,
-        params.reference_index,
-        params.reference_dict
-        )
-    .set { reference_ch }
-
-// Decription of input channel
-Channel
-    .fromPath(params.variable_name)
-    .ifEmpty { error "Cannot find: ${params.variable_name}" }
-    .set { input_ch_variable_name }
-
-files_to_validate_ch = files_to_validate_ch
-    .mix(reference_ch)
-    .mix(input_ch_variable_name)
-*/
-
-// Main workflow here
 workflow {
+    def database = file(params.decoy_database)
+    def msfragger = file(params.msfragger_executable)
 
+    samples = readMzMLCsv(params.input_csv)
+    configOptions = Channel.of(
+        ['search_ProteomicDIA', params.search_ProteomicDIA],
+        ['validate_ProteomicPSM', params.validate_ProteomicPSM],
+        ['generate_ProteomicSpectralLibrary', params.generate_ProteomicSpectralLibrary],
+        ['quantitate_ProteomicDIA', params.quantitate_ProteomicDIA]
+    )
+    create_config_json(configOptions)
+    searchConfig = create_config_json.out.config.filter { name, config -> name == 'search_ProteomicDIA' }.map { name, config -> config }
+    validateConfig = create_config_json.out.config.filter { name, config -> name == 'validate_ProteomicPSM' }.map { name, config -> config }
+    libraryConfig = create_config_json.out.config.filter { name, config -> name == 'generate_ProteomicSpectralLibrary' }.map { name, config -> config }
+    quantConfig = create_config_json.out.config.filter { name, config -> name == 'quantitate_ProteomicDIA' }.map { name, config -> config }
 
-    base_meta = Channel.value([
-        'log_output_dir': params.log_output_dir,
-        'output_dir': params.output_dir_base
-    ])
+    create_search_csv(samples)
+    searchInput = create_search_csv.out.input.combine(searchConfig)
+        .map { csv, records, config -> [csv, records, config] }
+    call_search_dia(searchInput, database, msfragger)
 
-    // Validate input files
-    run_validate_PipeVal(
-        base_meta.combine(files_to_validate_ch)
-        )
+    create_validation_csv(call_search_dia.out.result)
+    validationInput = create_validation_csv.out.input.combine(validateConfig)
+        .map { records, inputCsv, mzmlCsv, config -> [records, inputCsv, mzmlCsv, config] }
+    call_validate_psm(validationInput, database)
 
-    // Capture validation results
-    run_validate_PipeVal.out.validation_result
-        .collectFile(
-            name: 'input_validation.txt', newLine: true,
-            storeDir: "${params.output_dir_base}/validation"
-        )
+    create_library_csv(call_validate_psm.out.result)
+    libraryInput = create_library_csv.out.input.combine(libraryConfig)
+        .map { records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config ->
+            [records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config]
+        }
+    call_spectral_library(libraryInput)
 
-    // Add pipeline-specific workflow steps here
-    run_command_Tool(
-        run_validate_PipeVal.out.validated_file
-        )
-
-    /*
-    tool_name_command_name(
-        samplesToProcessChannel,
-        input_ch_variable_name
-        )
-    */
-
-    workflow.onComplete = {
-        WorkflowFinalizer.completeWorkflow(workflow, params);
-    }
+    create_quantitation_csv(call_spectral_library.out.result)
+    quantInput = create_quantitation_csv.out.input.combine(quantConfig)
+        .map { inputCsv, libraryTsv, config -> [inputCsv, libraryTsv, config] }
+    call_quantitate_dia(quantInput)
 }

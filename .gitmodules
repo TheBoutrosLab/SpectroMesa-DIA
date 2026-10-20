@@ -7,3 +7,15 @@
 [submodule "lib"]
 	path = lib
 	url = git@github.com:TheBoutrosLab/pipeline-Nextflow-lib.git
+[submodule "external/search-ProteomicDIA"]
+	path = external/search-ProteomicDIA
+	url = git@github.com:TheBoutrosLab/pipeline-search-ProteomicDIA.git
+[submodule "external/validate-ProteomicPSM"]
+	path = external/validate-ProteomicPSM
+	url = git@github.com:TheBoutrosLab/pipeline-validate-ProteomicPSM.git
+[submodule "external/generate-ProteomicSpectralLibrary"]
+	path = external/generate-ProteomicSpectralLibrary
+	url = git@github.com:TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary.git
+[submodule "external/quantitate-ProteomicDIA"]
+	path = external/quantitate-ProteomicDIA
+	url = git@github.com:TheBoutrosLab/pipeline-quantitate-ProteomicDIA.git

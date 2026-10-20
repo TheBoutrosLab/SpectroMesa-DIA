@@ -1,74 +1,71 @@
 ---
-dataset_id:
+input_csv:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'CSV with sample_name,fraction_id,path columns'
+decoy_database:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Target-decoy FASTA database'
+decoy_string:
   type: 'String'
   required: true
-  help: 'Dataset identifier'
-patient_id:
+  help: 'Decoy accession marker shared by MSFragger, validation, and ProtLoom'
+decoy_position:
   type: 'String'
   required: true
-  help: 'Patient identifier'
-sample_id:
+  help: 'Decoy marker position; prefix is required by search-ProteomicDIA'
+contam_string:
   type: 'String'
   required: true
-  help: 'Sample identifier'
-param_name:
+  help: 'Contaminant accession marker in the ProtLoom project YAML'
+contam_position:
   type: 'String'
-  required: false
-  default: 'foo-bar'
-  help: 'Example pipeline parameter; replace with pipeline-specific parameters'
+  required: true
+  help: 'Contaminant marker position: prefix or suffix'
+msfragger_executable:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'MSFragger JAR'
 output_dir:
   type: 'Path'
   mode: 'w'
   required: true
-  help: 'Absolute path to output directory'
-apptainer_library:
-  type: 'Path'
-  mode: 'r'
-  required: false
-  help: 'Absolute path to Apptainer library directory'
-apptainer_cache:
-  type: 'Path'
-  mode: 'w'
-  required: false
-  help: 'Absolute path to Apptainer cache directory'
-singularity_library:
-  type: 'Path'
-  mode: 'r'
-  required: false
-  help: 'Absolute path to Singularity library directory'
-singularity_cache:
-  type: 'Path'
-  mode: 'w'
-  required: false
-  help: 'Absolute path to Singularity cache directory'
-base_resource_update:
-  type: 'ResourceUpdateNamespace'
-  required: false
-  help: 'User-defined modifications for adjusting base resource allocations for processes'
-  elements:
-    memory:
-      type: 'ResourceUpdateList'
-      required: false
-      help: 'List of memory updates'
-    cpus:
-      type: 'ResourceUpdateList'
-      required: false
-      help: 'List of CPU updates'
-input:
-  type: 'InputNamespace'
+  help: 'Directory for metapipeline results'
+dataset_id:
+  type: 'String'
   required: true
-  help: 'Input samples'
-  elements:
-    BAM:
-      type: 'InputBAMNamespace'
-      required: true
-      help: 'Input BAM samples grouped by sample type'
-      elements:
-        normal:
-          type: 'BAMEntryList'
-          required: false
-          help: 'Input normal sample'
-        tumor:
-          type: 'BAMEntryList'
-          required: false
-          help: 'Input tumor sample'
+  help: 'Cohort identifier'
+child_profile:
+  type: 'String'
+  required: true
+  help: 'Nextflow profile for each component pipeline'
+compute_profile:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'Resource profile name; built-in names are pines and boutroslab_aws'
+additional_resource_profile_dir:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'Optional PATH-style list of directories searched before bundled resource profiles'
+search_ProteomicDIA:
+  type: 'Namespace'
+  required: true
+  help: 'Search pipeline parameters'
+validate_ProteomicPSM:
+  type: 'Namespace'
+  required: true
+  help: 'PSM validation pipeline parameters'
+generate_ProteomicSpectralLibrary:
+  type: 'Namespace'
+  required: true
+  help: 'Spectral library pipeline parameters'
+quantitate_ProteomicDIA:
+  type: 'Namespace'
+  required: true
+  help: 'DIA quantitation pipeline parameters'

@@ -1,69 +1,19 @@
 # Changelog
-All notable changes to the pipeline-name pipeline.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-
-This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
----
+All notable changes to metapipeline-ProteomicDIA are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0] - 2026-10-20
+
 ### Added
-- Add external `indexFile`
-- Add `sample_id` extraction from BAM
-- Add template input YAMLs
-- Add `pipeline-Nexflow-config` as submodule and redirect `set_resources_allocation`
-- Add `pipeline-Nextflow-module` as submodule
-- Additional out of memory exit code
-- Pipeline release action
-- Template for NFTest testing results in PR template
-- Enable dependabot
-- Add example PlantUML image to README
-- Add workflow to build documentation
-- Add workflows to run Nextflow configuration tests
-- Add `CODEOWNERS` set to `nextflow-wg`
-- Add standard workflows for documentation and tests
-- Add schema example with custom types
-### Changed
-- Switch resource limit checks to external scripts
-- Update links in on-prem `Confluence` to point to cloud-based `Confluence`
-- Fix `CODEOWNERS` file
-- Use `schema.check_path` for `workDir` validation
-- Add `Discussions` and `Contributors` to the Table of Contents in `README.md`
-- Update from DSL1 to DSL2
-- Standardize config structure
-- Restructure repo so main script is `main.nf`
-- Reorganize contributors and metadata
-- Reorganize PR template so description is at top
-- Update automatic node detection to allow for `F2` detection
-- Update `ISSUE_TEMPLATE`
-- Standardize input/output/parameter structure in `README.md`
-- Avoid modification of input parameter `output_dir`
-- Create default docker container registry parameter for tools
-- Use `methods.setup_process_afterscript()` to capture log files
-- Use metadata-as-input rather than `addParams`
-
----
-
-## [1.0.0] - YYYY-MM-DD
-### Added
-- For new features.
-- Added item 1.
-
-### Changed
-- For changes in existing functionality.
-- Changed item 1.
-
-### Deprecated
-- For soon-to-be removed features.
-
-### Removed
-- For now removed features.
-- Removed item 1.
-
-### Fixed
-- For any bug fixes.
-- Fixed item 1.
-
-### Security
-- In case of vulnerabilities.
+- DIA metapipeline chaining `search-ProteomicDIA` (MSFragger), `validate-ProteomicPSM` (MSBooster, Percolator, ProtLoom), `generate-ProteomicSpectralLibrary` (EasyPQP), and `quantitate-ProteomicDIA` (DIA-NN). Each child pipeline is launched by its own Nextflow process in `module/`.
+- Nextflow processes and CSV handoffs for search idXML, unfiltered ProtLoom idXML, cohort PSM and peptide reports, the spectral library TSV, and mzML inputs.
+- Input CSV with `sample_name,fraction_id,path`; environment variable expansion for test inputs; template configuration, `.env-template`, and an NFTest integration case for the complete workflow.
+- Child pipeline Git submodules and an SVG workflow schematic in `docs/pipeline-flow.svg`.
+- Child pipeline parameter namespaces: `search_ProteomicDIA`, `validate_ProteomicPSM`, `generate_ProteomicSpectralLibrary`, and `quantitate_ProteomicDIA`.
+- Input validation and output/log directory setup in `config/methods.config`.
+- One-mzML-per-sample run naming with `sample_name`; `fraction_id` remains in input and handoff CSVs for future multi-fraction support.
+- An NFTest runner that uses `/scratch/$SLURM_JOB_ID/<test-case>` and accepts a test-case argument, following the proteomic metapipeline convention.
+- Versioned child pipeline directories under `params.final_output_dir` and handoff CSVs under its `manifests/` directory.
+- Root-level shared database and decoy/contaminant markers, with child-specific values derived by `methods.setup()` and checked against the ProtLoom YAML.

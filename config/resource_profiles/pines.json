@@ -1,0 +1,154 @@
+{
+    "max_cpus": 64,
+    "max_memory": "500 GB",
+    "children": {
+        "search_ProteomicDIA": {
+            "write_MSFraggerParams": {
+                "cpus": 1,
+                "memory": "1 GB"
+            },
+            "search_database_MSFragger": {
+                "cpus": 24,
+                "memory": "128 GB"
+            },
+            "convert_pepXML2idXML_MSFragger": {
+                "cpus": 2,
+                "memory": "24 GB"
+            },
+            "calculate_SHA512": {
+                "cpus": 1,
+                "memory": "1 GB"
+            }
+        },
+        "validate_ProteomicPSM": {
+            "index_peptides": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "extract_PSM_features": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "score_PEP_percolator": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "score_FDR_OpenMS": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "filter_PSM": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "export_mzTab": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "switch_score_2_pep": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "split_idXML": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "fix_idXMLSpectraDataPath": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "merge_PSM": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "aggregate_consensus_id": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "index_peptide_aggregated": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "merge_PSM_fractions": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "score_FDR_OpenMS_consensus": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "filter_PSM_consensus": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "filter_PSM_protloom": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "export_mzTab_consensus": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "export_MSBooster_PIN": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "run_MSBooster": {
+                "cpus": 8,
+                "memory": "48 GB"
+            },
+            "run_percolator_PIN": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "import_percolator_POUT": {
+                "cpus": 4,
+                "memory": "24 GB"
+            },
+            "run_ProtLoom_localInfer": {
+                "cpus": 8,
+                "memory": "64 GB"
+            },
+            "run_ProtLoom_jointGraph": {
+                "cpus": 8,
+                "memory": "64 GB"
+            },
+            "run_ProtLoom_jointInfer": {
+                "cpus": 8,
+                "memory": "64 GB"
+            },
+            "run_ProtLoom_computeFDR": {
+                "cpus": 4,
+                "memory": "16 GB"
+            },
+            "export_EasyPQP_reports": {
+                "cpus": 4,
+                "memory": "16 GB"
+            }
+        },
+        "generate_ProteomicSpectralLibrary": {
+            "split_idXML": {
+                "cpus": 2,
+                "memory": "8 GB"
+            },
+            "convert_EasyPQP": {
+                "cpus": 2,
+                "memory": "8 GB"
+            },
+            "set_EasyPQP_idXML_score": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "library_EasyPQP": {
+                "cpus": 8,
+                "memory": "64 GB"
+            }
+        },
+        "quantitate_ProteomicDIA": {
+            "quantitate_DIANN": {
+                "cpus": 32,
+                "memory": "256 GB"
+            }
+        }
+    }
+}
