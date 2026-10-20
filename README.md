@@ -1,162 +1,217 @@
-# Pipeline Name
+# metapipeline-DIA
 
-[![Prepare release](https://img.shields.io/badge/Action-Create%20New%20Release-blue)](https://github.com/theboutroslab/template-NextflowPipeline/actions/workflows/prepare-release.yaml)
+This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster, Percolator, and ProtLoom, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
 
-- [Pipeline Name](#pipeline-name)
-  - [Overview](#overview)
-  - [How To Run](#how-to-run)
-  - [Flow Diagram](#flow-diagram)
-  - [Pipeline Steps](#pipeline-steps)
-    - [1. Step/Process 1](#1-stepprocess-1)
-    - [2. Step/Process 2](#2-stepprocess-2)
-    - [3. Step/Process n](#3-stepprocess-n)
-  - [Inputs](#inputs)
-  - [Outputs](#outputs)
-  - [Testing and Validation](#testing-and-validation)
-    - [Test Data Set](#test-data-set)
-    - [Validation <version number\>](#validation-version-number)
-    - [Validation Tool](#validation-tool)
-  - [References](#references)
-  - [Discussions](#discussions)
-  - [Contributors](#contributors)
-  - [License](#license)
-## Overview
+![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
-A 3-4 sentence summary of the pipeline, including the pipeline's purpose, the type of expected scientific inputs/outputs of the pipeline (e.g: FASTQs and BAMs), and a list of tools/steps in the pipeline.
+## Quick start
 
----
+1. Initialize the child pipelines and shared Boutros Lab modules:
 
-## How To Run
+   ```bash
+   git submodule update --init --recursive
+   ```
 
-1. Update the params section of the .config file
+2. Prepare the [mzML input CSV](input/template-mzML.csv), a target-decoy FASTA, the MSFragger JAR, and the [ProtLoom project YAML](external/validate-ProteomicPSM/input/protloom-project.example.yaml). Use the same FASTA and accession markers in the run configuration and ProtLoom YAML.
+3. Copy [config/template.config](config/template.config) to a run-specific file. Set `input_csv`, `decoy_database`, `msfragger_executable`, `output_dir`, `dataset_id`, and `validate_ProteomicPSM.protloom_project_yaml`. Review the shared markers and the child-specific settings for your experiment. Keep the template's `includeConfig` lines and final `methods.setup()` call.
+4. Run with Nextflow 24.10.6 and its v1 syntax parser. Choose a work directory with enough space for the mzML files and child pipeline work:
 
-2. Update the input yaml
+   ```bash
+   export NXF_VER=24.10.6
+   export NXF_SYNTAX_PARSER=v1
+   export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-DIA-work
+   nextflow run main.nf -c /path/to/run.config
+   ```
 
-3. See the submission script, [here](https://github.com/theboutroslab/tool-submit-nf), to submit your pipeline
-
----
-
-## Flow Diagram
-
-A directed acyclic graph of your pipeline. The [PlantUML](https://plantuml.com/) code defining this diagram is version-controlled in the [docs/](./docs/) folder, and a [GitHub Action](https://github.com/theboutroslab/tool-PlantUML-action) automatically regenerates the SVG image when that file is changed.
-
-![Pipeline Graph](./docs/pipeline-flow.svg)
-
----
-
-## Pipeline Steps
-
-### 1. Step/Process 1
-
-> A 2-3 sentence description of each step/proccess in your pipeline that includes the purpose of the step/process, the tool(s) being used and their version, and the expected scientific inputs/outputs (e.g: FASTQs and BAMs) of the pipeline.
-
-### 2. Step/Process 2
-
-> A 2-3 sentence description of each step/proccess in your pipeline that includes the purpose of the step/process, the tool(s) being used and their version, and the expected scientific inputs/outputs (e.g: FASTQs and BAMs) of the pipeline.
-
-### 3. Step/Process n
-
-> A 2-3 sentence description of each step/proccess in your pipeline that includes the purpose of the step/process, the tool(s) being used and their version, and the expected scientific inputs/outputs (e.g: FASTQs and BAMs) of the pipeline.
-
----
+The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. The parent launches each child with `child_profile` (`standard` by default). Make sure the selected child profile's container runtime is available. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
 
 ## Inputs
 
-### Input YAML
+The input CSV has exactly these columns:
 
-> include an example of the organization structure within the YAML. Example:
-```yaml
-input 1: 'patient_id'
-input:
-    normal:
-      - id: <normal id>
-        BAM: </path/to/normal.bam>
-    tumor:
-      - id: <tumor id>
-        BAM: </path/to/tumor.bam>
+```csv
+sample_name,fraction_id,path
+sample_01,1,/data/sample_01.mzML
+sample_02,1,/data/sample_02.mzML
 ```
 
-### Config
+| Input | Requirement |
+| --- | --- |
+| `sample_name` | Unique per row. The current workflow accepts one mzML per sample and uses this name in child pipeline outputs. |
+| `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
+| `path` | Existing mzML file. Relative paths resolve from the input CSV's directory. mzML paths and basenames must be unique; basenames cannot contain another dot before `.mzML`. |
+| `decoy_database` | Existing target-decoy FASTA used by search and validation. |
+| `msfragger_executable` | Separately obtained MSFragger JAR. |
+| `validate_ProteomicPSM.protloom_project_yaml` | ProtLoom project YAML with the database, annotations, and a sample mapping for every `sample_name` in the CSV. See the [validation pipeline's ProtLoom guidance](external/validate-ProteomicPSM/README.md). |
 
-| Field | Type | Required | Description |
-| ----- | ---- | ------------ | ------------------------ |
-| param 1 | _type_ | yes/no | 1-2 sentence description of the parameter, including any defaults if any. |
-| param 2 | _type_ | yes/no | 1-2 sentence description of the parameter, including any defaults if any. |
-| param n | _type_ | yes/no | 1-2 sentence description of the parameter, including any defaults if any. |
-| `work_dir` | path | no | Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
+## Parameters
 
-> Include the optional param `work_dir` in the inputs accompanied by a warning of the potentials dangers of using the param. Update the warning if necessary.
+Set shared values once at the root of the run config. `methods.setup()` derives the child-specific database and decoy settings before writing the child parameter JSON files. The ProtLoom project YAML independently supplies its database markers and must agree with the root values.
 
----
+| Root parameter | Default | Purpose |
+| --- | --- | --- |
+| `input_csv` | Required | Sample-to-mzML CSV. |
+| `decoy_database` | Required | Target-decoy FASTA passed to search and validation. |
+| `decoy_string` | `DECOY_` | Decoy accession marker; becomes the MSFragger `decoy_prefix` and validation `decoy_string`. |
+| `decoy_position` | `prefix` | Decoy marker position. The current MSFragger search requires `prefix`; validation receives this as `decoy_string_position`. |
+| `contam_string` | `CONTAMINANT_` | Contaminant marker; must match `database.contam_string` in the ProtLoom YAML. |
+| `contam_position` | `prefix` | Contaminant marker position (`prefix` or `suffix`); must match `database.contam_position` in the ProtLoom YAML. |
+| `msfragger_executable` | Required | MSFragger JAR. |
+| `output_dir` | Required | Root directory for published results and logs. |
+| `dataset_id` | `cohort` | Name of this cohort's result directory. |
+| `child_profile` | `standard` | Nextflow profile applied to each child pipeline run. |
 
-## Outputs
+Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked **set by metapipeline** are supplied by `methods.setup()` or the child-call process; do not repeat them in a run config. `subworkflow_cpus` controls the parent process that launches a child run, while the child's own resource settings control its internal processes.
 
-<!-- List and describe the final output(s) of the pipeline. -->
+### `search_ProteomicDIA` — MSFragger search
 
-| Output | Description |
-| ------------ | ------------------------ |
-| ouput 1 | 1 - 2 sentence description of the output. |
-| ouput 2 | 1 - 2 sentence description of the output. |
-| ouput n | 1 - 2 sentence description of the output. |
+| Parameter | Default | Purpose |
+| --- | --- | --- |
+| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
 
----
+The `MSFragger` block uses native `fragger.params` keys. The values below are in [config/template.config](config/template.config); other defaults come from the [search pipeline configuration](external/search-ProteomicDIA/config/default.config).
 
-## Testing and Validation
+| `MSFragger` parameter | Template value | Purpose |
+| --- | --- | --- |
+| `precursor_mass_lower` | `-25` | Lower precursor mass search bound. |
+| `precursor_mass_upper` | `25` | Upper precursor mass search bound. |
+| `precursor_mass_units` | Child default: `1` | Precursor tolerance units (`1` = ppm). |
+| `precursor_true_tolerance` | `4` | Precursor calibration tolerance. |
+| `precursor_true_units` | Child default: `1` | Calibration tolerance units (`1` = ppm). |
+| `fragment_mass_tolerance` | `50` | Fragment tolerance. |
+| `fragment_mass_units` | Child default: `1` | Fragment tolerance units (`1` = ppm). |
+| `calibrate_mass` | Child default: `2` | Mass calibration mode. |
+| `deisotope` | Child default: `1` | Peak deisotoping mode. |
+| `deneutralloss` | Child default: `1` | Neutral-loss peak handling. |
+| `isotope_error` | `0/1/2` | Allowed precursor isotope errors. |
+| `precursor_mass_mode` | Child default: `selected` | Precursor mass interpretation. |
+| `require_precursor` | Child default: `1` | Require precursor evidence. |
+| `reuse_dia_fragment_peaks` | Child default: `0` | Whether fragment peaks may match multiple peptides. |
+| `fragment_ion_series` | Child default: `b,y` | Fragment ion series. |
+| `search_enzyme_name_1` | `stricttrypsin` | Primary enzyme name. |
+| `search_enzyme_cut_1` | `KR` | Cleavage residues. |
+| `search_enzyme_nocut_1` | Empty | Residues that prevent cleavage. |
+| `search_enzyme_sense_1` | `C` | Cleavage terminus. |
+| `allowed_missed_cleavage_1` | `2` | Maximum missed cleavages. |
+| `num_enzyme_termini` | `2` | Required enzymatic termini. |
+| `clip_nTerm_M` | `1` | Permit N-terminal methionine clipping. |
+| `variable_mod_01` | `15.9949 M 3` | Methionine oxidation. |
+| `variable_mod_02` | `42.0106 [^ 1` | Protein N-terminal acetylation. |
+| `allow_multiple_variable_mods_on_residue` | `0` | Multiple variable modifications on one residue. |
+| `max_variable_mods_per_peptide` | `3` | Maximum variable modifications per peptide. |
+| `output_format` | Child fixed value: `pepXML_pin` | pepXML and PIN needed downstream. |
+| `output_report_topN` | `5` | Top PSMs reported per spectrum. |
+| `output_max_expect` | Child default: `50` | Maximum expectation value for reported PSMs. |
+| `digest_min_length` | `7` | Minimum digested peptide length. |
+| `digest_max_length` | `50` | Maximum digested peptide length. |
+| `digest_mass_range` | `500.0 5000.0` | Digested peptide mass range in Da. |
+| `max_fragment_charge` | `2` | Maximum theoretical fragment charge. |
+| `minimum_peaks` | `15` | Minimum spectrum peak count. |
+| `use_topN_peaks` | `150` | Maximum experimental peaks retained per spectrum. |
+| `min_matched_fragments` | `4` | Minimum matched fragments for a PSM. |
+| `add_C_cysteine` | `57.02146` | Fixed cysteine carbamidomethylation mass. |
 
-### Test Data Set
+The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gives allowed values and validation rules.
 
-A 2-3 sentence description of the test data set(s) used to validate and test this pipeline. If possible, include references and links for how to access and use the test dataset
+### `validate_ProteomicPSM` — MSBooster, Percolator, and ProtLoom
 
-### Validation <version number\>
+| Parameter | Template value or source | Purpose |
+| --- | --- | --- |
+| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
+| `run_percolator` | Fixed: `true` | Run MSBooster then Percolator. |
+| `percolator_workflow` | Fixed: `msbooster` | Run MSBooster then Percolator. |
+| `run_protloom` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
+| `export_easypqp_reports` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
+| `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |
+| `fractionated` | Fixed: `false` | One search engine and one mzML per sample. |
+| `protloom_project_yaml` | Required | Project YAML with sample annotations, database files, and marker settings. |
+| `protloom_pc_order` | `proteotypic` | Peptide-class and protein-tier priorities. |
+| `protloom_pt_order` | `canonical` | Peptide-class and protein-tier priorities. |
+| `protloom_enzyme` | `trypsin` | ProtLoom cleavage rule. |
+| `protloom_easypqp_fdr` | `0.01` | Cohort report PSM and protein-group q-value cutoff. |
+| `protloom_idxml_primary_score` | `pep` | Primary score in unfiltered ProtLoom idXML. |
+| `protloom_idxml_unmatched_psms` | `remove` | Handling of PSMs without a ProtLoom match. |
+| `protloom_version` | Child default: `0.2.3` | ProtLoom version and container. |
+| `docker_image_protloom` | Child default: matching image | ProtLoom version and container. |
+| `enzyme` | Child default: `Trypsin` | Enzyme used by peptide indexing and Percolator. |
+| `skip_peptide_indexing` | Child default: `false` | Skip OpenMS PeptideIndexer when idXMLs are already indexed. |
+| `index_peptides_unmatched_action` | Metapipeline default: `remove` | Handling of peptides absent from the FASTA. |
+| `index_peptides_aaa_max` | Metapipeline default: `0` | Maximum ambiguous amino acids for peptide indexing. |
+| `index_peptides_missing_decoy_action` | Child/OpenMS defaults | Additional peptide-indexing controls. |
+| `index_peptides_mismatches_max` | Child/OpenMS defaults | Additional peptide-indexing controls. |
+| `index_peptides_IL_equivalent` | Child/OpenMS defaults | Additional peptide-indexing controls. |
+| `msbooster_params` | Child bundled file | MSBooster prediction configuration. |
+| `percolator_decoy_pattern` | Defaults to `decoy_string` | Decoy protein pattern used for direct Percolator execution. |
+| `percolator_post_processing_tdc` | Child default: `true` | Percolator target-decoy competition after rescoring. |
+| `filter_psm_score_peptide` | Child default: `0.01` | Final PSM q-value cutoff. |
+| `filter_psm_remove_decoys` | Child default: `true` | Exclude decoys from filtered outputs. |
+| `filter_psm_keep_unreferenced_protein_hits` | Child default: `false` | Retain or remove unreferenced hits. |
+| `filter_psm_delete_unreferenced_peptide_hits` | Child default: `true` | Retain or remove unreferenced hits. |
+| `filter_psm_whitelist_proteins` | Child default: no file | Restrict retained protein or peptide hits. |
+| `filter_psm_whitelist_peptides` | Child default: no file | Restrict retained protein or peptide hits. |
+| `filter_psm_blacklist_proteins` | Child default: no file | Exclude selected protein or peptide hits. |
+| `filter_psm_blacklist_peptides` | Child default: no file | Exclude selected protein or peptide hits. |
+| `filter_psm_in_silico_digestion` | Child default: no file | FASTA for digestion-based filtering. |
 
-| Input/Output | Description | Result |
-| ------------ | ------------------------ | ------------------------ |
-| metric 1 | 1 - 2 sentence description of the metric | quantifiable result |
-| metric 2 | 1 - 2 sentence description of the metric | quantifiable result |
-| metric n | 1 - 2 sentence description of the metric | quantifiable result |
+See the [validation pipeline parameters](external/validate-ProteomicPSM/README.md#config) and [OpenMS option mapping](external/validate-ProteomicPSM/docs/params.rst) for the remaining advanced indexing, filtering, and resource controls.
 
-- [Reference/External Link/Path 1 to any files/plots or other validation results](<link>)
-- [Reference/External Link/Path 2 to any files/plots or other validation results](<link>)
-- [Reference/External Link/Path n to any files/plots or other validation results](<link>)
+### `generate_ProteomicSpectralLibrary` — EasyPQP library
 
-### Validation Tool
+| Parameter | Template value or source | Purpose |
+| --- | --- | --- |
+| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
+| `fractionated` | Fixed: `false` | Current workflow accepts one mzML per sample. |
+| `idxml_score_type` | `ProtLoom PEP` | Score read from each unfiltered ProtLoom idXML hit. |
+| `easypqp_score_type` | Metapipeline default: `PEP` | Meaning of the selected score. |
+| `easypqp_version` | Child default: `0.1.59` | EasyPQP version and container. |
 
-Included is a template for validating your input files. For more information on the tool check out: https://github.com/theboutroslab/package-PipeVal
+See the [library pipeline parameter reference](external/generate-ProteomicSpectralLibrary/README.md#inputs).
 
----
+### `quantitate_ProteomicDIA` — DIA-NN quantitation
 
-## References
+| Parameter | Template value or source | Purpose |
+| --- | --- | --- |
+| `subworkflow_cpus` | `8` | CPUs reserved for the parent child-launch process. |
+| `diann_qvalue` | Child default: `0.01` | Main report precursor q-value cutoff. |
+| `diann_matrix_qvalue` | Child default: `0.01` | Quantitation matrix q-value cutoff. |
+| `diann_fragment_interference_removal` | Child default: `false` | Whether to correct fragment elution curves for interference. |
 
-1. [Reference 1](<links-to-papers/external-code/documentation/metadata/other-repos/or-anything-else>)
-2. [Reference 2](<links-to-papers/external-code/documentation/metadata/other-repos/or-anything-else>)
-3. [Reference n](<links-to-papers/external-code/documentation/metadata/other-repos/or-anything-else>)
+See the [quantitation pipeline parameter reference](external/quantitate-ProteomicDIA/README.md#parameters).
 
----
+See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
-## Discussions
+## Pipeline steps and outputs
 
-- [Issue tracker](<link-to-repo-issues-page>) to report errors and enhancement ideas.
-- Discussions can take place in [<pipeline> Discussions](<link-to-repo-discussions-page>)
-- [<pipeline> pull requests](<link-to-repo-pull-requests>) are also open for discussion
+1. `search-ProteomicDIA` searches each mzML with MSFragger and produces idXML files.
+2. `validate-ProteomicPSM` uses MSBooster, Percolator, and ProtLoom. Its unfiltered ProtLoom idXML files and cohort PSM and peptide reports feed the library stage.
+3. `generate-ProteomicSpectralLibrary` uses those identifications and the original mzML files to produce an EasyPQP library TSV.
+4. `quantitate-ProteomicDIA` quantifies the original mzML files against that library with DIA-NN.
 
----
+Versioned child pipeline directories and the handoff CSVs are published at:
 
-## Contributors
+```text
+<output_dir>/metapipeline-DIA-1.0.0/<dataset_id>/
+├── main_workflow/
+│   ├── search-ProteomicDIA-<version>/
+│   ├── validate-ProteomicPSM-<version>/
+│   ├── generate-ProteomicSpectralLibrary-<version>/
+│   ├── quantitate-ProteomicDIA-<version>/
+│   └── manifests/
+└── log-metapipeline-DIA-1.0.0-<timestamp>/
+```
 
-> Update link to repo-specific URL for GitHub Insights Contributors page.
+The metapipeline creates each stage's input CSV in `manifests/`. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
-Please see list of [Contributors](https://github.com/theboutroslab/template-NextflowPipeline/graphs/contributors) at GitHub.
+## Testing
 
----
+The included NFTest case runs all four child pipelines. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+
+```bash
+zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
+```
+
+The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV expands `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
 
 ## License
 
-[pipeline name] is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
-
-<one line to give the program's name and a brief idea of what it does.>
-
-Copyright (C) 2026 Sanford Burnham Prebys Medical Discovery Institute ("Boutros Lab")
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+This pipeline is licensed under GNU GPL version 2. See [LICENSE](LICENSE).
