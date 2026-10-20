@@ -85,9 +85,6 @@ Settings specific to one child belong in its namespace in the run config. The ta
 
 ### `search_ProteomicDIA` — MSFragger search
 
-| Parameter | Default | Purpose |
-| --- | --- | --- |
-
 The `MSFragger` block uses native `fragger.params` keys. The values below are in [config/template.config](config/template.config); other defaults come from the [search pipeline configuration](external/search-ProteomicDIA/config/default.config).
 
 | `MSFragger` parameter | Template value | Purpose |
