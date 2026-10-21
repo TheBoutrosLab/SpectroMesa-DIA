@@ -12,7 +12,7 @@ This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates 
    git submodule update --init --recursive
    ```
 
-2. Prepare the [mzML input CSV](input/template-mzML.csv), a target-decoy FASTA, the MSFragger JAR, and the [ProtLoom project YAML](external/validate-ProteomicPSM/input/protloom-project.example.yaml). Use the same FASTA and accession markers in the run configuration and ProtLoom YAML.
+2. Prepare the [mzML input CSV](input/template-mzML.csv), a target-decoy FASTA, the MSFragger JAR, and a [ProtLoom project YAML](config/protloom-project.example.yaml). Use the same FASTA and accession markers in the run configuration and ProtLoom YAML.
 3. Copy [config/template.config](config/template.config) to a run-specific file. Set `input_csv`, `decoy_database`, `msfragger_executable`, `output_dir`, `dataset_id`, and `validate_ProteomicPSM.protloom_project_yaml`. Review the shared markers and the child-specific settings for your experiment. Keep the template's `includeConfig` lines and final `methods.setup()` call.
 4. Run with Nextflow 24.10.6 and its v1 syntax parser. Choose a work directory with enough space for the mzML files and child pipeline work:
 
@@ -48,19 +48,26 @@ Run with `-c /path/to/run.config`; a matching Nextflow `-profile` entry is not r
 The input CSV has exactly these columns:
 
 ```csv
-sample_name,fraction_id,path
-sample_01,1,/data/sample_01.mzML
-sample_02,1,/data/sample_02.mzML
+sample_name,fraction_id,annotation_id,path
+sample_01,1,reference,/data/sample_01.mzML
+sample_02,1,reference,/data/sample_02.mzML
 ```
 
 | Input | Requirement |
 | --- | --- |
 | `sample_name` | Unique per row. The current workflow accepts one mzML per sample and uses this name in child pipeline outputs. |
 | `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
+| `annotation_id` | Must match an `annotations[].annotation_id` in the ProtLoom project YAML. The metapipeline uses it to generate ProtLoom sample mappings. |
 | `path` | Existing mzML file. Relative paths resolve from the input CSV's directory. mzML paths and basenames must be unique; basenames cannot contain another dot before `.mzML`. |
 | `decoy_database` | Existing target-decoy FASTA used by search and validation. |
 | `msfragger_executable` | Separately obtained MSFragger JAR. |
-| `validate_ProteomicPSM.protloom_project_yaml` | ProtLoom project YAML with the database, annotations, and a sample mapping for every `sample_name` in the CSV. See the [validation pipeline's ProtLoom guidance](external/validate-ProteomicPSM/README.md). |
+| `validate_ProteomicPSM.protloom_project_yaml` | ProtLoom project YAML with database and annotation settings; the metapipeline supplies the `samples` section from the CSV. |
+
+### ProtLoom project YAML
+
+Start from [config/protloom-project.example.yaml](config/protloom-project.example.yaml). Provide `schema_version: 1`, `annotations` with a unique `annotation_id` and existing GTF file for each annotation, and `database.output_fasta` and `database.output_entries_tsv` pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include `fasta_sources` when this YAML also describes the database sources used by ProtLoom `buildDB`; validation uses the built database outputs and annotations.
+
+Do not maintain a `samples` section in this input file. The metapipeline checks each CSV `annotation_id` against `annotations`, writes `protloom-project.generated.yaml` under the output `manifests/` directory, and passes that file to `validate-ProteomicPSM`. If the input YAML contains an older `samples` section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.
 
 ## Parameters
 
@@ -139,7 +146,7 @@ The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gi
 | `export_easypqp_reports` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
 | `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |
 | `fractionated` | Fixed: `false` | One search engine and one mzML per sample. |
-| `protloom_project_yaml` | Required | Project YAML with sample annotations, database files, and marker settings. |
+| `protloom_project_yaml` | Required | Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV. |
 | `protloom_pc_order` | `proteotypic` | Peptide-class and protein-tier priorities. |
 | `protloom_pt_order` | `canonical` | Peptide-class and protein-tier priorities. |
 | `protloom_enzyme` | `trypsin` | ProtLoom cleavage rule. |
@@ -223,7 +230,7 @@ The included NFTest case runs all four child pipelines. From the repository root
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
 ```
 
-The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV expands `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
+The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
 
 ## License
 

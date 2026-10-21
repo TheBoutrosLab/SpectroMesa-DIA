@@ -2,7 +2,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
 /**
- * Expands environment variables in CSV and JSON inputs used by NFTest configurations.
+ * Expands environment variables in text inputs used by NFTest configurations.
  */
 class NFTestCsvTools {
     /**
@@ -40,6 +40,10 @@ class NFTestCsvTools {
 
     String prepareInputJson(Object sourceJson, String testName, Object launchDir) {
         return prepareInputFile(sourceJson, testName, launchDir, 'json')
+    }
+
+    String prepareInputYaml(Object sourceYaml, String testName, Object launchDir) {
+        return prepareInputFile(sourceYaml, testName, launchDir, 'yaml')
     }
 
     String prepareInputFile(Object sourceCsv, String testName, Object launchDir, String extension) {

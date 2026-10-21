@@ -7,7 +7,7 @@ process create_search_csv {
     exec:
         def csv = file("${task.workDir}/search.csv")
         csv.text = 'sample_name,mzML\n'
-        records.each { sample, fraction, mzml ->
+        records.each { sample, fraction, mzml, annotation ->
             csv.append("${sample},${mzml}\n")
         }
 }

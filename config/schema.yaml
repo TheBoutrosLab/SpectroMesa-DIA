@@ -3,7 +3,7 @@ input_csv:
   type: 'Path'
   mode: 'r'
   required: true
-  help: 'CSV with sample_name,fraction_id,path columns'
+  help: 'CSV with sample_name,fraction_id,annotation_id,path columns'
 decoy_database:
   type: 'Path'
   mode: 'r'

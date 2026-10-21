@@ -5,14 +5,15 @@ include { create_config_json } from './module/create_config_json.nf'
 include { create_search_csv } from './module/create_search_csv.nf'
 include { call_search_dia } from './module/call_search_dia.nf'
 include { create_validation_csv } from './module/create_validation_csv.nf'
+include { create_protloom_project } from './module/create_protloom_project.nf'
 include { call_validate_psm } from './module/call_validate_psm.nf'
 include { create_library_csv } from './module/create_library_csv.nf'
 include { call_spectral_library } from './module/call_spectral_library.nf'
 include { create_quantitation_csv } from './module/create_quantitation_csv.nf'
 include { call_quantitate_dia } from './module/call_quantitate_dia.nf'
 
-// Current child pipelines accept one mzML per sample. Retain fraction_id in
-// the records for future multi-fraction support.
+// Current child pipelines accept one mzML per sample. Retain fraction_id and
+// annotation_id in the records for downstream validation and future fractions.
 def readMzMLCsv(String inputCsv) {
     def csv = file(inputCsv)
     if (!csv.isFile()) error "Input CSV does not exist: ${csv}"
@@ -21,8 +22,8 @@ def readMzMLCsv(String inputCsv) {
     }
 
     return Channel.fromPath(csv).splitCsv(header: true).toList().map { records ->
-        if (!records || records[0].keySet() != (['sample_name', 'fraction_id', 'path'] as Set)) {
-            error 'Input CSV must have exactly sample_name,fraction_id,path columns and at least one row'
+        if (!records || records[0].keySet() != (['sample_name', 'fraction_id', 'annotation_id', 'path'] as Set)) {
+            error 'Input CSV must have exactly sample_name,fraction_id,annotation_id,path columns and at least one row'
         }
         def seenSamples = [] as Set
         def seenNames = [] as Set
@@ -30,9 +31,11 @@ def readMzMLCsv(String inputCsv) {
         records.collect { row ->
             def sample = row.sample_name?.trim()
             def fraction = row.fraction_id?.trim()
+            def annotation = row.annotation_id?.trim()
             if (!(sample ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
-                !(fraction ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/)) {
-                error "Invalid sample_name or fraction_id: ${row}"
+                !(fraction ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
+                !(annotation ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/)) {
+                error "Invalid sample_name, fraction_id, or annotation_id: ${row}"
             }
             if (!seenSamples.add(sample)) {
                 error "Multiple fractions for sample '${sample}' are not supported yet"
@@ -47,7 +50,7 @@ def readMzMLCsv(String inputCsv) {
                 !seenPaths.add(mzml.toRealPath().toString())) {
                 error "mzML basenames and paths must be unique, with no dots before .mzML: ${mzml}"
             }
-            tuple(sample, fraction, mzml.toRealPath().toString())
+            tuple(sample, fraction, mzml.toRealPath().toString(), annotation)
         }
     }
 }
@@ -75,8 +78,12 @@ workflow {
     call_search_dia(searchInput, database, msfragger)
 
     create_validation_csv(call_search_dia.out.result)
+    create_protloom_project(samples, params.validate_ProteomicPSM.protloom_project_yaml)
     validationInput = create_validation_csv.out.input.combine(validateConfig)
-        .map { records, inputCsv, mzmlCsv, config -> [records, inputCsv, mzmlCsv, config] }
+        .combine(create_protloom_project.out.project)
+        .map { records, inputCsv, mzmlCsv, config, projectYaml ->
+            [records, inputCsv, mzmlCsv, config, projectYaml]
+        }
     call_validate_psm(validationInput, database)
 
     create_library_csv(call_validate_psm.out.result)
