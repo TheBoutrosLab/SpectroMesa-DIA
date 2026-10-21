@@ -1,3 +1,4 @@
+---
 # Paths may be absolute or relative to this YAML file.
 # The metapipeline adds samples from the input mzML CSV at runtime.
 schema_version: 1
