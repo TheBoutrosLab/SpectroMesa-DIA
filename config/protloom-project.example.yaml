@@ -1,0 +1,24 @@
+---
+# Paths may be absolute or relative to this YAML file.
+# The metapipeline adds samples from the input mzML CSV at runtime.
+schema_version: 1
+
+fasta_sources:
+  - fasta_id: reference
+    fasta_path: /path/to/reference.fasta
+    fasta_format: uniprot
+    protein_tier: canonical
+    peptide_class: proteotypic
+    annotation_id: reference
+
+annotations:
+  - annotation_id: reference
+    gtf_path: /path/to/reference.gtf
+
+database:
+  output_fasta: /path/to/target-decoy.fasta
+  output_entries_tsv: /path/to/target-decoy.entries.tsv
+  decoy_string: DECOY_
+  decoy_position: prefix
+  contam_string: CONTAMINANT_
+  contam_position: prefix

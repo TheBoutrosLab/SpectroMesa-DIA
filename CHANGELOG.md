@@ -4,6 +4,9 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+- Input CSV annotation IDs and automatic ProtLoom sample mappings in a published project YAML, with a sample-free example configuration and test-local YAML environment expansion.
+
 ## [1.0.0] - 2026-10-20
 
 ### Added

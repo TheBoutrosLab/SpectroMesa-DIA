@@ -21,7 +21,7 @@
   <rect x="50" y="34" width="1380" height="96" rx="16" class="card"/>
   <rect x="50" y="34" width="9" height="96" rx="4" fill="#159a89"/>
   <text x="78" y="73" class="name">Sample mzML files</text>
-  <text x="78" y="102" class="tool">Input CSV: sample_name, fraction_id, path</text>
+  <text x="78" y="102" class="tool">Input CSV: sample_name, fraction_id, annotation_id, path</text>
   <path d="M185 130 V183 H1295" class="bus"/>
   <path d="M185 183 V260" class="input"/>
   <path d="M925 183 V260" class="input"/>

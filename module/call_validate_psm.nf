@@ -1,7 +1,7 @@
 process call_validate_psm {
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'validate-ProteomicPSM-*'
     input:
-        tuple val(records), path(inputCsv), path(mzmlCsv), path(configJson)
+        tuple val(records), path(inputCsv), path(mzmlCsv), path(configJson), path(projectYaml)
         path decoyDatabase
     output:
         tuple val(records), path('validate-ProteomicPSM-*'), emit: result
@@ -13,6 +13,7 @@ process call_validate_psm {
             -c ${projectDir}/external/validate-ProteomicPSM/config/template.config \
             -profile ${params.child_profile} \
             -params-file ${configJson} \
+            --protloom_project_yaml \$(realpath ${projectYaml}) \
             --input_csv \$(realpath ${inputCsv}) \
             --input_mzml_csv \$(realpath ${mzmlCsv}) \
             --decoy_database \$(realpath ${decoyDatabase}) \

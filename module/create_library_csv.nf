@@ -10,7 +10,7 @@ process create_library_csv {
 
     script:
         def version = params.validate_ProteomicPSM.protloom_version ?: '0.2.3'
-        def ids = records.collect { sample, fraction, mzml ->
+        def ids = records.collect { sample, fraction, mzml, annotation ->
             def run = sample
             def id = "${validationDir}/${run}/ProtLoom-${version}/output/${run}_protloom.idXML"
             """
@@ -18,7 +18,7 @@ process create_library_csv {
             printf '%s,%s\\n' '${run}' "\$(realpath '${id}')" >> library.csv
             """.stripIndent()
         }.join('\n')
-        def mzmlRows = records.collect { sample, fraction, mzml ->
+        def mzmlRows = records.collect { sample, fraction, mzml, annotation ->
             "printf '%s,%s,%s\\n' '${sample}' '${fraction}' '${mzml}' >> library-mzml.csv"
         }.join('\n')
         def reports = "${validationDir}/${params.dataset_id}/ProtLoom-${version}/output"
