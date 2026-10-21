@@ -47,6 +47,8 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">Inputs</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#protloom-project-yaml">ProtLoom project YAML</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -82,7 +84,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Inputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/690222f1d1e12b28471068bff415beba223c01d0/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -92,9 +94,9 @@
               
                 <h2 id="inputs">Inputs</h2>
 <p>The input CSV has exactly these columns:</p>
-<pre><code class="language-csv">sample_name,fraction_id,path
-sample_01,1,/data/sample_01.mzML
-sample_02,1,/data/sample_02.mzML
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path
+sample_01,1,reference,/data/sample_01.mzML
+sample_02,1,reference,/data/sample_02.mzML
 </code></pre>
 <table>
 <thead>
@@ -113,6 +115,10 @@ sample_02,1,/data/sample_02.mzML
 <td>Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name.</td>
 </tr>
 <tr>
+<td><code>annotation_id</code></td>
+<td>Must match an <code>annotations[].annotation_id</code> in the ProtLoom project YAML. The metapipeline uses it to generate ProtLoom sample mappings.</td>
+</tr>
+<tr>
 <td><code>path</code></td>
 <td>Existing mzML file. Relative paths resolve from the input CSV's directory. mzML paths and basenames must be unique; basenames cannot contain another dot before <code>.mzML</code>.</td>
 </tr>
@@ -126,10 +132,13 @@ sample_02,1,/data/sample_02.mzML
 </tr>
 <tr>
 <td><code>validate_ProteomicPSM.protloom_project_yaml</code></td>
-<td>ProtLoom project YAML with the database, annotations, and a sample mapping for every <code>sample_name</code> in the CSV. See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/690222f1d1e12b28471068bff415beba223c01d0/external/validate-ProteomicPSM/README.md">validation pipeline's ProtLoom guidance</a>.</td>
+<td>ProtLoom project YAML with database and annotation settings; the metapipeline supplies the <code>samples</code> section from the CSV.</td>
 </tr>
 </tbody>
 </table>
+<h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
+<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
+<p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
               
             </div>
           </div><footer>
