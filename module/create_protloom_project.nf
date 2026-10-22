@@ -1,6 +1,7 @@
 process create_protloom_project {
     publishDir "${params.final_output_dir}/manifests", mode: 'copy',
-        pattern: 'protloom-project.generated.yaml'
+        pattern: 'protloom-project.generated.yaml',
+        enabled: params.validate_ProteomicPSM.run_protloom
 
     input:
         val records
@@ -10,6 +11,10 @@ process create_protloom_project {
         path('protloom-project.generated.yaml'), emit: project
 
     exec:
+        if (!params.validate_ProteomicPSM.run_protloom) {
+            file("${task.workDir}/protloom-project.generated.yaml").text = '# ProtLoom disabled\n'
+            return
+        }
         def source = new File(sourceYaml.toString()).canonicalFile
         if (!source.isFile()) {
             error "ProtLoom project YAML does not exist: ${source}"

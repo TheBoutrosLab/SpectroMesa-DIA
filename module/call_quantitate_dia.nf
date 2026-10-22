@@ -1,7 +1,7 @@
 process call_quantitate_dia {
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'quantitate-ProteomicDIA-*'
     input:
-        tuple path(inputCsv), path(libraryTsv), path(configJson)
+        tuple path(inputCsv), path(libraryTsv), path(configJson), path(resourceConfig)
     output:
         path('quantitate-ProteomicDIA-*'), emit: result
     script:
@@ -10,10 +10,11 @@ process call_quantitate_dia {
         NXF_WORK=\$(pwd)/child-work nextflow run \
             ${projectDir}/external/quantitate-ProteomicDIA/main.nf \
             -c ${projectDir}/external/quantitate-ProteomicDIA/config/template.config \
+            -c ${resourceConfig} \
             -profile ${params.child_profile} \
             -params-file ${configJson} \
             --input_csv \$(realpath ${inputCsv}) \
-            --library_tsv \$(realpath ${libraryTsv}) \
+            --library \$(realpath ${libraryTsv}) \
             --dataset_id ${params.dataset_id} \
             --output_dir \$(pwd)
         """
