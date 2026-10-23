@@ -5,7 +5,8 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 ## [Unreleased]
 
 ### Added
-- Updated `validate-ProteomicPSM` to v2.2.0, including Fido and Epifany grouping, renamed process resources, and algorithm-specific EasyPQP report handoffs.
+- Set ProteinProphet as the default validation protein-grouping route; ProtLoom remains available by explicit selection.
+- Updated `validate-ProteomicPSM` to v2.2.1, including Fido and Epifany grouping, renamed process resources, algorithm-specific EasyPQP report handoffs, and shared PSM and separate ProtLoom protein-group q-value cutoffs.
 - Skip ProtLoom project generation when ProtLoom is disabled.
 - Add an Epifany end-to-end NFTest case without ProtLoom.
 - Input CSV annotation IDs and automatic ProtLoom sample mappings in a published project YAML, with a sample-free example configuration and test-local YAML environment expansion.
