@@ -2,9 +2,12 @@
 
 All notable changes to metapipeline-ProteomicDIA are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-10-22
+## [Unreleased]
 
 ### Added
+- Updated `validate-ProteomicPSM` to v2.2.0, including Fido and Epifany grouping, renamed process resources, and algorithm-specific EasyPQP report handoffs.
+- Skip ProtLoom project generation when ProtLoom is disabled.
+- Add an Epifany end-to-end NFTest case without ProtLoom.
 - Input CSV annotation IDs and automatic ProtLoom sample mappings in a published project YAML, with a sample-free example configuration and test-local YAML environment expansion.
 - Updated all four child pipelines to current commits, including the quantitation pipeline's `library` input and nested DIA-NN options, and added resource entries for validation's ProteinProphet processes.
 - Optional per-process memory in custom resource profiles; omitted values leave the child Nextflow memory directive unset.

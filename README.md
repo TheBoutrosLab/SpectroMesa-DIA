@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom or ProteinProphet, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
+This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -142,7 +142,11 @@ The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gi
 | --- | --- | --- |
 | `run_percolator` | Fixed: `true` | Run MSBooster then Percolator. |
 | `percolator_workflow` | Fixed: `msbooster` | Run MSBooster then Percolator. |
-| `run_protloom` | Default: `true` | Use ProtLoom when true; use iProphet and ProteinProphet when false. |
+| `run_protloom` | Default: `true` | Use ProtLoom when true; use the selected protein inference algorithm when false. |
+| `protein_inference_algorithm` | Default: `ProteinProphet` | Non-ProtLoom grouping: `ProteinProphet`, `Fido`, or `Epifany` (`Epiphany` alias). |
+| `fido_min_probability` | Child default: `0.01` | Minimum Fido group posterior probability for EasyPQP export. |
+| `epifany_min_probability` | Child default: `0.01` | Minimum Epifany group posterior probability for EasyPQP export. |
+| `docker_image_fido` | Child default: `ghcr.io/theboutroslab/fido:1.0` | Standalone Fido container image. |
 | `export_easypqp_reports` | Fixed: `true` | Export cohort PSM and peptide TSVs from the selected route. |
 | `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |
 | `fractionated` | Fixed: `false` | One search engine and one mzML per sample. |
@@ -206,7 +210,7 @@ See [config/template.config](config/template.config) for an editable run configu
 ## Pipeline steps and outputs
 
 1. `search-ProteomicDIA` searches each mzML with MSFragger and produces idXML files.
-2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProtLoom by default or ProteinProphet when `validate_ProteomicPSM.run_protloom = false`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
+2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProtLoom by default or the selected ProteinProphet, Fido, or Epifany backend when `validate_ProteomicPSM.run_protloom = false`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
 3. `generate-ProteomicSpectralLibrary` uses those identifications and the original mzML files to produce an EasyPQP library TSV.
 4. `quantitate-ProteomicDIA` quantifies the original mzML files against that library with DIA-NN.
 
@@ -227,11 +231,12 @@ The metapipeline creates each stage's input CSV in `manifests/`. The child direc
 
 ## Testing
 
-The NFTest cases run all four child pipelines using either ProtLoom or ProteinProphet for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run all four child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
 
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
 ```
 
 The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).

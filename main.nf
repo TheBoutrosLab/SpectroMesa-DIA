@@ -78,12 +78,18 @@ workflow {
     call_search_dia(searchInput, database, msfragger)
 
     create_validation_csv(call_search_dia.out.result)
-    create_protloom_project(samples, params.validate_ProteomicPSM.get('protloom_project_yaml') ?: '')
-    validationInput = create_validation_csv.out.input.combine(validateConfig)
-        .combine(create_protloom_project.out.project)
-        .map { records, inputCsv, mzmlCsv, config, resources, projectYaml ->
-            [records, inputCsv, mzmlCsv, config, resources, projectYaml]
+    validationBase = create_validation_csv.out.input.combine(validateConfig)
+    if (params.validate_ProteomicPSM.run_protloom) {
+        create_protloom_project(samples, params.validate_ProteomicPSM.protloom_project_yaml)
+        validationInput = validationBase.combine(create_protloom_project.out.project)
+            .map { records, inputCsv, mzmlCsv, config, resources, projectYaml ->
+                [records, inputCsv, mzmlCsv, config, resources, projectYaml]
+            }
+    } else {
+        validationInput = validationBase.map { records, inputCsv, mzmlCsv, config, resources ->
+            [records, inputCsv, mzmlCsv, config, resources, []]
         }
+    }
     call_validate_psm(validationInput, database)
 
     create_library_csv(call_validate_psm.out.result)

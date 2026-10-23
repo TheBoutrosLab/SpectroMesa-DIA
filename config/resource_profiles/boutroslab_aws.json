@@ -72,11 +72,11 @@
             "export_MSBooster_PIN": {
                 "cpus": 2
             },
-            "run_MSBooster": {
+            "extract_PSMFeatures_MSBooster": {
                 "cpus": 6,
                 "memory": "12 GB"
             },
-            "run_percolator_PIN": {
+            "score_PSM_PercolatorPIN": {
                 "cpus": 2
             },
             "import_percolator_POUT": {
@@ -88,34 +88,48 @@
             "convert_ProteinProphet_pepXML": {
                 "cpus": 1
             },
-            "run_iProphet": {
+            "integrate_PSM_iProphet": {
                 "cpus": 8,
                 "memory": "32 GB"
             },
-            "run_ProteinProphet": {
+            "infer_ProteinGroups_ProteinProphet": {
                 "cpus": 1,
                 "memory": "32 GB"
             },
             "convert_ProteinProphet_idXML": {
                 "cpus": 1
             },
-            "export_ProteinProphet_EasyPQP": {
+            "export_ProteinGroup_EasyPQP": {
                 "cpus": 1
             },
-            "run_ProtLoom_localInfer": {
+            "infer_ProteinGroups_ProtLoomLocal": {
                 "cpus": 1,
                 "memory": "10 GB"
             },
-            "run_ProtLoom_jointGraph": {
+            "build_CohortGraph_ProtLoom": {
                 "cpus": 1,
                 "memory": "10 GB"
             },
-            "run_ProtLoom_jointInfer": {
+            "infer_ProteinGroups_ProtLoomJoint": {
                 "cpus": 1,
                 "memory": "10 GB"
             },
-            "run_ProtLoom_computeFDR": {
+            "score_FDR_ProtLoom": {
                 "cpus": 1
+            },
+            "export_Fido_graph": {
+                "cpus": 1
+            },
+            "infer_ProteinGroups_Fido": {
+                "cpus": 1,
+                "memory": "32 GB"
+            },
+            "parse_Fido_groups": {
+                "cpus": 1
+            },
+            "infer_ProteinGroups_Epifany": {
+                "cpus": 8,
+                "memory": "32 GB"
             },
             "export_EasyPQP_reports": {
                 "cpus": 3,
