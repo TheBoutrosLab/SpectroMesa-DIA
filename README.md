@@ -146,6 +146,7 @@ The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gi
 | `protein_inference_algorithm` | Default: `ProteinProphet` | Non-ProtLoom grouping: `ProteinProphet`, `Fido`, or `Epifany` (`Epiphany` alias). |
 | `fido_min_probability` | Child default: `0.01` | Minimum Fido group posterior probability for EasyPQP export. |
 | `epifany_min_probability` | Child default: `0.01` | Minimum Epifany group posterior probability for EasyPQP export. |
+| `epifany_greedy_group_resolution` | Child default: `none` | Optional Epifany shared-peptide resolution: `none`, `remove_associations_only`, or `remove_proteins_wo_evidence`. |
 | `docker_image_fido` | Child default: `ghcr.io/theboutroslab/fido:1.0` | Standalone Fido container image. |
 | `export_easypqp_reports` | Fixed: `true` | Export cohort PSM and peptide TSVs from the selected route. |
 | `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |

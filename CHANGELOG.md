@@ -6,11 +6,12 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ### Added
 - Set ProteinProphet as the default validation protein-grouping route; ProtLoom remains available by explicit selection.
-- Updated `validate-ProteomicPSM` to v2.2.1, including Fido and Epifany grouping, renamed process resources, algorithm-specific EasyPQP report handoffs, and shared PSM and separate ProtLoom protein-group q-value cutoffs.
+- Update child pipeline Git submodules: `search-ProteomicDIA` to `v0.1.1`, `validate-ProteomicPSM` to `v2.2.2`, `generate-ProteomicSpectralLibrary` to `v1.0.1`, and `quantitate-ProteomicDIA` to `v1.1.0`.
+- Add Fido and Epifany grouping, aligned resource mappings and EasyPQP handoffs, shared PSM and separate ProtLoom group q-value cutoffs, and Epifany shared-peptide resolution.
 - Skip ProtLoom project generation when ProtLoom is disabled.
 - Add an Epifany end-to-end NFTest case without ProtLoom.
 - Input CSV annotation IDs and automatic ProtLoom sample mappings in a published project YAML, with a sample-free example configuration and test-local YAML environment expansion.
-- Updated all four child pipelines to current commits, including the quantitation pipeline's `library` input and nested DIA-NN options, and added resource entries for validation's ProteinProphet processes.
+- Add support for the quantitation pipeline's `library` input and nested DIA-NN options, and resource entries for validation's ProteinProphet processes.
 - Optional per-process memory in custom resource profiles; omitted values leave the child Nextflow memory directive unset.
 - A ProteinProphet validation route and end-to-end NFTest case that builds the EasyPQP library without ProtLoom.
 
