@@ -53,7 +53,7 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#search_proteomicdia-msfragger-search">search_ProteomicDIA — MSFragger search</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#validate_proteomicpsm-msbooster-percolator-and-protloom">validate_ProteomicPSM — MSBooster, Percolator, and ProtLoom</a>
+    <li class="toctree-l2"><a class="reference internal" href="#validate_proteomicpsm-msbooster-percolator-and-protein-inference">validate_ProteomicPSM — MSBooster, Percolator, and protein inference</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#generate_proteomicspectrallibrary-easypqp-library">generate_ProteomicSpectralLibrary — EasyPQP library</a>
     </li>
@@ -90,7 +90,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Parameters</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -171,9 +171,9 @@
 </tr>
 </tbody>
 </table>
-<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
+<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
 <h3 id="search_proteomicdia-msfragger-search"><code>search_ProteomicDIA</code> — MSFragger search</h3>
-<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
+<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
 <table>
 <thead>
 <tr>
@@ -370,8 +370,8 @@
 </tr>
 </tbody>
 </table>
-<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
-<h3 id="validate_proteomicpsm-msbooster-percolator-and-protloom"><code>validate_ProteomicPSM</code> — MSBooster, Percolator, and ProtLoom</h3>
+<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
+<h3 id="validate_proteomicpsm-msbooster-percolator-and-protein-inference"><code>validate_ProteomicPSM</code> — MSBooster, Percolator, and protein inference</h3>
 <table>
 <thead>
 <tr>
@@ -393,13 +393,38 @@
 </tr>
 <tr>
 <td><code>run_protloom</code></td>
-<td>Fixed: <code>true</code></td>
-<td>Run ProtLoom and export cohort PSM and peptide TSVs.</td>
+<td>Default: <code>false</code></td>
+<td>Use ProteinProphet by default; set true for ProtLoom.</td>
+</tr>
+<tr>
+<td><code>protein_inference_algorithm</code></td>
+<td>Default: <code>ProteinProphet</code></td>
+<td>Non-ProtLoom grouping: <code>ProteinProphet</code>, <code>Fido</code>, or <code>Epifany</code> (<code>Epiphany</code> alias).</td>
+</tr>
+<tr>
+<td><code>fido_min_probability</code></td>
+<td>Child default: <code>0.01</code></td>
+<td>Minimum Fido group posterior probability for EasyPQP export.</td>
+</tr>
+<tr>
+<td><code>epifany_min_probability</code></td>
+<td>Child default: <code>0.01</code></td>
+<td>Minimum Epifany group posterior probability for EasyPQP export.</td>
+</tr>
+<tr>
+<td><code>epifany_greedy_group_resolution</code></td>
+<td>Child default: <code>none</code></td>
+<td>Optional Epifany shared-peptide resolution: <code>none</code>, <code>remove_associations_only</code>, or <code>remove_proteins_wo_evidence</code>.</td>
+</tr>
+<tr>
+<td><code>docker_image_fido</code></td>
+<td>Child default: <code>ghcr.io/theboutroslab/fido:1.0</code></td>
+<td>Standalone Fido container image.</td>
 </tr>
 <tr>
 <td><code>export_easypqp_reports</code></td>
 <td>Fixed: <code>true</code></td>
-<td>Run ProtLoom and export cohort PSM and peptide TSVs.</td>
+<td>Export cohort PSM and peptide TSVs from the selected route.</td>
 </tr>
 <tr>
 <td><code>merge_consensus</code></td>
@@ -413,7 +438,7 @@
 </tr>
 <tr>
 <td><code>protloom_project_yaml</code></td>
-<td>Required</td>
+<td>Required with ProtLoom</td>
 <td>Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV.</td>
 </tr>
 <tr>
@@ -432,9 +457,14 @@
 <td>ProtLoom cleavage rule.</td>
 </tr>
 <tr>
-<td><code>protloom_easypqp_fdr</code></td>
+<td><code>easypqp_psm_qvalue</code></td>
 <td><code>0.01</code></td>
-<td>Cohort report PSM and protein-group q-value cutoff.</td>
+<td>Maximum PSM q-value for EasyPQP export in every inference route.</td>
+</tr>
+<tr>
+<td><code>protloom_easypqp_group_qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Maximum ProtLoom protein-group q-value for EasyPQP export.</td>
 </tr>
 <tr>
 <td><code>protloom_idxml_primary_score</code></td>
@@ -553,7 +583,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
 <h3 id="generate_proteomicspectrallibrary-easypqp-library"><code>generate_ProteomicSpectralLibrary</code> — EasyPQP library</h3>
 <table>
 <thead>
@@ -571,8 +601,8 @@
 </tr>
 <tr>
 <td><code>idxml_score_type</code></td>
-<td><code>ProtLoom PEP</code></td>
-<td>Score read from each unfiltered ProtLoom idXML hit.</td>
+<td><code>ProtLoom PEP</code>, or <code>Posterior Error Probability</code> when ProtLoom is disabled</td>
+<td>Score read from each unfiltered validation idXML hit.</td>
 </tr>
 <tr>
 <td><code>easypqp_score_type</code></td>
@@ -586,7 +616,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
 <h3 id="quantitate_proteomicdia-dia-nn-quantitation"><code>quantitate_ProteomicDIA</code> — DIA-NN quantitation</h3>
 <table>
 <thead>
@@ -598,24 +628,30 @@
 </thead>
 <tbody>
 <tr>
-<td><code>diann_qvalue</code></td>
-<td>Child default: <code>0.01</code></td>
+<td><code>DIA-NN.qvalue</code></td>
+<td><code>0.01</code></td>
 <td>Main report precursor q-value cutoff.</td>
 </tr>
 <tr>
-<td><code>diann_matrix_qvalue</code></td>
-<td>Child default: <code>0.01</code></td>
+<td><code>DIA-NN.matrix_qvalue</code></td>
+<td><code>0.01</code></td>
 <td>Quantitation matrix q-value cutoff.</td>
 </tr>
 <tr>
-<td><code>diann_fragment_interference_removal</code></td>
-<td>Child default: <code>false</code></td>
-<td>Whether to correct fragment elution curves for interference.</td>
+<td><code>DIA-NN.no_ifs_removal</code></td>
+<td><code>true</code></td>
+<td>Disable fragment interference correction.</td>
+</tr>
+<tr>
+<td><code>DIA-NN.no_prot_inf</code></td>
+<td><code>true</code></td>
+<td>Disable protein inference for the generated EasyPQP TSV.</td>
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
-<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
+<p>Set these in <code>quantitate_ProteomicDIA { 'DIA-NN' { ... } }</code>. The metapipeline passes the generated EasyPQP TSV as the child's <code>library</code> input.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
+<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
               
             </div>
           </div><footer>

@@ -84,7 +84,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Inputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -116,7 +116,7 @@ sample_02,1,reference,/data/sample_02.mzML
 </tr>
 <tr>
 <td><code>annotation_id</code></td>
-<td>Must match an <code>annotations[].annotation_id</code> in the ProtLoom project YAML. The metapipeline uses it to generate ProtLoom sample mappings.</td>
+<td>Required CSV column. When ProtLoom is enabled, it must match an <code>annotations[].annotation_id</code> in its project YAML.</td>
 </tr>
 <tr>
 <td><code>path</code></td>
@@ -132,12 +132,12 @@ sample_02,1,reference,/data/sample_02.mzML
 </tr>
 <tr>
 <td><code>validate_ProteomicPSM.protloom_project_yaml</code></td>
-<td>ProtLoom project YAML with database and annotation settings; the metapipeline supplies the <code>samples</code> section from the CSV.</td>
+<td>Required only for the ProtLoom route. The metapipeline supplies its <code>samples</code> section from the CSV.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
-<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
+<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
 <p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
               
             </div>

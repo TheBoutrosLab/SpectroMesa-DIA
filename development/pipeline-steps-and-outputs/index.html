@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -93,7 +93,7 @@
                 <h2 id="pipeline-steps-and-outputs">Pipeline steps and outputs</h2>
 <ol>
 <li><code>search-ProteomicDIA</code> searches each mzML with MSFragger and produces idXML files.</li>
-<li><code>validate-ProteomicPSM</code> uses MSBooster, Percolator, and ProtLoom. Its unfiltered ProtLoom idXML files and cohort PSM and peptide reports feed the library stage.</li>
+<li><code>validate-ProteomicPSM</code> uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when <code>validate_ProteomicPSM.run_protloom = true</code>. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.</li>
 <li><code>generate-ProteomicSpectralLibrary</code> uses those identifications and the original mzML files to produce an EasyPQP library TSV.</li>
 <li><code>quantitate-ProteomicDIA</code> quantifies the original mzML files against that library with DIA-NN.</li>
 </ol>

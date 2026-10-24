@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Testing</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -91,10 +91,12 @@
             <div class="section" itemprop="articleBody">
               
                 <h2 id="testing">Testing</h2>
-<p>The included NFTest case runs all four child pipelines. From the repository root, inside a Slurm job, copy <code>.env-template</code> to <code>.env</code>, set <code>TEST_DATA_DIR</code>, and run:</p>
+<p>The NFTest cases run all four child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy <code>.env-template</code> to <code>.env</code>, set <code>TEST_DATA_DIR</code>, and run:</p>
 <pre><code class="language-bash">zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
 </code></pre>
-<p>The test runner uses <code>/scratch/$SLURM_JOB_ID/&lt;test-case&gt;</code> for its work and output. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/94f6ebda3265203a3a558c1946d30614c80ee31f/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
+<p>The test runner uses <code>/scratch/$SLURM_JOB_ID/&lt;test-case&gt;</code> for its work and output. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/4a1463c60c23fadf147a50f8c0ab948272756ef8/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
               
             </div>
           </div><footer>
