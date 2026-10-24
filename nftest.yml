@@ -11,3 +11,15 @@ cases:
     nf_config: test/test_integration_MSFragger_ProtLoom_DIANN/test.config
     skip: false
     verbose: true
+  - name: test_integration_MSFragger_ProteinProphet_DIANN
+    message: Integration of MSFragger, ProteinProphet, EasyPQP, and DIA-NN without ProtLoom
+    nf_script: main.nf
+    nf_config: test/test_integration_MSFragger_ProteinProphet_DIANN/test.config
+    skip: false
+    verbose: true
+  - name: test_integration_MSFragger_Epifany_DIANN
+    message: Integration of MSFragger, Epifany, EasyPQP, and DIA-NN without ProtLoom
+    nf_script: main.nf
+    nf_config: test/test_integration_MSFragger_Epifany_DIANN/test.config
+    skip: false
+    verbose: true

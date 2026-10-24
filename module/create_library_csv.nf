@@ -9,19 +9,26 @@ process create_library_csv {
             path('cohort-psm.tsv'), path('cohort-peptides.tsv'), emit: input
 
     script:
-        def version = params.validate_ProteomicPSM.protloom_version ?: '0.2.3'
+        def useProtLoom = params.validate_ProteomicPSM.run_protloom
+        def version = useProtLoom ?
+            (params.validate_ProteomicPSM.get('protloom_version') ?: '0.2.3') :
+            (params.validate_ProteomicPSM.get('openms_version') ?: '3.5.0')
         def ids = records.collect { sample, fraction, mzml, annotation ->
             def run = sample
-            def id = "${validationDir}/${run}/ProtLoom-${version}/output/${run}_protloom.idXML"
+            def id = useProtLoom ?
+                "${validationDir}/${run}/ProtLoom-${version}/output/${run}_protloom.idXML" :
+                "${validationDir}/${run}/OpenMS-${version}/output/${run}_MSFragger_idswitch_pep.idXML"
             """
-            test -f '${id}' || { echo 'Missing unfiltered ProtLoom idXML: ${id}' >&2; exit 1; }
+            test -f '${id}' || { echo 'Missing unfiltered library idXML: ${id}' >&2; exit 1; }
             printf '%s,%s\\n' '${run}' "\$(realpath '${id}')" >> library.csv
             """.stripIndent()
         }.join('\n')
         def mzmlRows = records.collect { sample, fraction, mzml, annotation ->
             "printf '%s,%s,%s\\n' '${sample}' '${fraction}' '${mzml}' >> library-mzml.csv"
         }.join('\n')
-        def reports = "${validationDir}/${params.dataset_id}/ProtLoom-${version}/output"
+        def reports = useProtLoom ?
+            "${validationDir}/${params.dataset_id}/ProtLoom-${version}/output" :
+            "${validationDir}/${params.dataset_id}/${params.validate_ProteomicPSM.protein_inference_algorithm}/output"
         """
         set -euo pipefail
         printf 'sample_name,idXML\\n' > library.csv

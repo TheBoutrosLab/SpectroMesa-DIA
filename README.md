@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster, Percolator, and ProtLoom, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
+This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -12,8 +12,8 @@ This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates 
    git submodule update --init --recursive
    ```
 
-2. Prepare the [mzML input CSV](input/template-mzML.csv), a target-decoy FASTA, the MSFragger JAR, and a [ProtLoom project YAML](config/protloom-project.example.yaml). Use the same FASTA and accession markers in the run configuration and ProtLoom YAML.
-3. Copy [config/template.config](config/template.config) to a run-specific file. Set `input_csv`, `decoy_database`, `msfragger_executable`, `output_dir`, `dataset_id`, and `validate_ProteomicPSM.protloom_project_yaml`. Review the shared markers and the child-specific settings for your experiment. Keep the template's `includeConfig` lines and final `methods.setup()` call.
+2. Prepare the [mzML input CSV](input/template-mzML.csv), a target-decoy FASTA, and the MSFragger JAR. If selecting ProtLoom, also prepare a [ProtLoom project YAML](config/protloom-project.example.yaml) with the same FASTA and accession markers as the run configuration.
+3. Copy [config/template.config](config/template.config) to a run-specific file. Set `input_csv`, `decoy_database`, `msfragger_executable`, `output_dir`, and `dataset_id`. Set `validate_ProteomicPSM.protloom_project_yaml` when using ProtLoom. Review the shared markers and the child-specific settings for your experiment. Keep the template's `includeConfig` lines and final `methods.setup()` call.
 4. Run with Nextflow 24.10.6 and its v1 syntax parser. Choose a work directory with enough space for the mzML files and child pipeline work:
 
    ```bash
@@ -29,10 +29,10 @@ The scratch path above is an example for a Slurm job; use another suitable work 
 
 | Profile | Node budget | Parent launch processes | Child allocations |
 | --- | --- | --- | --- |
-| `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger 24 CPUs/128 GB; MSBooster and major ProtLoom tasks double their default requests; EasyPQP library 8 CPUs/64 GB; DIA-NN 32 CPUs/256 GB. |
-| `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | Child defaults, except DIA-NN requests 16 CPUs/96 GB. |
+| `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB. |
+| `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB. |
 
-Parent CSV and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and explicit CPU and memory requests for every child process. The parent translates those requests into the child pipelines' existing resource update format and passes them through each child's parameter JSON. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
+Parent CSV and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
 
 For a profile outside the repository, copy [pines.json](config/resource_profiles/pines.json) or [boutroslab_aws.json](config/resource_profiles/boutroslab_aws.json) to a directory you control, rename it `<name>.json`, and edit its budget and allocations. Set these values in your run config:
 
@@ -57,11 +57,11 @@ sample_02,1,reference,/data/sample_02.mzML
 | --- | --- |
 | `sample_name` | Unique per row. The current workflow accepts one mzML per sample and uses this name in child pipeline outputs. |
 | `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
-| `annotation_id` | Must match an `annotations[].annotation_id` in the ProtLoom project YAML. The metapipeline uses it to generate ProtLoom sample mappings. |
+| `annotation_id` | Required CSV column. When ProtLoom is enabled, it must match an `annotations[].annotation_id` in its project YAML. |
 | `path` | Existing mzML file. Relative paths resolve from the input CSV's directory. mzML paths and basenames must be unique; basenames cannot contain another dot before `.mzML`. |
 | `decoy_database` | Existing target-decoy FASTA used by search and validation. |
 | `msfragger_executable` | Separately obtained MSFragger JAR. |
-| `validate_ProteomicPSM.protloom_project_yaml` | ProtLoom project YAML with database and annotation settings; the metapipeline supplies the `samples` section from the CSV. |
+| `validate_ProteomicPSM.protloom_project_yaml` | Required only for the ProtLoom route. The metapipeline supplies its `samples` section from the CSV. |
 
 ### ProtLoom project YAML
 
@@ -136,21 +136,27 @@ The `MSFragger` block uses native `fragger.params` keys. The values below are in
 
 The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gives allowed values and validation rules.
 
-### `validate_ProteomicPSM` — MSBooster, Percolator, and ProtLoom
+### `validate_ProteomicPSM` — MSBooster, Percolator, and protein inference
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
 | `run_percolator` | Fixed: `true` | Run MSBooster then Percolator. |
 | `percolator_workflow` | Fixed: `msbooster` | Run MSBooster then Percolator. |
-| `run_protloom` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
-| `export_easypqp_reports` | Fixed: `true` | Run ProtLoom and export cohort PSM and peptide TSVs. |
+| `run_protloom` | Default: `false` | Use ProteinProphet by default; set true for ProtLoom. |
+| `protein_inference_algorithm` | Default: `ProteinProphet` | Non-ProtLoom grouping: `ProteinProphet`, `Fido`, or `Epifany` (`Epiphany` alias). |
+| `fido_min_probability` | Child default: `0.01` | Minimum Fido group posterior probability for EasyPQP export. |
+| `epifany_min_probability` | Child default: `0.01` | Minimum Epifany group posterior probability for EasyPQP export. |
+| `epifany_greedy_group_resolution` | Child default: `none` | Optional Epifany shared-peptide resolution: `none`, `remove_associations_only`, or `remove_proteins_wo_evidence`. |
+| `docker_image_fido` | Child default: `ghcr.io/theboutroslab/fido:1.0` | Standalone Fido container image. |
+| `export_easypqp_reports` | Fixed: `true` | Export cohort PSM and peptide TSVs from the selected route. |
 | `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |
 | `fractionated` | Fixed: `false` | One search engine and one mzML per sample. |
-| `protloom_project_yaml` | Required | Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV. |
+| `protloom_project_yaml` | Required with ProtLoom | Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV. |
 | `protloom_pc_order` | `proteotypic` | Peptide-class and protein-tier priorities. |
 | `protloom_pt_order` | `canonical` | Peptide-class and protein-tier priorities. |
 | `protloom_enzyme` | `trypsin` | ProtLoom cleavage rule. |
-| `protloom_easypqp_fdr` | `0.01` | Cohort report PSM and protein-group q-value cutoff. |
+| `easypqp_psm_qvalue` | `0.01` | Maximum PSM q-value for EasyPQP export in every inference route. |
+| `protloom_easypqp_group_qvalue` | `0.01` | Maximum ProtLoom protein-group q-value for EasyPQP export. |
 | `protloom_idxml_primary_score` | `pep` | Primary score in unfiltered ProtLoom idXML. |
 | `protloom_idxml_unmatched_psms` | `remove` | Handling of PSMs without a ProtLoom match. |
 | `protloom_version` | Child default: `0.2.3` | ProtLoom version and container. |
@@ -182,7 +188,7 @@ See the [validation pipeline parameters](external/validate-ProteomicPSM/README.m
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
 | `fractionated` | Fixed: `false` | Current workflow accepts one mzML per sample. |
-| `idxml_score_type` | `ProtLoom PEP` | Score read from each unfiltered ProtLoom idXML hit. |
+| `idxml_score_type` | `ProtLoom PEP`, or `Posterior Error Probability` when ProtLoom is disabled | Score read from each unfiltered validation idXML hit. |
 | `easypqp_score_type` | Metapipeline default: `PEP` | Meaning of the selected score. |
 | `easypqp_version` | Child default: `0.1.59` | EasyPQP version and container. |
 
@@ -192,9 +198,12 @@ See the [library pipeline parameter reference](external/generate-ProteomicSpectr
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
-| `diann_qvalue` | Child default: `0.01` | Main report precursor q-value cutoff. |
-| `diann_matrix_qvalue` | Child default: `0.01` | Quantitation matrix q-value cutoff. |
-| `diann_fragment_interference_removal` | Child default: `false` | Whether to correct fragment elution curves for interference. |
+| `DIA-NN.qvalue` | `0.01` | Main report precursor q-value cutoff. |
+| `DIA-NN.matrix_qvalue` | `0.01` | Quantitation matrix q-value cutoff. |
+| `DIA-NN.no_ifs_removal` | `true` | Disable fragment interference correction. |
+| `DIA-NN.no_prot_inf` | `true` | Disable protein inference for the generated EasyPQP TSV. |
+
+Set these in `quantitate_ProteomicDIA { 'DIA-NN' { ... } }`. The metapipeline passes the generated EasyPQP TSV as the child's `library` input.
 
 See the [quantitation pipeline parameter reference](external/quantitate-ProteomicDIA/README.md#parameters).
 
@@ -203,7 +212,7 @@ See [config/template.config](config/template.config) for an editable run configu
 ## Pipeline steps and outputs
 
 1. `search-ProteomicDIA` searches each mzML with MSFragger and produces idXML files.
-2. `validate-ProteomicPSM` uses MSBooster, Percolator, and ProtLoom. Its unfiltered ProtLoom idXML files and cohort PSM and peptide reports feed the library stage.
+2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when `validate_ProteomicPSM.run_protloom = true`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
 3. `generate-ProteomicSpectralLibrary` uses those identifications and the original mzML files to produce an EasyPQP library TSV.
 4. `quantitate-ProteomicDIA` quantifies the original mzML files against that library with DIA-NN.
 
@@ -224,10 +233,12 @@ The metapipeline creates each stage's input CSV in `manifests/`. The child direc
 
 ## Testing
 
-The included NFTest case runs all four child pipelines. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run all four child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
 
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
 ```
 
 The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).

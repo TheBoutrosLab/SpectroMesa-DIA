@@ -61,40 +61,46 @@ workflow {
 
     samples = readMzMLCsv(params.input_csv)
     configOptions = Channel.of(
-        ['search_ProteomicDIA', params.search_ProteomicDIA],
-        ['validate_ProteomicPSM', params.validate_ProteomicPSM],
-        ['generate_ProteomicSpectralLibrary', params.generate_ProteomicSpectralLibrary],
-        ['quantitate_ProteomicDIA', params.quantitate_ProteomicDIA]
+        ['search_ProteomicDIA', params.search_ProteomicDIA, params.child_processes_without_memory.search_ProteomicDIA ?: []],
+        ['validate_ProteomicPSM', params.validate_ProteomicPSM, params.child_processes_without_memory.validate_ProteomicPSM ?: []],
+        ['generate_ProteomicSpectralLibrary', params.generate_ProteomicSpectralLibrary, params.child_processes_without_memory.generate_ProteomicSpectralLibrary ?: []],
+        ['quantitate_ProteomicDIA', params.quantitate_ProteomicDIA, params.child_processes_without_memory.quantitate_ProteomicDIA ?: []]
     )
     create_config_json(configOptions)
-    searchConfig = create_config_json.out.config.filter { name, config -> name == 'search_ProteomicDIA' }.map { name, config -> config }
-    validateConfig = create_config_json.out.config.filter { name, config -> name == 'validate_ProteomicPSM' }.map { name, config -> config }
-    libraryConfig = create_config_json.out.config.filter { name, config -> name == 'generate_ProteomicSpectralLibrary' }.map { name, config -> config }
-    quantConfig = create_config_json.out.config.filter { name, config -> name == 'quantitate_ProteomicDIA' }.map { name, config -> config }
+    searchConfig = create_config_json.out.config.filter { name, config, resources -> name == 'search_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
+    validateConfig = create_config_json.out.config.filter { name, config, resources -> name == 'validate_ProteomicPSM' }.map { name, config, resources -> [config, resources] }
+    libraryConfig = create_config_json.out.config.filter { name, config, resources -> name == 'generate_ProteomicSpectralLibrary' }.map { name, config, resources -> [config, resources] }
+    quantConfig = create_config_json.out.config.filter { name, config, resources -> name == 'quantitate_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
 
     create_search_csv(samples)
     searchInput = create_search_csv.out.input.combine(searchConfig)
-        .map { csv, records, config -> [csv, records, config] }
+        .map { csv, records, config, resources -> [csv, records, config, resources] }
     call_search_dia(searchInput, database, msfragger)
 
     create_validation_csv(call_search_dia.out.result)
-    create_protloom_project(samples, params.validate_ProteomicPSM.protloom_project_yaml)
-    validationInput = create_validation_csv.out.input.combine(validateConfig)
-        .combine(create_protloom_project.out.project)
-        .map { records, inputCsv, mzmlCsv, config, projectYaml ->
-            [records, inputCsv, mzmlCsv, config, projectYaml]
+    validationBase = create_validation_csv.out.input.combine(validateConfig)
+    if (params.validate_ProteomicPSM.run_protloom) {
+        create_protloom_project(samples, params.validate_ProteomicPSM.protloom_project_yaml)
+        validationInput = validationBase.combine(create_protloom_project.out.project)
+            .map { records, inputCsv, mzmlCsv, config, resources, projectYaml ->
+                [records, inputCsv, mzmlCsv, config, resources, projectYaml]
+            }
+    } else {
+        validationInput = validationBase.map { records, inputCsv, mzmlCsv, config, resources ->
+            [records, inputCsv, mzmlCsv, config, resources, []]
         }
+    }
     call_validate_psm(validationInput, database)
 
     create_library_csv(call_validate_psm.out.result)
     libraryInput = create_library_csv.out.input.combine(libraryConfig)
-        .map { records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config ->
-            [records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config]
+        .map { records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config, resources ->
+            [records, idxmlCsv, mzmlCsv, psmTsv, peptideTsv, config, resources]
         }
     call_spectral_library(libraryInput)
 
     create_quantitation_csv(call_spectral_library.out.result)
     quantInput = create_quantitation_csv.out.input.combine(quantConfig)
-        .map { inputCsv, libraryTsv, config -> [inputCsv, libraryTsv, config] }
+        .map { inputCsv, libraryTsv, config, resources -> [inputCsv, libraryTsv, config, resources] }
     call_quantitate_dia(quantInput)
 }

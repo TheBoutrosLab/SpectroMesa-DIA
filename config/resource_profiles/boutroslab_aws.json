@@ -4,122 +4,132 @@
     "children": {
         "search_ProteomicDIA": {
             "write_MSFraggerParams": {
-                "cpus": 1,
-                "memory": "1 GB"
+                "cpus": 1
             },
             "search_database_MSFragger": {
-                "cpus": 12,
+                "cpus": 8,
                 "memory": "64 GB"
             },
             "convert_pepXML2idXML_MSFragger": {
-                "cpus": 2,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "calculate_SHA512": {
-                "cpus": 1,
-                "memory": "1 GB"
+                "cpus": 1
             }
         },
         "validate_ProteomicPSM": {
             "index_peptides": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 2
             },
             "extract_PSM_features": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "score_PEP_percolator": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "score_FDR_OpenMS": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "filter_PSM": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "export_mzTab": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "switch_score_2_pep": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "split_idXML": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "fix_idXMLSpectraDataPath": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "merge_PSM": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "aggregate_consensus_id": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "index_peptide_aggregated": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "merge_PSM_fractions": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "score_FDR_OpenMS_consensus": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "filter_PSM_consensus": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "filter_PSM_protloom": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 1
             },
             "export_mzTab_consensus": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 3
             },
             "export_MSBooster_PIN": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 2
             },
-            "run_MSBooster": {
-                "cpus": 3,
-                "memory": "24 GB"
+            "extract_PSMFeatures_MSBooster": {
+                "cpus": 6,
+                "memory": "12 GB"
             },
-            "run_percolator_PIN": {
-                "cpus": 3,
-                "memory": "24 GB"
+            "score_PSM_PercolatorPIN": {
+                "cpus": 2
             },
             "import_percolator_POUT": {
-                "cpus": 3,
-                "memory": "24 GB"
+                "cpus": 2
             },
-            "run_ProtLoom_localInfer": {
-                "cpus": 3,
+            "prepare_ProteinProphet_idXML": {
+                "cpus": 1
+            },
+            "convert_ProteinProphet_pepXML": {
+                "cpus": 1
+            },
+            "integrate_PSM_iProphet": {
+                "cpus": 8,
                 "memory": "32 GB"
             },
-            "run_ProtLoom_jointGraph": {
-                "cpus": 3,
+            "infer_ProteinGroups_ProteinProphet": {
+                "cpus": 1,
                 "memory": "32 GB"
             },
-            "run_ProtLoom_jointInfer": {
-                "cpus": 3,
+            "convert_ProteinProphet_idXML": {
+                "cpus": 1
+            },
+            "export_ProteinGroup_EasyPQP": {
+                "cpus": 1
+            },
+            "infer_ProteinGroups_ProtLoomLocal": {
+                "cpus": 1,
+                "memory": "10 GB"
+            },
+            "build_CohortGraph_ProtLoom": {
+                "cpus": 1,
+                "memory": "10 GB"
+            },
+            "infer_ProteinGroups_ProtLoomJoint": {
+                "cpus": 1,
+                "memory": "10 GB"
+            },
+            "score_FDR_ProtLoom": {
+                "cpus": 1
+            },
+            "export_Fido_graph": {
+                "cpus": 1
+            },
+            "infer_ProteinGroups_Fido": {
+                "cpus": 1,
                 "memory": "32 GB"
             },
-            "run_ProtLoom_computeFDR": {
-                "cpus": 3,
-                "memory": "16 GB"
+            "parse_Fido_groups": {
+                "cpus": 1
+            },
+            "infer_ProteinGroups_Epifany": {
+                "cpus": 8,
+                "memory": "32 GB"
             },
             "export_EasyPQP_reports": {
                 "cpus": 3,

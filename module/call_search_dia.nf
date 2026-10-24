@@ -1,7 +1,7 @@
 process call_search_dia {
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'search-ProteomicDIA-*'
     input:
-        tuple path(inputCsv), val(records), path(configJson)
+        tuple path(inputCsv), val(records), path(configJson), path(resourceConfig)
         path decoyDatabase
         path msfraggerJar
     output:
@@ -12,6 +12,7 @@ process call_search_dia {
         NXF_WORK=\$(pwd)/child-work nextflow run \
             ${projectDir}/external/search-ProteomicDIA/main.nf \
             -c ${projectDir}/external/search-ProteomicDIA/config/template.config \
+            -c ${resourceConfig} \
             -profile ${params.child_profile} \
             -params-file ${configJson} \
             --input_csv \$(realpath ${inputCsv}) \

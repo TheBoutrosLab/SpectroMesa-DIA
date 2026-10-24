@@ -1,7 +1,7 @@
 process call_spectral_library {
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'generate-ProteomicSpectralLibrary-*'
     input:
-        tuple val(records), path(idxmlCsv), path(mzmlCsv), path(psmTsv), path(peptideTsv), path(configJson)
+        tuple val(records), path(idxmlCsv), path(mzmlCsv), path(psmTsv), path(peptideTsv), path(configJson), path(resourceConfig)
     output:
         tuple val(records), path('generate-ProteomicSpectralLibrary-*'), emit: result
     script:
@@ -10,6 +10,7 @@ process call_spectral_library {
         NXF_WORK=\$(pwd)/child-work nextflow run \
             ${projectDir}/external/generate-ProteomicSpectralLibrary/main.nf \
             -c ${projectDir}/external/generate-ProteomicSpectralLibrary/config/template.config \
+            -c ${resourceConfig} \
             -profile ${params.child_profile} \
             -params-file ${configJson} \
             --idxml_csv \$(realpath ${idxmlCsv}) \
