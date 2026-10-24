@@ -28,7 +28,7 @@ process create_library_csv {
         }.join('\n')
         def reports = useProtLoom ?
             "${validationDir}/${params.dataset_id}/ProtLoom-${version}/output" :
-            "${validationDir}/${params.dataset_id}/ProteinProphet/output"
+            "${validationDir}/${params.dataset_id}/${params.validate_ProteomicPSM.protein_inference_algorithm}/output"
         """
         set -euo pipefail
         printf 'sample_name,idXML\\n' > library.csv
