@@ -85,7 +85,13 @@
             "prepare_ProteinProphet_idXML": {
                 "cpus": 1
             },
+            "extract_ProteinProphet_EnzymeRule": {
+                "cpus": 1
+            },
             "convert_ProteinProphet_pepXML": {
+                "cpus": 1
+            },
+            "repair_ProteinProphet_pepXML": {
                 "cpus": 1
             },
             "integrate_PSM_iProphet": {

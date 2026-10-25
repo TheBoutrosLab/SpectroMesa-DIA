@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update `validate-ProteomicPSM` to `v2.3.0` and allocate resources for its ProteinProphet enzyme-rule extraction and pepXML termini repair processes.
+
 ## [1.1.0] - 2026-10-25
 
 ### Added
