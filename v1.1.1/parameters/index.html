@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Parameters - metapipeline-ProteomicDIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Parameters";
+        var mkdocs_page_input_path = "parameters.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> metapipeline-ProteomicDIA
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../quick-start/">Quick start</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Inputs</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Parameters</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#search_proteomicdia-msfragger-search">search_ProteomicDIA — MSFragger search</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validate_proteomicpsm-msbooster-percolator-and-protein-inference">validate_ProteomicPSM — MSBooster, Percolator, and protein inference</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generate_proteomicspectrallibrary-easypqp-library">generate_ProteomicSpectralLibrary — EasyPQP library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#quantitate_proteomicdia-dia-nn-quantitation">quantitate_ProteomicDIA — DIA-NN quantitation</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps-and-outputs/">Pipeline steps and outputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">metapipeline-ProteomicDIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Parameters</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/v1.1.1/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="parameters">Parameters</h2>
+<p>Set shared values once at the root of the run config. <code>methods.setup()</code> derives the child-specific database and decoy settings before writing the child parameter JSON files. The ProtLoom project YAML independently supplies its database markers and must agree with the root values.</p>
+<table>
+<thead>
+<tr>
+<th>Root parameter</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_csv</code></td>
+<td>Required</td>
+<td>Sample-to-mzML CSV.</td>
+</tr>
+<tr>
+<td><code>decoy_database</code></td>
+<td>Required</td>
+<td>Target-decoy FASTA passed to search and validation.</td>
+</tr>
+<tr>
+<td><code>decoy_string</code></td>
+<td><code>DECOY_</code></td>
+<td>Decoy accession marker; becomes the MSFragger <code>decoy_prefix</code> and validation <code>decoy_string</code>.</td>
+</tr>
+<tr>
+<td><code>decoy_position</code></td>
+<td><code>prefix</code></td>
+<td>Decoy marker position. The current MSFragger search requires <code>prefix</code>; validation receives this as <code>decoy_string_position</code>.</td>
+</tr>
+<tr>
+<td><code>contam_string</code></td>
+<td><code>CONTAMINANT_</code></td>
+<td>Contaminant marker; must match <code>database.contam_string</code> in the ProtLoom YAML.</td>
+</tr>
+<tr>
+<td><code>contam_position</code></td>
+<td><code>prefix</code></td>
+<td>Contaminant marker position (<code>prefix</code> or <code>suffix</code>); must match <code>database.contam_position</code> in the ProtLoom YAML.</td>
+</tr>
+<tr>
+<td><code>msfragger_executable</code></td>
+<td>Required</td>
+<td>MSFragger JAR.</td>
+</tr>
+<tr>
+<td><code>output_dir</code></td>
+<td>Required</td>
+<td>Root directory for published results and logs.</td>
+</tr>
+<tr>
+<td><code>dataset_id</code></td>
+<td><code>cohort</code></td>
+<td>Name of this cohort's result directory.</td>
+</tr>
+<tr>
+<td><code>child_profile</code></td>
+<td><code>standard</code></td>
+<td>Nextflow profile applied to each child pipeline run.</td>
+</tr>
+<tr>
+<td><code>compute_profile</code></td>
+<td>Set by <code>-profile pines</code> or <code>-profile boutroslab_aws</code></td>
+<td>Resource profile name; set directly to select a profile from <code>additional_resource_profile_dir</code>.</td>
+</tr>
+<tr>
+<td><code>additional_resource_profile_dir</code></td>
+<td>None</td>
+<td>Optional PATH-style list of directories containing <code>&lt;compute_profile&gt;.json</code> files.</td>
+</tr>
+</tbody>
+</table>
+<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
+<h3 id="search_proteomicdia-msfragger-search"><code>search_ProteomicDIA</code> — MSFragger search</h3>
+<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
+<table>
+<thead>
+<tr>
+<th><code>MSFragger</code> parameter</th>
+<th>Template value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>precursor_mass_lower</code></td>
+<td><code>-25</code></td>
+<td>Lower precursor mass search bound.</td>
+</tr>
+<tr>
+<td><code>precursor_mass_upper</code></td>
+<td><code>25</code></td>
+<td>Upper precursor mass search bound.</td>
+</tr>
+<tr>
+<td><code>precursor_mass_units</code></td>
+<td>Child default: <code>1</code></td>
+<td>Precursor tolerance units (<code>1</code> = ppm).</td>
+</tr>
+<tr>
+<td><code>precursor_true_tolerance</code></td>
+<td><code>4</code></td>
+<td>Precursor calibration tolerance.</td>
+</tr>
+<tr>
+<td><code>precursor_true_units</code></td>
+<td>Child default: <code>1</code></td>
+<td>Calibration tolerance units (<code>1</code> = ppm).</td>
+</tr>
+<tr>
+<td><code>fragment_mass_tolerance</code></td>
+<td><code>50</code></td>
+<td>Fragment tolerance.</td>
+</tr>
+<tr>
+<td><code>fragment_mass_units</code></td>
+<td>Child default: <code>1</code></td>
+<td>Fragment tolerance units (<code>1</code> = ppm).</td>
+</tr>
+<tr>
+<td><code>calibrate_mass</code></td>
+<td>Child default: <code>2</code></td>
+<td>Mass calibration mode.</td>
+</tr>
+<tr>
+<td><code>deisotope</code></td>
+<td>Child default: <code>1</code></td>
+<td>Peak deisotoping mode.</td>
+</tr>
+<tr>
+<td><code>deneutralloss</code></td>
+<td>Child default: <code>1</code></td>
+<td>Neutral-loss peak handling.</td>
+</tr>
+<tr>
+<td><code>isotope_error</code></td>
+<td><code>0/1/2</code></td>
+<td>Allowed precursor isotope errors.</td>
+</tr>
+<tr>
+<td><code>precursor_mass_mode</code></td>
+<td>Child default: <code>selected</code></td>
+<td>Precursor mass interpretation.</td>
+</tr>
+<tr>
+<td><code>require_precursor</code></td>
+<td>Child default: <code>1</code></td>
+<td>Require precursor evidence.</td>
+</tr>
+<tr>
+<td><code>reuse_dia_fragment_peaks</code></td>
+<td>Child default: <code>0</code></td>
+<td>Whether fragment peaks may match multiple peptides.</td>
+</tr>
+<tr>
+<td><code>fragment_ion_series</code></td>
+<td>Child default: <code>b,y</code></td>
+<td>Fragment ion series.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_name_1</code></td>
+<td><code>stricttrypsin</code></td>
+<td>Primary enzyme name.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_cut_1</code></td>
+<td><code>KR</code></td>
+<td>Cleavage residues.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_nocut_1</code></td>
+<td>Empty</td>
+<td>Residues that prevent cleavage.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_sense_1</code></td>
+<td><code>C</code></td>
+<td>Cleavage terminus.</td>
+</tr>
+<tr>
+<td><code>allowed_missed_cleavage_1</code></td>
+<td><code>2</code></td>
+<td>Maximum missed cleavages.</td>
+</tr>
+<tr>
+<td><code>num_enzyme_termini</code></td>
+<td><code>2</code></td>
+<td>Required enzymatic termini.</td>
+</tr>
+<tr>
+<td><code>clip_nTerm_M</code></td>
+<td><code>1</code></td>
+<td>Permit N-terminal methionine clipping.</td>
+</tr>
+<tr>
+<td><code>variable_mod_01</code></td>
+<td><code>15.9949 M 3</code></td>
+<td>Methionine oxidation.</td>
+</tr>
+<tr>
+<td><code>variable_mod_02</code></td>
+<td><code>42.0106 [^ 1</code></td>
+<td>Protein N-terminal acetylation.</td>
+</tr>
+<tr>
+<td><code>allow_multiple_variable_mods_on_residue</code></td>
+<td><code>0</code></td>
+<td>Multiple variable modifications on one residue.</td>
+</tr>
+<tr>
+<td><code>max_variable_mods_per_peptide</code></td>
+<td><code>3</code></td>
+<td>Maximum variable modifications per peptide.</td>
+</tr>
+<tr>
+<td><code>output_format</code></td>
+<td>Child fixed value: <code>pepXML_pin</code></td>
+<td>pepXML and PIN needed downstream.</td>
+</tr>
+<tr>
+<td><code>output_report_topN</code></td>
+<td><code>5</code></td>
+<td>Top PSMs reported per spectrum.</td>
+</tr>
+<tr>
+<td><code>output_max_expect</code></td>
+<td>Child default: <code>50</code></td>
+<td>Maximum expectation value for reported PSMs.</td>
+</tr>
+<tr>
+<td><code>digest_min_length</code></td>
+<td><code>7</code></td>
+<td>Minimum digested peptide length.</td>
+</tr>
+<tr>
+<td><code>digest_max_length</code></td>
+<td><code>50</code></td>
+<td>Maximum digested peptide length.</td>
+</tr>
+<tr>
+<td><code>digest_mass_range</code></td>
+<td><code>500.0 5000.0</code></td>
+<td>Digested peptide mass range in Da.</td>
+</tr>
+<tr>
+<td><code>max_fragment_charge</code></td>
+<td><code>2</code></td>
+<td>Maximum theoretical fragment charge.</td>
+</tr>
+<tr>
+<td><code>minimum_peaks</code></td>
+<td><code>15</code></td>
+<td>Minimum spectrum peak count.</td>
+</tr>
+<tr>
+<td><code>use_topN_peaks</code></td>
+<td><code>150</code></td>
+<td>Maximum experimental peaks retained per spectrum.</td>
+</tr>
+<tr>
+<td><code>min_matched_fragments</code></td>
+<td><code>4</code></td>
+<td>Minimum matched fragments for a PSM.</td>
+</tr>
+<tr>
+<td><code>add_C_cysteine</code></td>
+<td><code>57.02146</code></td>
+<td>Fixed cysteine carbamidomethylation mass.</td>
+</tr>
+</tbody>
+</table>
+<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
+<h3 id="validate_proteomicpsm-msbooster-percolator-and-protein-inference"><code>validate_ProteomicPSM</code> — MSBooster, Percolator, and protein inference</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Template value or source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run_percolator</code></td>
+<td>Fixed: <code>true</code></td>
+<td>Run MSBooster then Percolator.</td>
+</tr>
+<tr>
+<td><code>percolator_workflow</code></td>
+<td>Fixed: <code>msbooster</code></td>
+<td>Run MSBooster then Percolator.</td>
+</tr>
+<tr>
+<td><code>run_protloom</code></td>
+<td>Default: <code>false</code></td>
+<td>Use ProteinProphet by default; set true for ProtLoom.</td>
+</tr>
+<tr>
+<td><code>protein_inference_algorithm</code></td>
+<td>Default: <code>ProteinProphet</code></td>
+<td>Non-ProtLoom grouping: <code>ProteinProphet</code>, <code>Fido</code>, or <code>Epifany</code> (<code>Epiphany</code> alias).</td>
+</tr>
+<tr>
+<td><code>fido_min_probability</code></td>
+<td>Child default: <code>0.01</code></td>
+<td>Minimum Fido group posterior probability for EasyPQP export.</td>
+</tr>
+<tr>
+<td><code>epifany_min_probability</code></td>
+<td>Child default: <code>0.01</code></td>
+<td>Minimum Epifany group posterior probability for EasyPQP export.</td>
+</tr>
+<tr>
+<td><code>epifany_greedy_group_resolution</code></td>
+<td>Child default: <code>none</code></td>
+<td>Optional Epifany shared-peptide resolution: <code>none</code>, <code>remove_associations_only</code>, or <code>remove_proteins_wo_evidence</code>.</td>
+</tr>
+<tr>
+<td><code>docker_image_fido</code></td>
+<td>Child default: <code>ghcr.io/theboutroslab/fido:1.0</code></td>
+<td>Standalone Fido container image.</td>
+</tr>
+<tr>
+<td><code>export_easypqp_reports</code></td>
+<td>Fixed: <code>true</code></td>
+<td>Export cohort PSM and peptide TSVs from the selected route.</td>
+</tr>
+<tr>
+<td><code>merge_consensus</code></td>
+<td>Fixed: <code>false</code></td>
+<td>One search engine and one mzML per sample.</td>
+</tr>
+<tr>
+<td><code>fractionated</code></td>
+<td>Fixed: <code>false</code></td>
+<td>One search engine and one mzML per sample.</td>
+</tr>
+<tr>
+<td><code>protloom_project_yaml</code></td>
+<td>Required with ProtLoom</td>
+<td>Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV.</td>
+</tr>
+<tr>
+<td><code>protloom_pc_order</code></td>
+<td><code>proteotypic</code></td>
+<td>Peptide-class and protein-tier priorities.</td>
+</tr>
+<tr>
+<td><code>protloom_pt_order</code></td>
+<td><code>canonical</code></td>
+<td>Peptide-class and protein-tier priorities.</td>
+</tr>
+<tr>
+<td><code>protloom_enzyme</code></td>
+<td><code>trypsin</code></td>
+<td>ProtLoom cleavage rule.</td>
+</tr>
+<tr>
+<td><code>easypqp_psm_qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Maximum PSM q-value for EasyPQP export in every inference route.</td>
+</tr>
+<tr>
+<td><code>protloom_easypqp_group_qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Maximum ProtLoom protein-group q-value for EasyPQP export.</td>
+</tr>
+<tr>
+<td><code>protloom_idxml_primary_score</code></td>
+<td><code>pep</code></td>
+<td>Primary score in unfiltered ProtLoom idXML.</td>
+</tr>
+<tr>
+<td><code>protloom_idxml_unmatched_psms</code></td>
+<td><code>remove</code></td>
+<td>Handling of PSMs without a ProtLoom match.</td>
+</tr>
+<tr>
+<td><code>protloom_version</code></td>
+<td>Child default: <code>0.2.3</code></td>
+<td>ProtLoom version and container.</td>
+</tr>
+<tr>
+<td><code>docker_image_protloom</code></td>
+<td>Child default: matching image</td>
+<td>ProtLoom version and container.</td>
+</tr>
+<tr>
+<td><code>enzyme</code></td>
+<td>Child default: <code>Trypsin</code></td>
+<td>Enzyme used by peptide indexing and Percolator.</td>
+</tr>
+<tr>
+<td><code>skip_peptide_indexing</code></td>
+<td>Child default: <code>false</code></td>
+<td>Skip OpenMS PeptideIndexer when idXMLs are already indexed.</td>
+</tr>
+<tr>
+<td><code>index_peptides_unmatched_action</code></td>
+<td>Metapipeline default: <code>remove</code></td>
+<td>Handling of peptides absent from the FASTA.</td>
+</tr>
+<tr>
+<td><code>index_peptides_aaa_max</code></td>
+<td>Metapipeline default: <code>0</code></td>
+<td>Maximum ambiguous amino acids for peptide indexing.</td>
+</tr>
+<tr>
+<td><code>index_peptides_missing_decoy_action</code></td>
+<td>Child/OpenMS defaults</td>
+<td>Additional peptide-indexing controls.</td>
+</tr>
+<tr>
+<td><code>index_peptides_mismatches_max</code></td>
+<td>Child/OpenMS defaults</td>
+<td>Additional peptide-indexing controls.</td>
+</tr>
+<tr>
+<td><code>index_peptides_IL_equivalent</code></td>
+<td>Child/OpenMS defaults</td>
+<td>Additional peptide-indexing controls.</td>
+</tr>
+<tr>
+<td><code>msbooster_params</code></td>
+<td>Child bundled file</td>
+<td>MSBooster prediction configuration.</td>
+</tr>
+<tr>
+<td><code>percolator_decoy_pattern</code></td>
+<td>Defaults to <code>decoy_string</code></td>
+<td>Decoy protein pattern used for direct Percolator execution.</td>
+</tr>
+<tr>
+<td><code>percolator_post_processing_tdc</code></td>
+<td>Child default: <code>true</code></td>
+<td>Percolator target-decoy competition after rescoring.</td>
+</tr>
+<tr>
+<td><code>filter_psm_score_peptide</code></td>
+<td>Child default: <code>0.01</code></td>
+<td>Final PSM q-value cutoff.</td>
+</tr>
+<tr>
+<td><code>filter_psm_remove_decoys</code></td>
+<td>Child default: <code>true</code></td>
+<td>Exclude decoys from filtered outputs.</td>
+</tr>
+<tr>
+<td><code>filter_psm_keep_unreferenced_protein_hits</code></td>
+<td>Child default: <code>false</code></td>
+<td>Retain or remove unreferenced hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_delete_unreferenced_peptide_hits</code></td>
+<td>Child default: <code>true</code></td>
+<td>Retain or remove unreferenced hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_whitelist_proteins</code></td>
+<td>Child default: no file</td>
+<td>Restrict retained protein or peptide hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_whitelist_peptides</code></td>
+<td>Child default: no file</td>
+<td>Restrict retained protein or peptide hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_blacklist_proteins</code></td>
+<td>Child default: no file</td>
+<td>Exclude selected protein or peptide hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_blacklist_peptides</code></td>
+<td>Child default: no file</td>
+<td>Exclude selected protein or peptide hits.</td>
+</tr>
+<tr>
+<td><code>filter_psm_in_silico_digestion</code></td>
+<td>Child default: no file</td>
+<td>FASTA for digestion-based filtering.</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
+<h3 id="generate_proteomicspectrallibrary-easypqp-library"><code>generate_ProteomicSpectralLibrary</code> — EasyPQP library</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Template value or source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fractionated</code></td>
+<td>Fixed: <code>false</code></td>
+<td>Current workflow accepts one mzML per sample.</td>
+</tr>
+<tr>
+<td><code>idxml_score_type</code></td>
+<td><code>ProtLoom PEP</code>, or <code>Posterior Error Probability</code> when ProtLoom is disabled</td>
+<td>Score read from each unfiltered validation idXML hit.</td>
+</tr>
+<tr>
+<td><code>easypqp_score_type</code></td>
+<td>Metapipeline default: <code>PEP</code></td>
+<td>Meaning of the selected score.</td>
+</tr>
+<tr>
+<td><code>easypqp_version</code></td>
+<td>Child default: <code>0.1.59</code></td>
+<td>EasyPQP version and container.</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
+<h3 id="quantitate_proteomicdia-dia-nn-quantitation"><code>quantitate_ProteomicDIA</code> — DIA-NN quantitation</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Template value or source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIA-NN.qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Main report precursor q-value cutoff.</td>
+</tr>
+<tr>
+<td><code>DIA-NN.matrix_qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Quantitation matrix q-value cutoff.</td>
+</tr>
+<tr>
+<td><code>DIA-NN.no_ifs_removal</code></td>
+<td><code>true</code></td>
+<td>Disable fragment interference correction.</td>
+</tr>
+<tr>
+<td><code>DIA-NN.no_prot_inf</code></td>
+<td><code>true</code></td>
+<td>Disable protein inference for the generated EasyPQP TSV.</td>
+</tr>
+</tbody>
+</table>
+<p>Set these in <code>quantitate_ProteomicDIA { 'DIA-NN' { ... } }</code>. The metapipeline passes the generated EasyPQP TSV as the child's <code>library</code> input.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
+<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../inputs/" class="btn btn-neutral float-left" title="Inputs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../pipeline-steps-and-outputs/" class="btn btn-neutral float-right" title="Pipeline steps and outputs">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/tree/v1.1.1" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../inputs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../pipeline-steps-and-outputs/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
