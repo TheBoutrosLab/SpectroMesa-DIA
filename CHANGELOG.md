@@ -4,7 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-25
+
 ### Added
+
 - Set ProteinProphet as the default validation protein-grouping route; ProtLoom remains available by explicit selection.
 - Update child pipeline Git submodules: `search-ProteomicDIA` to `v0.1.1`, `validate-ProteomicPSM` to `v2.3.0`, `generate-ProteomicSpectralLibrary` to `v1.0.1`, and `quantitate-ProteomicDIA` to `v1.1.0`.
 - Add Fido and Epifany grouping, aligned resource mappings and EasyPQP handoffs, shared PSM and separate ProtLoom group q-value cutoffs, and Epifany shared-peptide resolution.
@@ -19,6 +22,7 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 ## [1.0.0] - 2026-10-20
 
 ### Added
+
 - DIA metapipeline chaining `search-ProteomicDIA` (MSFragger), `validate-ProteomicPSM` (MSBooster, Percolator, ProtLoom), `generate-ProteomicSpectralLibrary` (EasyPQP), and `quantitate-ProteomicDIA` (DIA-NN). Each child pipeline is launched by its own Nextflow process in `module/`.
 - Nextflow processes and CSV handoffs for search idXML, unfiltered ProtLoom idXML, cohort PSM and peptide reports, the spectral library TSV, and mzML inputs.
 - Input CSV with `sample_name,fraction_id,path`; environment variable expansion for test inputs; template configuration, `.env-template`, and an NFTest integration case for the complete workflow.
@@ -29,3 +33,7 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 - An NFTest runner that uses `/scratch/$SLURM_JOB_ID/<test-case>` and accepts a test-case argument, following the proteomic metapipeline convention.
 - Versioned child pipeline directories under `params.final_output_dir` and handoff CSVs under its `manifests/` directory.
 - Root-level shared database and decoy/contaminant markers, with child-specific values derived by `methods.setup()` and checked against the ProtLoom YAML.
+
+[1.0.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/releases/tag/v1.0.0
+[1.1.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.0.0...v1.1.0
+[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.1.0...HEAD
