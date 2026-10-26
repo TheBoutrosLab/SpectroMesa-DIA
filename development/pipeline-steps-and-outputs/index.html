@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/30552392ab0cd33736ae32d3497cbb316dc976f2/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/07e1d5a9db8e56d1281e7030648f18ec4c661f95/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -96,18 +96,20 @@
 <li><code>validate-ProteomicPSM</code> uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when <code>validate_ProteomicPSM.run_protloom = true</code>. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.</li>
 <li><code>generate-ProteomicSpectralLibrary</code> uses those identifications and the original mzML files to produce an EasyPQP library TSV.</li>
 <li><code>quantitate-ProteomicDIA</code> quantifies the original mzML files against that library with DIA-NN.</li>
+<li><code>qc-ProteomicDIA</code> summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.</li>
 </ol>
 <p>Versioned child pipeline directories and the handoff CSVs are published at:</p>
-<pre><code class="language-text">&lt;output_dir&gt;/metapipeline-ProteomicDIA-1.0.0/&lt;dataset_id&gt;/
+<pre><code class="language-text">&lt;output_dir&gt;/metapipeline-ProteomicDIA-1.1.0/&lt;dataset_id&gt;/
 ├── main_workflow/
 │   ├── search-ProteomicDIA-&lt;version&gt;/
 │   ├── validate-ProteomicPSM-&lt;version&gt;/
 │   ├── generate-ProteomicSpectralLibrary-&lt;version&gt;/
 │   ├── quantitate-ProteomicDIA-&lt;version&gt;/
+│   ├── qc-ProteomicDIA-1.0.0/
 │   └── manifests/
-└── log-metapipeline-ProteomicDIA-1.0.0-&lt;timestamp&gt;/
+└── log-metapipeline-ProteomicDIA-1.1.0-&lt;timestamp&gt;/
 </code></pre>
-<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
+<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>, including the three QC sample manifests. The combined QC table is in <code>qc-ProteomicDIA-1.0.0/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample metric tables and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
               
             </div>
           </div><footer>
