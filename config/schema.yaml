@@ -69,3 +69,7 @@ quantitate_ProteomicDIA:
   type: 'Namespace'
   required: true
   help: 'DIA quantitation pipeline parameters'
+qc_ProteomicDIA:
+  type: 'Namespace'
+  required: true
+  help: 'DIA quality-control pipeline parameters'

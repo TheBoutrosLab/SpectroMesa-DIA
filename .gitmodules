@@ -19,3 +19,6 @@
 [submodule "external/quantitate-ProteomicDIA"]
 	path = external/quantitate-ProteomicDIA
 	url = git@github.com:TheBoutrosLab/pipeline-quantitate-ProteomicDIA.git
+[submodule "external/qc-ProteomicDIA"]
+	path = external/qc-ProteomicDIA
+	url = git@github.com:TheBoutrosLab/pipeline-qc-ProteomicDIA.git
