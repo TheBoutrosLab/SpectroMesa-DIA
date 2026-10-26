@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, and quantifies the cohort with DIA-NN.
+This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -29,10 +29,10 @@ The scratch path above is an example for a Slurm job; use another suitable work 
 
 | Profile | Node budget | Parent launch processes | Child allocations |
 | --- | --- | --- | --- |
-| `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB. |
-| `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB. |
+| `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/32 GB. |
+| `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/16 GB. |
 
-Parent CSV and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
+Parent CSV, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including `qc-ProteomicDIA`. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
 
 For a profile outside the repository, copy [pines.json](config/resource_profiles/pines.json) or [boutroslab_aws.json](config/resource_profiles/boutroslab_aws.json) to a directory you control, rename it `<name>.json`, and edit its budget and allocations. Set these values in your run config:
 
@@ -207,6 +207,10 @@ Set these in `quantitate_ProteomicDIA { 'DIA-NN' { ... } }`. The metapipeline pa
 
 See the [quantitation pipeline parameter reference](external/quantitate-ProteomicDIA/README.md#parameters).
 
+### `qc_ProteomicDIA` — cohort quality control
+
+All `qc_ProteomicDIA` parameters are set automatically by the metapipeline from the input mzMLs and preceding pipeline results.
+
 See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
 ## Pipeline steps and outputs
@@ -215,25 +219,27 @@ See [config/template.config](config/template.config) for an editable run configu
 2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when `validate_ProteomicPSM.run_protloom = true`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
 3. `generate-ProteomicSpectralLibrary` uses those identifications and the original mzML files to produce an EasyPQP library TSV.
 4. `quantitate-ProteomicDIA` quantifies the original mzML files against that library with DIA-NN.
+5. `qc-ProteomicDIA` summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.
 
 Versioned child pipeline directories and the handoff CSVs are published at:
 
 ```text
-<output_dir>/metapipeline-ProteomicDIA-1.0.0/<dataset_id>/
+<output_dir>/metapipeline-ProteomicDIA-1.1.0/<dataset_id>/
 ├── main_workflow/
 │   ├── search-ProteomicDIA-<version>/
 │   ├── validate-ProteomicPSM-<version>/
 │   ├── generate-ProteomicSpectralLibrary-<version>/
 │   ├── quantitate-ProteomicDIA-<version>/
+│   ├── qc-ProteomicDIA-1.0.0/
 │   └── manifests/
-└── log-metapipeline-ProteomicDIA-1.0.0-<timestamp>/
+└── log-metapipeline-ProteomicDIA-1.1.0-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`, including the three QC sample manifests. The combined QC table is in `qc-ProteomicDIA-1.0.0/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
-The NFTest cases run all four child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run all five child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
 
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN

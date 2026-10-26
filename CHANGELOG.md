@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Add `qc-ProteomicDIA` v1.0.0 as a fifth child pipeline, with automatic stage manifests, inference-route handoff, resource profiles, and published cohort QC results.
+
 ## [1.1.1] - 2026-10-25
 
 ### Added

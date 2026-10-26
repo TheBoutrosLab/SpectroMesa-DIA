@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1480" height="640" viewBox="0 0 1480 640" role="img" aria-labelledby="figure-title figure-description">
   <title id="figure-title">DIA pipeline workflow</title>
-  <desc id="figure-description">Sample mzML files enter MSFragger search, EasyPQP library generation, and DIA-NN quantitation. Search idXML files pass to MSBooster, Percolator, and ProtLoom validation. Unfiltered ProtLoom idXML files and cohort PSM and peptide reports pass to EasyPQP. The resulting library TSV passes to DIA-NN. A target-decoy database feeds search and validation.</desc>
+  <desc id="figure-description">Sample mzML files enter MSFragger search, EasyPQP library generation, and DIA-NN quantitation. Search idXML files pass to MSBooster, Percolator, and protein inference. Unfiltered validation idXML files and cohort PSM and peptide reports pass to EasyPQP. The resulting library TSV passes to DIA-NN. The QC pipeline summarizes mzML, search, validation, library, and DIA-NN outputs. A target-decoy database feeds search and validation.</desc>
   <defs>
     <style>
       text { font-family: Arial, Helvetica, sans-serif; fill: #183044; }
@@ -40,7 +40,7 @@
   <text x="442" y="307" class="name">Validate PSMs</text>
   <text x="442" y="338" class="tool">validate-ProteomicPSM</text>
   <text x="442" y="373" class="small">MSBooster → Percolator</text>
-  <text x="442" y="400" class="small">→ ProtLoom</text>
+  <text x="442" y="400" class="small">→ protein inference</text>
 
   <rect x="790" y="260" width="270" height="170" rx="16" class="card"/>
   <rect x="790" y="260" width="270" height="9" rx="4" fill="#b87832"/>
@@ -59,10 +59,16 @@
   <path d="M320 355 H410" class="arrow"/>
   <text x="338" y="338" class="handoff">idXML</text>
   <path d="M690 355 H780" class="arrow"/>
-  <text x="699" y="315" class="handoff">ProtLoom</text>
+  <text x="699" y="315" class="handoff">unfiltered</text>
   <text x="699" y="335" class="handoff">idXML + TSVs</text>
   <path d="M1060 355 H1150" class="arrow"/>
   <text x="1071" y="338" class="handoff">library TSV</text>
+
+  <path d="M1295 430 V495" class="arrow"/>
+  <rect x="790" y="505" width="640" height="97" rx="16" class="card"/>
+  <rect x="790" y="505" width="9" height="97" rx="4" fill="#536aa5"/>
+  <text x="818" y="544" class="name">Cohort QC</text>
+  <text x="818" y="573" class="tool">qc-ProteomicDIA · search, validation, library, DIA-NN</text>
 
   <rect x="50" y="505" width="640" height="97" rx="16" class="card"/>
   <rect x="50" y="505" width="9" height="97" rx="4" fill="#159a89"/>

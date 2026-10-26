@@ -11,6 +11,8 @@ include { create_library_csv } from './module/create_library_csv.nf'
 include { call_spectral_library } from './module/call_spectral_library.nf'
 include { create_quantitation_csv } from './module/create_quantitation_csv.nf'
 include { call_quantitate_dia } from './module/call_quantitate_dia.nf'
+include { create_qc_inputs } from './module/create_qc_inputs.nf'
+include { call_qc_dia } from './module/call_qc_dia.nf'
 
 // Current child pipelines accept one mzML per sample. Retain fraction_id and
 // annotation_id in the records for downstream validation and future fractions.
@@ -64,13 +66,15 @@ workflow {
         ['search_ProteomicDIA', params.search_ProteomicDIA, params.child_processes_without_memory.search_ProteomicDIA ?: []],
         ['validate_ProteomicPSM', params.validate_ProteomicPSM, params.child_processes_without_memory.validate_ProteomicPSM ?: []],
         ['generate_ProteomicSpectralLibrary', params.generate_ProteomicSpectralLibrary, params.child_processes_without_memory.generate_ProteomicSpectralLibrary ?: []],
-        ['quantitate_ProteomicDIA', params.quantitate_ProteomicDIA, params.child_processes_without_memory.quantitate_ProteomicDIA ?: []]
+        ['quantitate_ProteomicDIA', params.quantitate_ProteomicDIA, params.child_processes_without_memory.quantitate_ProteomicDIA ?: []],
+        ['qc_ProteomicDIA', params.qc_ProteomicDIA, params.child_processes_without_memory.qc_ProteomicDIA ?: []]
     )
     create_config_json(configOptions)
     searchConfig = create_config_json.out.config.filter { name, config, resources -> name == 'search_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
     validateConfig = create_config_json.out.config.filter { name, config, resources -> name == 'validate_ProteomicPSM' }.map { name, config, resources -> [config, resources] }
     libraryConfig = create_config_json.out.config.filter { name, config, resources -> name == 'generate_ProteomicSpectralLibrary' }.map { name, config, resources -> [config, resources] }
     quantConfig = create_config_json.out.config.filter { name, config, resources -> name == 'quantitate_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
+    qcConfig = create_config_json.out.config.filter { name, config, resources -> name == 'qc_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
 
     create_search_csv(samples)
     searchInput = create_search_csv.out.input.combine(searchConfig)
@@ -103,4 +107,18 @@ workflow {
     quantInput = create_quantitation_csv.out.input.combine(quantConfig)
         .map { inputCsv, libraryTsv, config, resources -> [inputCsv, libraryTsv, config, resources] }
     call_quantitate_dia(quantInput)
+
+    create_qc_inputs(
+        call_search_dia.out.result,
+        call_validate_psm.out.result.map { records, dir -> dir },
+        call_spectral_library.out.result.map { records, dir -> dir },
+        call_quantitate_dia.out.result
+    )
+    qcInput = create_qc_inputs.out.input.combine(qcConfig)
+        .map { mzmlCsv, searchCsv, filteredCsv, proteinGroups,
+               libraryTsv, exportSummary, diannReport, config, resources ->
+            [mzmlCsv, searchCsv, filteredCsv, proteinGroups,
+             libraryTsv, exportSummary, diannReport, config, resources]
+        }
+    call_qc_dia(qcInput)
 }

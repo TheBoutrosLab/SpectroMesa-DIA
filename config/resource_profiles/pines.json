@@ -165,6 +165,56 @@
                 "cpus": 16,
                 "memory": "96 GB"
             }
+        },
+        "qc_ProteomicDIA": {
+            "summarize_mzML": {
+                "cpus": 1,
+                "memory": "8 GB"
+            },
+            "summarize_search_idXML": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_filtered_idXML": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_ProteinGroups_ProteinProphet": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_ProteinGroups_Fido": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_ProteinGroups_Epifany": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_ProteinGroups_ProtLoom": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_EasyPQP_library": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "summarize_DIANN_report": {
+                "cpus": 2,
+                "memory": "32 GB"
+            },
+            "collect_QCMetrics": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
+            "extract_MS1_matrix": {
+                "cpus": 1,
+                "memory": "8 GB"
+            },
+            "plot_MS1_landscape": {
+                "cpus": 1,
+                "memory": "4 GB"
+            }
         }
     }
 }
