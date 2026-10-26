@@ -209,15 +209,7 @@ See the [quantitation pipeline parameter reference](external/quantitate-Proteomi
 
 ### `qc_ProteomicDIA` — cohort quality control
 
-| Parameter | Template value or source | Purpose |
-| --- | --- | --- |
-| `inference_route` | Set by metapipeline | Matches the selected validation route: `ProteinProphet`, `Fido`, `Epifany`, or `ProtLoom`. |
-| `mzml_csv`, `search_idxml_csv`, `filtered_idxml_csv` | Set by metapipeline | Sample manifests generated from the original mzMLs and child results. |
-| `protein_groups`, `library_tsv`, `export_summary_tsv`, `diann_report` | Set by metapipeline | Inference, EasyPQP, and DIA-NN results from the preceding stages. |
-| `pyopenms_version` | Child default: `3.5.0` | pyOpenMS container version. |
-| `docker_image_plotly` | Child default: `multiqc/multiqc:v1.35` | Container for the interactive MS1 landscape. |
-
-QC runs after quantitation, writes a cohort metric table and per-sample summaries, and creates an interactive MS1 landscape for each mzML. See the [QC pipeline parameter reference](external/qc-ProteomicDIA/README.md#inputs) for advanced options.
+All `qc_ProteomicDIA` parameters are set automatically by the metapipeline from the input mzMLs and preceding pipeline results.
 
 See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
