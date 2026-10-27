@@ -4,6 +4,11 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update `validate-ProteomicPSM` to `v2.3.1`, which publishes Percolator PIN and PSM feature files for downstream QC.
+- Update `qc-ProteomicDIA` to `v1.1.0` and pass a generated PSM feature manifest for the new QC metrics.
+
 ## [1.2.0] - 2026-10-26
 
 ### Added

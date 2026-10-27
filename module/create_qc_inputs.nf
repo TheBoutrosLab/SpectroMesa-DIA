@@ -9,7 +9,7 @@ process create_qc_inputs {
 
     output:
         tuple path('qc-mzml.csv'), path('qc-search-idxml.csv'),
-            path('qc-filtered-idxml.csv'), path('qc-protein-groups.input'),
+            path('qc-filtered-idxml.csv'), path('qc-psm-features.csv'), path('qc-protein-groups.input'),
             path('qc-library.tsv'), path('qc-export-summary.tsv'),
             path('qc-diann-report.tsv'), emit: input
 
@@ -21,11 +21,18 @@ process create_qc_inputs {
         def validationOutput = useProtLoom ?
             "${validationDir}/${params.dataset_id}/ProtLoom-${protloomVersion}/output" :
             "${validationDir}/${params.dataset_id}/${route}/output"
+        def featureRoute = params.validate_ProteomicPSM.run_percolator ?
+            (params.validate_ProteomicPSM.percolator_workflow == 'msbooster' ? 'MSBooster' : 'PSMFeatureExtractor') : null
         def rows = records.collect { sample, fraction, mzml, annotation ->
             def searchId = "${searchDir}/${params.dataset_id}/output/MSFragger/${sample}_MSFragger.idXML"
             def filteredId = useProtLoom ?
                 "${validationDir}/${sample}/ProtLoom-${protloomVersion}/output/${sample}_ProtLoom_filter.idXML" :
                 "${validationDir}/${sample}/OpenMS-${openmsVersion}/output/${sample}_MSFragger_filter.idXML"
+            def featurePath = featureRoute == 'MSBooster' ?
+                "${validationDir}/${sample}/MSBooster/output/engine_MSFragger/run_01-fraction_${fraction}_edited.pin" :
+                "${validationDir}/${sample}/OpenMS-${openmsVersion}/output/${sample}_MSFragger_featureExtracted.idXML"
+            def featureRow = featureRoute ?
+                "if [ -f '${featurePath}' ]; then printf '%s,%s,%s,%s,%s\\n' '${sample}' 'MSFragger' '${featureRoute}' '${featureRoute == 'MSBooster' ? fraction : ''}' \"\$(realpath '${featurePath}')\" >> qc-psm-features.csv; fi" : ''
             def groupRow = useProtLoom ?
                 """
                 group_tsv='${validationDir}/${sample}/ProtLoom-${protloomVersion}/output/${sample}_groups.tsv'
@@ -39,6 +46,7 @@ process create_qc_inputs {
             printf '%s,%s,%s\\n' '${sample}' '${fraction}' "\$(realpath '${mzml}')" >> qc-mzml.csv
             printf '%s,%s,%s\\n' '${sample}' 'MSFragger' "\$(realpath '${searchId}')" >> qc-search-idxml.csv
             printf '%s,%s\\n' '${sample}' "\$(realpath '${filteredId}')" >> qc-filtered-idxml.csv
+            ${featureRow}
             ${groupRow}
             """.stripIndent()
         }.join('\n')
@@ -56,6 +64,7 @@ process create_qc_inputs {
         printf 'sample_name,fraction_id,path\\n' > qc-mzml.csv
         printf 'sample_name,search_engine,idXML\\n' > qc-search-idxml.csv
         printf 'sample_name,idXML\\n' > qc-filtered-idxml.csv
+        printf 'sample_name,search_engine,route,fraction_id,path\\n' > qc-psm-features.csv
         ${groupCommand}
         ${rows}
         test -f '${library}' || { echo 'Missing EasyPQP library: ${library}' >&2; exit 1; }
