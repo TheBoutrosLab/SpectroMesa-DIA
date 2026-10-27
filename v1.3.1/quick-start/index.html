@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Quick start - metapipeline-ProteomicDIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quick start";
+        var mkdocs_page_input_path = "quick-start.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> metapipeline-ProteomicDIA
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Quick start</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#resource-profiles">Resource profiles</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps-and-outputs/">Pipeline steps and outputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">metapipeline-ProteomicDIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Quick start</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/v1.3.1/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="quick-start">Quick start</h2>
+<ol>
+<li>Initialize the child pipelines and shared Boutros Lab modules:</li>
+</ol>
+<p><code>bash
+   git submodule update --init --recursive</code></p>
+<ol>
+<li>
+<p>Prepare the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/input/template-mzML.csv">mzML input CSV</a>, a target-decoy FASTA, and the MSFragger JAR. If selecting ProtLoom, also prepare a <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/protloom-project.example.yaml">ProtLoom project YAML</a> with the same FASTA and accession markers as the run configuration.</p>
+</li>
+<li>
+<p>Copy <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/template.config">config/template.config</a> to a run-specific file. Set <code>input_csv</code>, <code>decoy_database</code>, <code>msfragger_executable</code>, <code>output_dir</code>, and <code>dataset_id</code>. Set <code>validate_ProteomicPSM.protloom_project_yaml</code> when using ProtLoom. Review the shared markers and the child-specific settings for your experiment. Keep the template's <code>includeConfig</code> lines and final <code>methods.setup()</code> call.</p>
+</li>
+<li>
+<p>Run with Nextflow 24.10.6 and its v1 syntax parser. Choose a work directory with enough space for the mzML files and child pipeline work:</p>
+</li>
+</ol>
+<p><code>bash
+   export NXF_VER=24.10.6
+   export NXF_SYNTAX_PARSER=v1
+   export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-ProteomicDIA-work
+   nextflow run main.nf -c /path/to/run.config -profile pines</code></p>
+<p>The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. Select <code>-profile pines</code> for a 64 CPU, 500 GB node or <code>-profile boutroslab_aws</code> for a 32 CPU, 128 GB node. These profiles set resource budgets, while <code>child_profile</code> (<code>standard</code> by default) selects the container runtime in each child. Make sure the selected child profile's runtime is available. Nextflow's <code>-c</code> option adds the run configuration to the project's configuration; see the <a href="https://www.nextflow.io/docs/latest/config.html">Nextflow configuration documentation</a>.</p>
+<h3 id="resource-profiles">Resource profiles</h3>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Node budget</th>
+<th>Parent launch processes</th>
+<th>Child allocations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pines</code></td>
+<td>64 CPUs, 500 GB</td>
+<td>2 CPUs, 4 GB per child launcher</td>
+<td>MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/32 GB.</td>
+</tr>
+<tr>
+<td><code>boutroslab_aws</code></td>
+<td>32 CPUs, 128 GB</td>
+<td>2 CPUs, 4 GB per child launcher</td>
+<td>MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/16 GB.</td>
+</tr>
+</tbody>
+</table>
+<p>Parent CSV, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/resources.json">config/resources.json</a>. Each profile has its own file under <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/resource_profiles">config/resource_profiles</a>, containing its budget and CPU requests for every child process. A process <code>memory</code> value is optional: omit it to leave that child's Nextflow memory directive unset. <code>search_database_MSFragger</code> is the exception because it uses <code>task.memory</code> to size the Java heap. The profile's <code>max_memory</code> remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including <code>qc-ProteomicDIA</code>. Existing child resource defaults remain in effect when neither profile is selected. A run config can set <code>base_resource_update</code> within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.</p>
+<p>For a profile outside the repository, copy <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/resource_profiles/pines.json">pines.json</a> or <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/resource_profiles/boutroslab_aws.json">boutroslab_aws.json</a> to a directory you control, rename it <code>&lt;name&gt;.json</code>, and edit its budget and allocations. Set these values in your run config:</p>
+<pre><code class="language-groovy">params.compute_profile = 'my_cluster'
+params.additional_resource_profile_dir = '/path/to/resource_profiles'
+</code></pre>
+<p>Run with <code>-c /path/to/run.config</code>; a matching Nextflow <code>-profile</code> entry is not required. <code>additional_resource_profile_dir</code> can contain multiple directories separated by the operating system's PATH separator (<code>:</code> on Linux/macOS). Lookup checks those directories from left to right, then the bundled <code>config/resource_profiles</code> directory. Missing directories or missing files in one location are skipped. Relative directories resolve from the launch directory. A profile file found earlier takes precedence over a file of the same name found later. To add a bundled profile, add its name to <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/d62149d38ebdfb6fbc2c53fc34aa07076e7a2587/config/profiles.config">config/profiles.config</a> and create <code>config/resource_profiles/&lt;name&gt;.json</code>. The shared parent process requests usually do not need to change.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../inputs/" class="btn btn-neutral float-right" title="Inputs">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/tree/v1.3.1" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../inputs/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
