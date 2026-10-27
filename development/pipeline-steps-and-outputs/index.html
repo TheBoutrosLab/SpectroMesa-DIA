@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/c32b6a501227ca601a2c6af1b3bda1a291f8bc98/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b146b9d0db32dfc5545e549398546a97e2a746dd/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -105,11 +105,11 @@
 │   ├── validate-ProteomicPSM-&lt;version&gt;/
 │   ├── generate-ProteomicSpectralLibrary-&lt;version&gt;/
 │   ├── quantitate-ProteomicDIA-&lt;version&gt;/
-│   ├── qc-ProteomicDIA-1.0.0/
+│   ├── qc-ProteomicDIA-1.1.0/
 │   └── manifests/
 └── log-metapipeline-ProteomicDIA-1.1.0-&lt;timestamp&gt;/
 </code></pre>
-<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>, including the three QC sample manifests. The combined QC table is in <code>qc-ProteomicDIA-1.0.0/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample metric tables and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
+<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>, including the QC sample and PSM feature manifests. The combined QC table is in <code>qc-ProteomicDIA-1.1.0/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
               
             </div>
           </div><footer>
