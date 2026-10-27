@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Fixed
+
+- Update `validate-ProteomicPSM` to `v2.3.2` to correct MSBooster calibration scores for MSFragger, Comet, and Sage.
+
 ## [1.3.0] - 2026-10-27
 
 ### Added
