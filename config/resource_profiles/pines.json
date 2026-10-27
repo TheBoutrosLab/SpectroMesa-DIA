@@ -179,6 +179,10 @@
                 "cpus": 1,
                 "memory": "4 GB"
             },
+            "summarize_PSMFeatures": {
+                "cpus": 1,
+                "memory": "4 GB"
+            },
             "summarize_ProteinGroups_ProteinProphet": {
                 "cpus": 1,
                 "memory": "4 GB"

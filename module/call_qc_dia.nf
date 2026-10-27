@@ -2,7 +2,7 @@ process call_qc_dia {
     publishDir "${params.final_output_dir}", mode: 'copy', pattern: 'qc-ProteomicDIA-*'
 
     input:
-        tuple path(mzmlCsv), path(searchCsv), path(filteredCsv), path(proteinGroups),
+        tuple path(mzmlCsv), path(searchCsv), path(filteredCsv), path(featuresCsv), path(proteinGroups),
             path(libraryTsv), path(exportSummary), path(diannReport),
             path(configJson), path(resourceConfig)
 
@@ -21,6 +21,7 @@ process call_qc_dia {
             --mzml_csv \$(realpath ${mzmlCsv}) \\
             --search_idxml_csv \$(realpath ${searchCsv}) \\
             --filtered_idxml_csv \$(realpath ${filteredCsv}) \\
+            --psm_features_csv \$(realpath ${featuresCsv}) \\
             --inference_route ${params.qc_ProteomicDIA.inference_route} \\
             --protein_groups \$(realpath ${proteinGroups}) \\
             --library_tsv \$(realpath ${libraryTsv}) \\

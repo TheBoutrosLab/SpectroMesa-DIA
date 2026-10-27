@@ -115,9 +115,9 @@ workflow {
         call_quantitate_dia.out.result
     )
     qcInput = create_qc_inputs.out.input.combine(qcConfig)
-        .map { mzmlCsv, searchCsv, filteredCsv, proteinGroups,
+        .map { mzmlCsv, searchCsv, filteredCsv, featuresCsv, proteinGroups,
                libraryTsv, exportSummary, diannReport, config, resources ->
-            [mzmlCsv, searchCsv, filteredCsv, proteinGroups,
+            [mzmlCsv, searchCsv, filteredCsv, featuresCsv, proteinGroups,
              libraryTsv, exportSummary, diannReport, config, resources]
         }
     call_qc_dia(qcInput)
