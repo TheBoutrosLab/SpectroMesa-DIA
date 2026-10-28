@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update `qc-ProteomicDIA` to `v1.1.1` for MSBooster PSM counts by missed cleavage, enzyme specificity, and precursor charge.
+
 ## [1.3.1] - 2026-10-27
 
 ### Fixed
