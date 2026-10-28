@@ -230,12 +230,12 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 │   ├── validate-ProteomicPSM-<version>/
 │   ├── generate-ProteomicSpectralLibrary-<version>/
 │   ├── quantitate-ProteomicDIA-<version>/
-│   ├── qc-ProteomicDIA-1.1.0/
+│   ├── qc-ProteomicDIA-1.1.1/
 │   └── manifests/
 └── log-metapipeline-ProteomicDIA-1.1.0-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`, including the QC sample and PSM feature manifests. The combined QC table is in `qc-ProteomicDIA-1.1.0/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`, including the QC sample and PSM feature manifests. The combined QC table is in `qc-ProteomicDIA-1.1.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
