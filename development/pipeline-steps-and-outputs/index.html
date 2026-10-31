@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -97,19 +97,22 @@
 <li><code>generate-ProteomicSpectralLibrary</code> uses those identifications and the original mzML files to produce an EasyPQP library TSV.</li>
 <li><code>quantitate-ProteomicDIA</code> quantifies the original mzML files against that library with DIA-NN.</li>
 <li><code>qc-ProteomicDIA</code> summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.</li>
+<li>For ProteinProphet, Fido, and Epifany runs, ProteoVault builds a validated DuckDB database from the core results, search FASTA, full DIA-NN report, and cohort QC table.</li>
 </ol>
 <p>Versioned child pipeline directories and the handoff CSVs are published at:</p>
-<pre><code class="language-text">&lt;output_dir&gt;/metapipeline-ProteomicDIA-1.1.0/&lt;dataset_id&gt;/
-├── main_workflow/
-│   ├── search-ProteomicDIA-&lt;version&gt;/
-│   ├── validate-ProteomicPSM-&lt;version&gt;/
-│   ├── generate-ProteomicSpectralLibrary-&lt;version&gt;/
-│   ├── quantitate-ProteomicDIA-&lt;version&gt;/
-│   ├── qc-ProteomicDIA-1.1.1/
-│   └── manifests/
-└── log-metapipeline-ProteomicDIA-1.1.0-&lt;timestamp&gt;/
+<pre><code class="language-text">&lt;output_dir&gt;/metapipeline-ProteomicDIA-&lt;version&gt;/
+├── &lt;dataset_id&gt;.proteovault.duckdb  # absent for ProtLoom runs
+└── &lt;dataset_id&gt;/
+    ├── main_workflow/
+    │   ├── search-ProteomicDIA-&lt;version&gt;/
+    │   ├── validate-ProteomicPSM-&lt;version&gt;/
+    │   ├── generate-ProteomicSpectralLibrary-&lt;version&gt;/
+    │   ├── quantitate-ProteomicDIA-&lt;version&gt;/
+    │   ├── qc-ProteomicDIA-1.1.1/
+    │   └── manifests/
+    └── log-metapipeline-ProteomicDIA-&lt;version&gt;-&lt;timestamp&gt;/
 </code></pre>
-<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>, including the QC sample and PSM feature manifests. The combined QC table is in <code>qc-ProteomicDIA-1.1.1/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
+<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>, including the QC sample and PSM feature manifests. The combined QC table is in <code>qc-ProteomicDIA-1.1.1/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core, FASTA, QC, and quant-details layers. It is published at the versioned metapipeline root, which is the directory to supply as <code>--pipeline-output</code> when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
               
             </div>
           </div><footer>

@@ -61,6 +61,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#qc_proteomicdia-cohort-quality-control">qc_ProteomicDIA — cohort quality control</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#proteovault-cohort-database">ProteoVault — cohort database</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -92,7 +94,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Parameters</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -159,7 +161,17 @@
 <tr>
 <td><code>child_profile</code></td>
 <td><code>standard</code></td>
-<td>Nextflow profile applied to each child pipeline run.</td>
+<td>Nextflow profile applied to each child pipeline run; set with the matching parent <code>-profile</code> runtime.</td>
+</tr>
+<tr>
+<td><code>proteovault_version</code></td>
+<td><code>0.1.0</code></td>
+<td>Version used for the ProteoVault image.</td>
+</tr>
+<tr>
+<td><code>docker_image_proteovault</code></td>
+<td><code>ghcr.io/theboutroslab/proteovault:${params.proteovault_version}</code></td>
+<td>Image for the parent ProteoVault process.</td>
 </tr>
 <tr>
 <td><code>compute_profile</code></td>
@@ -173,9 +185,9 @@
 </tr>
 </tbody>
 </table>
-<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
+<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
 <h3 id="search_proteomicdia-msfragger-search"><code>search_ProteomicDIA</code> — MSFragger search</h3>
-<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
+<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
 <table>
 <thead>
 <tr>
@@ -372,7 +384,7 @@
 </tr>
 </tbody>
 </table>
-<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
+<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
 <h3 id="validate_proteomicpsm-msbooster-percolator-and-protein-inference"><code>validate_ProteomicPSM</code> — MSBooster, Percolator, and protein inference</h3>
 <table>
 <thead>
@@ -585,7 +597,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
 <h3 id="generate_proteomicspectrallibrary-easypqp-library"><code>generate_ProteomicSpectralLibrary</code> — EasyPQP library</h3>
 <table>
 <thead>
@@ -618,7 +630,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
 <h3 id="quantitate_proteomicdia-dia-nn-quantitation"><code>quantitate_ProteomicDIA</code> — DIA-NN quantitation</h3>
 <table>
 <thead>
@@ -652,10 +664,12 @@
 </tbody>
 </table>
 <p>Set these in <code>quantitate_ProteomicDIA { 'DIA-NN' { ... } }</code>. The metapipeline passes the generated EasyPQP TSV as the child's <code>library</code> input.</p>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
 <h3 id="qc_proteomicdia-cohort-quality-control"><code>qc_ProteomicDIA</code> — cohort quality control</h3>
 <p>All <code>qc_ProteomicDIA</code> parameters are set automatically by the metapipeline from the input mzMLs and preceding pipeline results.</p>
-<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/bfc0c3f8877e6d272e37458605aa984b5d813831/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
+<h3 id="proteovault-cohort-database">ProteoVault — cohort database</h3>
+<p>After QC, the metapipeline builds the core ProteoVault layer with the search FASTA, adds the <code>quant-details</code> layer from the full DIA-NN report, and validates the DuckDB database. The core build also imports the published cohort QC table when available. ProteoVault is skipped when <code>validate_ProteomicPSM.run_protloom = true</code>, because its current importer does not support the ProtLoom output layout. <code>proteovault_version</code> defaults to <code>0.1.0</code>; <code>docker_image_proteovault</code> uses that version by default.</p>
+<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/b1c5dd42788726b8433bd6af69819d909bdbfd86/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
               
             </div>
           </div><footer>
