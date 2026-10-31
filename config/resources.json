@@ -143,6 +143,18 @@
                 "fraction": 1.0,
                 "max": "4 GB"
             }
+        },
+        "build_proteovault": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.125,
+                "max": 8
+            },
+            "memory": {
+                "min": "16 GB",
+                "fraction": 0.25,
+                "max": "64 GB"
+            }
         }
     }
 }

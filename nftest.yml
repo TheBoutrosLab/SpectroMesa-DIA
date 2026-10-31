@@ -6,19 +6,19 @@ global:
   clean_logs: true
 cases:
   - name: test_integration_MSFragger_ProtLoom_DIANN
-    message: Integration of MSFragger, ProtLoom, EasyPQP, DIA-NN, and cohort QC
+    message: Integration of MSFragger, ProtLoom, EasyPQP, DIA-NN, and cohort QC without ProteoVault
     nf_script: main.nf
     nf_config: test/test_integration_MSFragger_ProtLoom_DIANN/test.config
     skip: false
     verbose: true
   - name: test_integration_MSFragger_ProteinProphet_DIANN
-    message: Integration of MSFragger, ProteinProphet, EasyPQP, DIA-NN, and cohort QC
+    message: Integration of MSFragger, ProteinProphet, EasyPQP, DIA-NN, cohort QC, and ProteoVault
     nf_script: main.nf
     nf_config: test/test_integration_MSFragger_ProteinProphet_DIANN/test.config
     skip: false
     verbose: true
   - name: test_integration_MSFragger_Epifany_DIANN
-    message: Integration of MSFragger, Epifany, EasyPQP, DIA-NN, and cohort QC
+    message: Integration of MSFragger, Epifany, EasyPQP, DIA-NN, cohort QC, and ProteoVault
     nf_script: main.nf
     nf_config: test/test_integration_MSFragger_Epifany_DIANN/test.config
     skip: false

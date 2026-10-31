@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Build a ProteoVault 0.1.0 DuckDB database after QC for ProteinProphet, Fido, and Epifany runs with core, search FASTA, QC, and quant-details layers, publishing it at the versioned metapipeline output root.
+
 ## [1.3.2] - 2026-10-28
 
 ### Added
