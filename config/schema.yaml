@@ -43,6 +43,14 @@ child_profile:
   type: 'String'
   required: true
   help: 'Nextflow profile for each component pipeline'
+proteovault_version:
+  type: 'String'
+  required: false
+  help: 'ProteoVault version used for the container image'
+docker_image_proteovault:
+  type: 'String'
+  required: false
+  help: 'ProteoVault container image built from proteovault_version by default'
 compute_profile:
   type: 'String'
   required: false

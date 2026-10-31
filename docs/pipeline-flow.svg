@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="640" viewBox="0 0 1480 640" role="img" aria-labelledby="figure-title figure-description">
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="770" viewBox="0 0 1480 770" role="img" aria-labelledby="figure-title figure-description">
   <title id="figure-title">DIA pipeline workflow</title>
-  <desc id="figure-description">Sample mzML files enter MSFragger search, EasyPQP library generation, and DIA-NN quantitation. Search idXML files pass to MSBooster, Percolator, and protein inference. Unfiltered validation idXML files and cohort PSM and peptide reports pass to EasyPQP. The resulting library TSV passes to DIA-NN. The QC pipeline summarizes mzML, search, validation, library, and DIA-NN outputs. A target-decoy database feeds search and validation.</desc>
+  <desc id="figure-description">Sample mzML files enter MSFragger search, EasyPQP library generation, and DIA-NN quantitation. Search idXML files pass to MSBooster, Percolator, and protein inference. Unfiltered validation idXML files and cohort PSM and peptide reports pass to EasyPQP. The resulting library TSV passes to DIA-NN. The QC pipeline summarizes mzML, search, validation, library, and DIA-NN outputs. ProteoVault builds a DuckDB database from supported inference routes and the target-decoy FASTA; ProtLoom runs skip this step. A target-decoy database feeds search and validation.</desc>
   <defs>
     <style>
       text { font-family: Arial, Helvetica, sans-serif; fill: #183044; }
@@ -16,7 +16,7 @@
     <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#52758a"/></marker>
     <marker id="tealhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#159a89"/></marker>
   </defs>
-  <rect width="1480" height="640" fill="#f7fafb"/>
+  <rect width="1480" height="770" fill="#f7fafb"/>
 
   <rect x="50" y="34" width="1380" height="96" rx="16" class="card"/>
   <rect x="50" y="34" width="9" height="96" rx="4" fill="#159a89"/>
@@ -76,4 +76,12 @@
   <text x="78" y="573" class="tool">FASTA for search and PSM validation</text>
   <path d="M185 505 V440" class="input"/>
   <path d="M555 505 V440" class="input"/>
+  <path d="M1110 602 V632" class="arrow"/>
+  <path d="M690 553 H737 V690 H780" class="input"/>
+  <text x="701" y="642" class="handoff" style="fill:#158675">FASTA</text>
+  <rect x="790" y="642" width="640" height="106" rx="16" class="card"/>
+  <rect x="790" y="642" width="9" height="106" rx="4" fill="#765996"/>
+  <text x="818" y="681" class="name">ProteoVault</text>
+  <text x="818" y="710" class="tool">Core + FASTA + quant-details → DuckDB</text>
+  <text x="818" y="734" class="small">Skipped for ProtLoom runs</text>
 </svg>

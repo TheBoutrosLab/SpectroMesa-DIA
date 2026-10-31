@@ -13,6 +13,7 @@ include { create_quantitation_csv } from './module/create_quantitation_csv.nf'
 include { call_quantitate_dia } from './module/call_quantitate_dia.nf'
 include { create_qc_inputs } from './module/create_qc_inputs.nf'
 include { call_qc_dia } from './module/call_qc_dia.nf'
+include { build_proteovault } from './module/build_proteovault.nf'
 
 // Current child pipelines accept one mzML per sample. Retain fraction_id and
 // annotation_id in the records for downstream validation and future fractions.
@@ -121,4 +122,15 @@ workflow {
              libraryTsv, exportSummary, diannReport, config, resources]
         }
     call_qc_dia(qcInput)
+
+    if (!params.validate_ProteomicPSM.run_protloom) {
+        build_proteovault(
+            call_search_dia.out.result.map { records, dir -> dir },
+            call_validate_psm.out.result.map { records, dir -> dir },
+            call_spectral_library.out.result.map { records, dir -> dir },
+            call_quantitate_dia.out.result,
+            call_qc_dia.out.result,
+            database
+        )
+    }
 }

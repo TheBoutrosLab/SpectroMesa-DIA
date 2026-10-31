@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC.
+This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC. Runs without ProtLoom also build a ProteoVault database.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -20,10 +20,10 @@ This Boutros Lab metapipeline searches DIA mzML files with MSFragger, validates 
    export NXF_VER=24.10.6
    export NXF_SYNTAX_PARSER=v1
    export NXF_WORK=/scratch/$SLURM_JOB_ID/metapipeline-ProteomicDIA-work
-   nextflow run main.nf -c /path/to/run.config -profile pines
+   nextflow run main.nf -c /path/to/run.config -profile pines,standard
    ```
 
-The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. Select `-profile pines` for a 64 CPU, 500 GB node or `-profile boutroslab_aws` for a 32 CPU, 128 GB node. These profiles set resource budgets, while `child_profile` (`standard` by default) selects the container runtime in each child. Make sure the selected child profile's runtime is available. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
+The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. Select `pines` for a 64 CPU, 500 GB node or `boutroslab_aws` for a 32 CPU, 128 GB node. Add `standard` or `docker` for Docker, `apptainer` for Apptainer, or `singularity` for Singularity, for example `-profile pines,apptainer`. The runtime profile configures the parent ProteoVault process and passes the matching `child_profile` to every child pipeline. `standard` uses Docker by default when no runtime profile is selected. Apptainer and Singularity pull the ProteoVault OCI image through their Nextflow settings. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
 
 ### Resource profiles
 
@@ -32,7 +32,7 @@ The scratch path above is an example for a Slurm job; use another suitable work 
 | `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/32 GB. |
 | `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/16 GB. |
 
-Parent CSV, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including `qc-ProteomicDIA`. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
+Parent CSV, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. ProteoVault requests up to 8 CPUs/64 GB on `pines` and 4 CPUs/32 GB on `boutroslab_aws`. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including `qc-ProteomicDIA`. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
 
 For a profile outside the repository, copy [pines.json](config/resource_profiles/pines.json) or [boutroslab_aws.json](config/resource_profiles/boutroslab_aws.json) to a directory you control, rename it `<name>.json`, and edit its budget and allocations. Set these values in your run config:
 
@@ -84,7 +84,9 @@ Set shared values once at the root of the run config. `methods.setup()` derives 
 | `msfragger_executable` | Required | MSFragger JAR. |
 | `output_dir` | Required | Root directory for published results and logs. |
 | `dataset_id` | `cohort` | Name of this cohort's result directory. |
-| `child_profile` | `standard` | Nextflow profile applied to each child pipeline run. |
+| `child_profile` | `standard` | Nextflow profile applied to each child pipeline run; set with the matching parent `-profile` runtime. |
+| `proteovault_version` | `0.1.0` | Version used for the ProteoVault image. |
+| `docker_image_proteovault` | `ghcr.io/theboutroslab/proteovault:${params.proteovault_version}` | Image for the parent ProteoVault process. |
 | `compute_profile` | Set by `-profile pines` or `-profile boutroslab_aws` | Resource profile name; set directly to select a profile from `additional_resource_profile_dir`. |
 | `additional_resource_profile_dir` | None | Optional PATH-style list of directories containing `<compute_profile>.json` files. |
 
@@ -211,6 +213,10 @@ See the [quantitation pipeline parameter reference](external/quantitate-Proteomi
 
 All `qc_ProteomicDIA` parameters are set automatically by the metapipeline from the input mzMLs and preceding pipeline results.
 
+### ProteoVault — cohort database
+
+After QC, the metapipeline builds the core ProteoVault layer with the search FASTA, adds the `quant-details` layer from the full DIA-NN report, and validates the DuckDB database. The core build also imports the published cohort QC table when available. ProteoVault is skipped when `validate_ProteomicPSM.run_protloom = true`, because its current importer does not support the ProtLoom output layout. `proteovault_version` defaults to `0.1.0`; `docker_image_proteovault` uses that version by default.
+
 See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
 ## Pipeline steps and outputs
@@ -220,26 +226,29 @@ See [config/template.config](config/template.config) for an editable run configu
 3. `generate-ProteomicSpectralLibrary` uses those identifications and the original mzML files to produce an EasyPQP library TSV.
 4. `quantitate-ProteomicDIA` quantifies the original mzML files against that library with DIA-NN.
 5. `qc-ProteomicDIA` summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.
+6. For ProteinProphet, Fido, and Epifany runs, ProteoVault builds a validated DuckDB database from the core results, search FASTA, full DIA-NN report, and cohort QC table.
 
 Versioned child pipeline directories and the handoff CSVs are published at:
 
 ```text
-<output_dir>/metapipeline-ProteomicDIA-1.1.0/<dataset_id>/
-├── main_workflow/
-│   ├── search-ProteomicDIA-<version>/
-│   ├── validate-ProteomicPSM-<version>/
-│   ├── generate-ProteomicSpectralLibrary-<version>/
-│   ├── quantitate-ProteomicDIA-<version>/
-│   ├── qc-ProteomicDIA-1.1.1/
-│   └── manifests/
-└── log-metapipeline-ProteomicDIA-1.1.0-<timestamp>/
+<output_dir>/metapipeline-ProteomicDIA-<version>/
+├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
+└── <dataset_id>/
+    ├── main_workflow/
+    │   ├── search-ProteomicDIA-<version>/
+    │   ├── validate-ProteomicPSM-<version>/
+    │   ├── generate-ProteomicSpectralLibrary-<version>/
+    │   ├── quantitate-ProteomicDIA-<version>/
+    │   ├── qc-ProteomicDIA-1.1.1/
+    │   └── manifests/
+    └── log-metapipeline-ProteomicDIA-<version>-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`, including the QC sample and PSM feature manifests. The combined QC table is in `qc-ProteomicDIA-1.1.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`, including the QC sample and PSM feature manifests. The combined QC table is in `qc-ProteomicDIA-1.1.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core, FASTA, QC, and quant-details layers. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
-The NFTest cases run all five child pipelines using ProtLoom, ProteinProphet, or Epifany for validation. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run all five child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
 
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN

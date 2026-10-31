@@ -1,6 +1,6 @@
 # Integration tests
 
-The three NFTest cases run the complete metapipeline, including `qc-ProteomicDIA`, with ProtLoom, ProteinProphet, or Epifany as the validation route. A successful run publishes the cohort QC metric table and per-sample MS1 plots under the versioned `qc-ProteomicDIA-1.1.1` result directory.
+The three NFTest cases run the complete search, validation, library, quantitation, and QC workflow with ProtLoom, ProteinProphet, or Epifany as the validation route. ProteinProphet and Epifany also run ProteoVault and publish `<dataset_id>.proteovault.duckdb` directly under the versioned metapipeline output directory. The ProtLoom case skips ProteoVault. All cases publish the cohort QC metric table and per-sample MS1 plots under the versioned `qc-ProteomicDIA-1.1.1` result directory.
 
 From the repository root, create `.env` from `.env-template`, set `TEST_DATA_DIR`, and run a case inside a Slurm job:
 
