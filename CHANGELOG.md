@@ -4,6 +4,8 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-03
+
 ### Added
 
 - Update `qc-ProteomicDIA` to `v1.2.0` and pass original Bruker `.d` acquisition paths for MS1 and acquisition QC; the QC child now matches DIA-NN run names directly.
@@ -84,4 +86,5 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 [1.3.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.2.0...v1.3.0
 [1.3.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.0...v1.3.1
 [1.3.2]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.1...v1.3.2
-[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.2...HEAD
+[1.4.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.2...v1.4.0
+[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.4.0...HEAD
