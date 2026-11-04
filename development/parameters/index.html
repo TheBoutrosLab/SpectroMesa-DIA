@@ -96,7 +96,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Parameters</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -202,11 +202,11 @@
 </tr>
 </tbody>
 </table>
-<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
+<p>Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked <strong>set by metapipeline</strong> are supplied by <code>methods.setup()</code> or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/config/resources.json">config/resources.json</a>, while each child's resource handler controls its internal processes.</p>
 <h3 id="reconstruct_proteomicmsms-diatracer-reconstruction"><code>reconstruct_ProteomicMSMS</code> — diaTracer reconstruction</h3>
-<p>For Bruker <code>.d</code> input, the metapipeline automatically sends the raw directories to <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/reconstruct-ProteomicMSMS/README.md">reconstruct-ProteomicMSMS</a>. Its pseudo-MS/MS mzML files feed search, validation, library generation, and QC. The original <code>.d</code> directories feed DIA-NN quantitation. This stage is skipped for mzML input. diaTracer options such as <code>diatracer_delta_apex_im</code> can be set in the <code>reconstruct_ProteomicMSMS</code> namespace; its defaults come from the child pipeline. The bundled resource profiles allocate 12 CPUs and 64 GB to diaTracer. This child runs with Nextflow 25.10.5 by default through <code>reconstruct_nextflow_version</code>, while the parent and other children use the documented Nextflow 24.10.6 runtime. The installed <code>nextflow</code> launcher must honor <code>NXF_VER</code>; the child uses Java 21 or another Java version supported by Nextflow 25.10.5.</p>
+<p>For Bruker <code>.d</code> input, the metapipeline automatically sends the raw directories to <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/reconstruct-ProteomicMSMS/README.md">reconstruct-ProteomicMSMS</a>. Its pseudo-MS/MS mzML files feed search, validation, library generation, and QC. The original <code>.d</code> directories feed DIA-NN quantitation. This stage is skipped for mzML input. diaTracer options such as <code>diatracer_delta_apex_im</code> can be set in the <code>reconstruct_ProteomicMSMS</code> namespace; its defaults come from the child pipeline. The bundled resource profiles allocate 12 CPUs and 64 GB to diaTracer. This child runs with Nextflow 25.10.5 by default through <code>reconstruct_nextflow_version</code>, while the parent and other children use the documented Nextflow 24.10.6 runtime. The installed <code>nextflow</code> launcher must honor <code>NXF_VER</code>; the child uses Java 21 or another Java version supported by Nextflow 25.10.5.</p>
 <h3 id="search_proteomicdia-msfragger-search"><code>search_ProteomicDIA</code> — MSFragger search</h3>
-<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
+<p>The <code>MSFragger</code> block uses native <code>fragger.params</code> keys. The values below are in <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/config/template.config">config/template.config</a>; other defaults come from the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/search-ProteomicDIA/config/default.config">search pipeline configuration</a>.</p>
 <table>
 <thead>
 <tr>
@@ -403,7 +403,7 @@
 </tr>
 </tbody>
 </table>
-<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
+<p>The child <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/search-ProteomicDIA/config/schema.yaml">MSFragger schema</a> gives allowed values and validation rules.</p>
 <h3 id="validate_proteomicpsm-msbooster-percolator-and-protein-inference"><code>validate_ProteomicPSM</code> — MSBooster, Percolator, and protein inference</h3>
 <table>
 <thead>
@@ -616,7 +616,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/validate-ProteomicPSM/README.md#config">validation pipeline parameters</a> and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/validate-ProteomicPSM/docs/params.rst">OpenMS option mapping</a> for the remaining advanced indexing, filtering, and resource controls.</p>
 <h3 id="generate_proteomicspectrallibrary-easypqp-library"><code>generate_ProteomicSpectralLibrary</code> — EasyPQP library</h3>
 <table>
 <thead>
@@ -649,7 +649,7 @@
 </tr>
 </tbody>
 </table>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/generate-ProteomicSpectralLibrary/README.md#inputs">library pipeline parameter reference</a>.</p>
 <h3 id="quantitate_proteomicdia-dia-nn-quantitation"><code>quantitate_ProteomicDIA</code> — DIA-NN quantitation</h3>
 <table>
 <thead>
@@ -683,12 +683,12 @@
 </tbody>
 </table>
 <p>Set these in <code>quantitate_ProteomicDIA { 'DIA-NN' { ... } }</code>. The metapipeline passes the generated EasyPQP TSV as the child's <code>library</code> input and the original acquisition paths as its sample input.</p>
-<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
+<p>See the <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/external/quantitate-ProteomicDIA/README.md#parameters">quantitation pipeline parameter reference</a>.</p>
 <h3 id="qc_proteomicdia-cohort-quality-control"><code>qc_ProteomicDIA</code> — cohort quality control</h3>
 <p>All <code>qc_ProteomicDIA</code> parameters are set automatically by the metapipeline. It passes reconstructed mzML paths and original acquisition paths separately, so Bruker MS1 and acquisition QC use the <code>.d</code> directory.</p>
 <h3 id="proteovault-cohort-database">ProteoVault — cohort database</h3>
 <p>After QC, the metapipeline builds the core ProteoVault layer with the search FASTA, adds the <code>quant-details</code> layer from the full DIA-NN report, and validates the DuckDB database. The core build also imports the published cohort QC table when available. ProteoVault is skipped when <code>validate_ProteomicPSM.run_protloom = true</code>, because its current importer does not support the ProtLoom output layout. <code>proteovault_version</code> defaults to <code>0.1.0</code>; <code>docker_image_proteovault</code> uses that version by default.</p>
-<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/64db7c46df8ced2f8e76d54a9c3e66df5e9d46cb/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
+<p>See <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/config/template.config">config/template.config</a> for an editable run configuration and <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/config/schema.yaml">config/schema.yaml</a> for root parameter validation.</p>
               
             </div>
           </div><footer>
