@@ -25,6 +25,20 @@ contam_position:
   type: 'String'
   required: true
   help: 'Contaminant marker position: prefix or suffix'
+reconstruct_nextflow_version:
+  type: 'String'
+  required: true
+  help: 'Nextflow version for reconstruct-ProteomicMSMS; default 25.10.5'
+diatracer_executable:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'diaTracer JAR required for Bruker .d input'
+bruker_lib_dir:
+  type: 'String'
+  required: false
+  allow_empty: true
+  help: 'MSFragger ext/bruker directory required for Bruker .d input'
 msfragger_executable:
   type: 'Path'
   mode: 'r'
@@ -61,6 +75,10 @@ additional_resource_profile_dir:
   required: false
   allow_empty: true
   help: 'Optional PATH-style list of directories searched before bundled resource profiles'
+reconstruct_ProteomicMSMS:
+  type: 'Namespace'
+  required: true
+  help: 'diaTracer reconstruction pipeline parameters'
 search_ProteomicDIA:
   type: 'Namespace'
   required: true

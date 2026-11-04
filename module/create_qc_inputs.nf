@@ -6,6 +6,7 @@ process create_qc_inputs {
         path validationDir
         path libraryDir
         path quantDir
+        val(rawRecords)
 
     output:
         tuple path('qc-mzml.csv'), path('qc-search-idxml.csv'),
@@ -16,14 +17,19 @@ process create_qc_inputs {
     script:
         def useProtLoom = params.validate_ProteomicPSM.run_protloom
         def route = params.qc_ProteomicDIA.inference_route
-        def protloomVersion = params.validate_ProteomicPSM.get('protloom_version') ?: '0.2.3'
+        def protloomVersion = params.validate_ProteomicPSM.get('protloom_version') ?: '0.3.1'
         def openmsVersion = params.validate_ProteomicPSM.get('openms_version') ?: '3.5.0'
         def validationOutput = useProtLoom ?
             "${validationDir}/${params.dataset_id}/ProtLoom-${protloomVersion}/output" :
             "${validationDir}/${params.dataset_id}/${route}/output"
         def featureRoute = params.validate_ProteomicPSM.run_percolator ?
             (params.validate_ProteomicPSM.percolator_workflow == 'msbooster' ? 'MSBooster' : 'PSMFeatureExtractor') : null
+        def acquisitionBySample = rawRecords.collectEntries { sample, fraction, acquisition, annotation ->
+            [(sample): acquisition]
+        }
         def rows = records.collect { sample, fraction, mzml, annotation ->
+            def acquisition = acquisitionBySample[sample]
+            if (!acquisition) error "Missing raw acquisition for ${sample}"
             def searchId = "${searchDir}/${params.dataset_id}/output/MSFragger/${sample}_MSFragger.idXML"
             def filteredId = useProtLoom ?
                 "${validationDir}/${sample}/ProtLoom-${protloomVersion}/output/${sample}_ProtLoom_filter.idXML" :
@@ -43,7 +49,7 @@ process create_qc_inputs {
             test -f '${mzml}' || { echo 'Missing mzML: ${mzml}' >&2; exit 1; }
             test -f '${searchId}' || { echo 'Missing search idXML: ${searchId}' >&2; exit 1; }
             test -f '${filteredId}' || { echo 'Missing filtered idXML: ${filteredId}' >&2; exit 1; }
-            printf '%s,%s,%s\\n' '${sample}' '${fraction}' "\$(realpath '${mzml}')" >> qc-mzml.csv
+            printf '%s,%s,%s,%s\\n' '${sample}' '${fraction}' "\$(realpath '${mzml}')" "\$(realpath '${acquisition}')" >> qc-mzml.csv
             printf '%s,%s,%s\\n' '${sample}' 'MSFragger' "\$(realpath '${searchId}')" >> qc-search-idxml.csv
             printf '%s,%s\\n' '${sample}' "\$(realpath '${filteredId}')" >> qc-filtered-idxml.csv
             ${featureRow}
@@ -61,7 +67,7 @@ process create_qc_inputs {
         def report = "${quantDir}/${params.dataset_id}/output/DIA-NN/${params.dataset_id}-report.tsv"
         """
         set -euo pipefail
-        printf 'sample_name,fraction_id,path\\n' > qc-mzml.csv
+        printf 'sample_name,fraction_id,path,acquisition_path\\n' > qc-mzml.csv
         printf 'sample_name,search_engine,idXML\\n' > qc-search-idxml.csv
         printf 'sample_name,idXML\\n' > qc-filtered-idxml.csv
         printf 'sample_name,search_engine,route,fraction_id,path\\n' > qc-psm-features.csv

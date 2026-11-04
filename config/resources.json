@@ -155,6 +155,30 @@
                 "fraction": 0.25,
                 "max": "64 GB"
             }
+        },
+        "create_reconstruction_csv": {
+            "cpus": {
+                "min": 1,
+                "fraction": 1.0,
+                "max": 1
+            },
+            "memory": {
+                "min": "2 GB",
+                "fraction": 1.0,
+                "max": "2 GB"
+            }
+        },
+        "call_reconstruct_msms": {
+            "cpus": {
+                "min": 2,
+                "fraction": 1.0,
+                "max": 2
+            },
+            "memory": {
+                "min": "4 GB",
+                "fraction": 1.0,
+                "max": "4 GB"
+            }
         }
     }
 }

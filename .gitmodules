@@ -22,3 +22,6 @@
 [submodule "external/qc-ProteomicDIA"]
 	path = external/qc-ProteomicDIA
 	url = git@github.com:TheBoutrosLab/pipeline-qc-ProteomicDIA.git
+[submodule "external/reconstruct-ProteomicMSMS"]
+	path = external/reconstruct-ProteomicMSMS
+	url = git@github.com:TheBoutrosLab/pipeline-reconstruct-ProteomicMSMS.git
