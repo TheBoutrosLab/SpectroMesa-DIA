@@ -140,6 +140,12 @@
             "export_EasyPQP_reports": {
                 "cpus": 3,
                 "memory": "16 GB"
+            },
+            "score_FDR_ProtLoomSplit": {
+                "cpus": 1
+            },
+            "score_FDR_ProtLoomSplit_consensus": {
+                "cpus": 1
             }
         },
         "generate_ProteomicSpectralLibrary": {
@@ -164,6 +170,10 @@
             "quantitate_DIANN": {
                 "cpus": 16,
                 "memory": "96 GB"
+            },
+            "prepare_EasyPQPLibrary": {
+                "cpus": 1,
+                "memory": "4 GB"
             }
         },
         "qc_ProteomicDIA": {
@@ -218,6 +228,16 @@
             "plot_MS1_landscape": {
                 "cpus": 1,
                 "memory": "4 GB"
+            }
+        },
+        "reconstruct_ProteomicMSMS": {
+            "reconstruct_msms_diaTracer": {
+                "cpus": 12,
+                "memory": "64 GB"
+            },
+            "calculate_SHA512": {
+                "cpus": 1,
+                "memory": "1 GB"
             }
         }
     }

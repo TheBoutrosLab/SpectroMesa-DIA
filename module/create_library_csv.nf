@@ -11,7 +11,7 @@ process create_library_csv {
     script:
         def useProtLoom = params.validate_ProteomicPSM.run_protloom
         def version = useProtLoom ?
-            (params.validate_ProteomicPSM.get('protloom_version') ?: '0.2.3') :
+            (params.validate_ProteomicPSM.get('protloom_version') ?: '0.3.1') :
             (params.validate_ProteomicPSM.get('openms_version') ?: '3.5.0')
         def ids = records.collect { sample, fraction, mzml, annotation ->
             def run = sample

@@ -6,7 +6,16 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ### Added
 
+- Update `qc-ProteomicDIA` to `v1.2.0` and pass original Bruker `.d` acquisition paths for MS1 and acquisition QC; the QC child now matches DIA-NN run names directly.
+- Update `generate-ProteomicSpectralLibrary` to `v1.0.2`, which passes single-run PSM and peak files separately to EasyPQP.
+- Add a Bruker dia-PASEF NFTest integration case using the `hela_diapasef` fixture.
+- Add `reconstruct-ProteomicMSMS` v1.0.0 for Bruker `.d` acquisitions; route its pseudo-MS/MS mzML to search, validation, spectral library generation, and QC while quantifying the original `.d` data.
+- Update `validate-ProteomicPSM` to `v2.4.1` and `quantitate-ProteomicDIA` to `v1.2.0`, including Bruker `.d` input support in the quantitation child, EasyPQP library preparation, and updated resource profiles. The metapipeline accepts Bruker `.d` directories through reconstruction.
 - Build a ProteoVault 0.1.0 DuckDB database after QC for ProteinProphet, Fido, and Epifany runs with core, search FASTA, QC, and quant-details layers, publishing it at the versioned metapipeline output root.
+
+### Fixed
+
+- Enable `copy_inputs_to_work` in the Bruker integration test under the correct quantitation namespace.
 
 ## [1.3.2] - 2026-10-28
 
