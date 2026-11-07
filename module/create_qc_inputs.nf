@@ -24,10 +24,10 @@ process create_qc_inputs {
             "${validationDir}/${params.dataset_id}/${route}/output"
         def featureRoute = params.validate_ProteomicPSM.run_percolator ?
             (params.validate_ProteomicPSM.percolator_workflow == 'msbooster' ? 'MSBooster' : 'PSMFeatureExtractor') : null
-        def acquisitionBySample = rawRecords.collectEntries { sample, fraction, acquisition, annotation ->
+        def acquisitionBySample = rawRecords.collectEntries { sample, fraction, acquisition, annotation, scan ->
             [(sample): acquisition]
         }
-        def rows = records.collect { sample, fraction, mzml, annotation ->
+        def rows = records.collect { sample, fraction, mzml, annotation, scan ->
             def acquisition = acquisitionBySample[sample]
             if (!acquisition) error "Missing raw acquisition for ${sample}"
             def searchId = "${searchDir}/${params.dataset_id}/output/MSFragger/${sample}_MSFragger.idXML"

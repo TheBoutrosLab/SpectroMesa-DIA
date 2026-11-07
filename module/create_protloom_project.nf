@@ -61,7 +61,7 @@ process create_protloom_project {
                 }
             }
         }
-        project.samples = records.collect { sample, fraction, mzml, annotation ->
+        project.samples = records.collect { sample, fraction, mzml, annotation, scan ->
             if (!annotationIds.contains(annotation)) {
                 error "Sample '${sample}' has annotation_id '${annotation}' absent from the ProtLoom project YAML"
             }

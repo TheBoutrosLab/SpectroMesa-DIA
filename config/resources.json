@@ -1,5 +1,17 @@
 {
     "default": {
+        "alias_converted_mzml": {
+            "cpus": {"min": 1, "fraction": 1.0, "max": 1},
+            "memory": {"min": "2 GB", "fraction": 1.0, "max": "2 GB"}
+        },
+        "create_conversion_csv": {
+            "cpus": {"min": 1, "fraction": 1.0, "max": 1},
+            "memory": {"min": "2 GB", "fraction": 1.0, "max": "2 GB"}
+        },
+        "call_convert_msdata": {
+            "cpus": {"min": 2, "fraction": 1.0, "max": 2},
+            "memory": {"min": "4 GB", "fraction": 1.0, "max": "4 GB"}
+        },
         "create_config_json": {
             "cpus": {
                 "min": 1,

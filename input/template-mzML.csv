@@ -1,2 +1,2 @@
-sample_name,fraction_id,annotation_id,path
-sample_01,1,reference,/path/to/sample_01.mzML
+sample_name,fraction_id,annotation_id,path,scan
+sample_01,1,reference,/path/to/sample_01.mzML,

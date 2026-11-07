@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline reconstructs Bruker `.d` acquisitions with diaTracer when needed and searches the resulting mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC. Runs without ProtLoom also build a ProteoVault database.
+This Boutros Lab metapipeline converts MS data files to mzML or reconstructs Bruker `.d` acquisitions with diaTracer, searches the resulting mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC. Runs without ProtLoom also build a ProteoVault database.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -12,7 +12,7 @@ This Boutros Lab metapipeline reconstructs Bruker `.d` acquisitions with diaTrac
    git submodule update --init --recursive
    ```
 
-2. Prepare the [input CSV](input/template-mzML.csv) with either mzML files or Bruker `.d` directories, a target-decoy FASTA, and the MSFragger JAR. For `.d` input, also provide the diaTracer JAR and MSFragger `ext/bruker` directory. If selecting ProtLoom, also prepare a [ProtLoom project YAML](config/protloom-project.example.yaml) with the same FASTA and accession markers as the run configuration.
+2. Prepare the [input CSV](input/template-mzML.csv) with either MS data files supported by the selected conversion algorithm or Bruker `.d` directories, a target-decoy FASTA, and the MSFragger JAR. For `.d` input, also provide the diaTracer JAR and MSFragger `ext/bruker` directory. If selecting ProtLoom, also prepare a [ProtLoom project YAML](config/protloom-project.example.yaml) with the same FASTA and accession markers as the run configuration.
 3. Copy [config/template.config](config/template.config) to a run-specific file. Set `input_csv`, `decoy_database`, `msfragger_executable`, `output_dir`, and `dataset_id`. For `.d` input, set `diatracer_executable` and `bruker_lib_dir`. Set `validate_ProteomicPSM.protloom_project_yaml` when using ProtLoom. Review the shared markers and the child-specific settings for your experiment. Keep the template's `includeConfig` lines and final `methods.setup()` call.
 4. Run with Nextflow 24.10.6 and its v1 syntax parser. Choose a work directory with enough space for the acquisitions, reconstructed mzML files, and child pipeline work:
 
@@ -32,7 +32,7 @@ The scratch path above is an example for a Slurm job; use another suitable work 
 | `pines` | 64 CPUs, 500 GB | 2 CPUs, 4 GB per child launcher | diaTracer 12 CPUs/64 GB; MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/32 GB. |
 | `boutroslab_aws` | 32 CPUs, 128 GB | 2 CPUs, 4 GB per child launcher | diaTracer 12 CPUs/64 GB; MSFragger search 8 CPUs/64 GB; iProphet 8 CPUs/32 GB; DIA-NN 16 CPUs/96 GB; QC DIA-NN report 2 CPUs/16 GB. |
 
-Parent CSV, reconstruction manifest, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. ProteoVault requests up to 8 CPUs/64 GB on `pines` and 4 CPUs/32 GB on `boutroslab_aws`. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including reconstruction and `qc-ProteomicDIA`. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
+Parent CSV, conversion and reconstruction manifests, QC manifest, and configuration tasks request 1 CPU and 2 GB in both profiles. ProteoVault requests up to 8 CPUs/64 GB on `pines` and 4 CPUs/32 GB on `boutroslab_aws`. Parent child-launch processes request 2 CPUs and 4 GB from [config/resources.json](config/resources.json). Each profile has its own file under [config/resource_profiles](config/resource_profiles), containing its budget and CPU requests for every child process. A process `memory` value is optional: omit it to leave that child's Nextflow memory directive unset. `search_database_MSFragger` is the exception because it uses `task.memory` to size the Java heap. The profile's `max_memory` remains required as a node budget. The parent passes process requests through each child's parameter JSON and a small resource override config, including conversion, reconstruction, and `qc-ProteomicDIA`. Existing child resource defaults remain in effect when neither profile is selected. A run config can set `base_resource_update` within a child namespace to replace that profile's process requests. These profiles describe node budgets; they do not select a Slurm partition or change the local executor.
 
 For a profile outside the repository, copy [pines.json](config/resource_profiles/pines.json) or [boutroslab_aws.json](config/resource_profiles/boutroslab_aws.json) to a directory you control, rename it `<name>.json`, and edit its budget and allocations. Set these values in your run config:
 
@@ -45,20 +45,21 @@ Run with `-c /path/to/run.config`; a matching Nextflow `-profile` entry is not r
 
 ## Inputs
 
-The input CSV has exactly these columns. Use either mzML files or Bruker `.d` directories throughout one run:
+The input CSV requires four columns and accepts an optional `scan` column. Additional columns are allowed and ignored. Use either MS data files or Bruker `.d` directories throughout one run:
 
 ```csv
-sample_name,fraction_id,annotation_id,path
-sample_01,1,reference,/data/sample_01.mzML
-sample_02,1,reference,/data/sample_02.mzML
+sample_name,fraction_id,annotation_id,path,scan
+sample_01,1,reference,/data/sample_01.mzML,
+sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 ```
 
 | Input | Requirement |
 | --- | --- |
-| `sample_name` | Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs. |
+| `sample_name` | Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs. File inputs require names without dots so mzML and idXML filenames match. |
 | `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
 | `annotation_id` | Required CSV column. When ProtLoom is enabled, it must match an `annotations[].annotation_id` in its project YAML. |
-| `path` | Existing mzML file or Bruker `.d` directory. Relative paths resolve from the input CSV directory. Paths and basenames must be unique. mzML basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens. |
+| `path` | Existing MS data file supported by `convert_MSData.convert_algorithm`, or Bruker `.d` directory. Relative paths resolve from the input CSV directory. Paths and basenames must be unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens. |
+| `scan` | Optional column, required for each SCIEX `.wiff` row. Give the companion `.wiff.scan` file path; leave blank for other inputs. Relative paths resolve from the input CSV directory. |
 | `decoy_database` | Existing target-decoy FASTA used by search and validation. |
 | `msfragger_executable` | Separately obtained MSFragger JAR. |
 | `diatracer_executable` | diaTracer JAR, required for `.d` input. |
@@ -77,7 +78,7 @@ Set shared values once at the root of the run config. `methods.setup()` derives 
 
 | Root parameter | Default | Purpose |
 | --- | --- | --- |
-| `input_csv` | Required | Sample-to-acquisition CSV (mzML or `.d`). |
+| `input_csv` | Required | Sample-to-acquisition CSV (MS data files or `.d`). |
 | `decoy_database` | Required | Target-decoy FASTA passed to search and validation. |
 | `decoy_string` | `DECOY_` | Decoy accession marker; becomes the MSFragger `decoy_prefix` and validation `decoy_string`. |
 | `decoy_position` | `prefix` | Decoy marker position. The current MSFragger search requires `prefix`; validation receives this as `decoy_string_position`. |
@@ -97,9 +98,26 @@ Set shared values once at the root of the run config. `methods.setup()` derives 
 
 Settings specific to one child belong in its namespace in the run config. The tables below list the parameters relevant to this metapipeline. Values marked **set by metapipeline** are supplied by `methods.setup()` or the child-call process; do not repeat them in a run config. Parent launcher requests are defined in [config/resources.json](config/resources.json), while each child's resource handler controls its internal processes.
 
+### `convert_MSData` — MS data conversion
+
+For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.0 produces mzML for search, library generation, quantitation, and QC. The metapipeline links each converted file under its sample name so mzML and idXML basenames match. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
+
+For SCIEX WIFF input, add `scan` to the input CSV and point it at the companion `.wiff.scan` file. The metapipeline validates and passes both paths to conversion. The `scan` column may be omitted for other formats.
+
+| Parameter | Default | Purpose |
+| --- | --- | --- |
+| `convert_algorithm` | `ProteoWizard` | Select ProteoWizard or OpenMS. |
+| `output_format` | `mzML` | Required output format for DIA downstream stages. |
+| `peak_picking_vendor` | `true` | Use vendor peak picking. |
+| `peak_picking_openms` | `false` | Use OpenMS PeakPickerHiRes. |
+| `run_index` | `false` | Reindex converted files with OpenMS FileConverter. |
+| `pwiz_extra_args` | `--64` | Extra ProteoWizard arguments. |
+| `pwiz_version`, `openms_version` | Child release defaults | Tool versions used by the conversion child. |
+| `input_csv`, `output_dir` | Set by metapipeline | Conversion manifest and child output directory. |
+
 ### `reconstruct_ProteomicMSMS` — diaTracer reconstruction
 
-For Bruker `.d` input, the metapipeline automatically sends the raw directories to [reconstruct-ProteomicMSMS](external/reconstruct-ProteomicMSMS/README.md). Its pseudo-MS/MS mzML files feed search, validation, library generation, and QC. The original `.d` directories feed DIA-NN quantitation. This stage is skipped for mzML input. diaTracer options such as `diatracer_delta_apex_im` can be set in the `reconstruct_ProteomicMSMS` namespace; its defaults come from the child pipeline. The bundled resource profiles allocate 12 CPUs and 64 GB to diaTracer. This child runs with Nextflow 25.10.5 by default through `reconstruct_nextflow_version`, while the parent and other children use the documented Nextflow 24.10.6 runtime. The installed `nextflow` launcher must honor `NXF_VER`; the child uses Java 21 or another Java version supported by Nextflow 25.10.5.
+For Bruker `.d` input, the metapipeline automatically sends the raw directories to [reconstruct-ProteomicMSMS](external/reconstruct-ProteomicMSMS/README.md). Its pseudo-MS/MS mzML files feed search, validation, library generation, and QC. The original `.d` directories feed DIA-NN quantitation. This stage is skipped for file input. diaTracer options such as `diatracer_delta_apex_im` can be set in the `reconstruct_ProteomicMSMS` namespace; its defaults come from the child pipeline. The bundled resource profiles allocate 12 CPUs and 64 GB to diaTracer. This child runs with Nextflow 25.10.5 by default through `reconstruct_nextflow_version`, while the parent and other children use the documented Nextflow 24.10.6 runtime. The installed `nextflow` launcher must honor `NXF_VER`; the child uses Java 21 or another Java version supported by Nextflow 25.10.5.
 
 ### `search_ProteomicDIA` — MSFragger search
 
@@ -230,10 +248,10 @@ See [config/template.config](config/template.config) for an editable run configu
 
 ## Pipeline steps and outputs
 
-1. For `.d` input, `reconstruct-ProteomicMSMS` generates pseudo-MS/MS mzML files with diaTracer. `search-ProteomicDIA` searches each input or reconstructed mzML with MSFragger and produces idXML files.
+1. For file input, `convert-MSData` produces mzML; for `.d` input, `reconstruct-ProteomicMSMS` generates pseudo-MS/MS mzML with diaTracer. `search-ProteomicDIA` searches the resulting mzML with MSFragger and produces idXML files.
 2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when `validate_ProteomicPSM.run_protloom = true`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
 3. `generate-ProteomicSpectralLibrary` uses those identifications and the search mzML files to produce an EasyPQP library TSV.
-4. `quantitate-ProteomicDIA` quantifies the original mzML files or Bruker `.d` directories against that library with DIA-NN.
+4. `quantitate-ProteomicDIA` quantifies converted mzML files or original Bruker `.d` directories against that library with DIA-NN.
 5. `qc-ProteomicDIA` summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.
 6. For ProteinProphet, Fido, and Epifany runs, ProteoVault builds a validated DuckDB database from the core results, search FASTA, full DIA-NN report, and cohort QC table.
 
@@ -244,6 +262,7 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 ├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
 └── <dataset_id>/
     ├── main_workflow/
+    │   ├── convert-MSData-1.1.0/  # file input only
     │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
     │   ├── search-ProteomicDIA-<version>/
     │   ├── validate-ProteomicPSM-<version>/
@@ -258,12 +277,13 @@ The metapipeline creates each stage's input CSV in `manifests/`, including the Q
 
 ## Testing
 
-The NFTest cases run all five child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run conversion for file inputs and the downstream child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
 
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
+zsh test/run-nftest.sh test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
 ```
 
 The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
