@@ -55,7 +55,7 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 
 | Input | Requirement |
 | --- | --- |
-| `sample_name` | Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs. File inputs require names without dots so mzML and idXML filenames match. |
+| `sample_name` | Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs. |
 | `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
 | `annotation_id` | Required CSV column. When ProtLoom is enabled, it must match an `annotations[].annotation_id` in its project YAML. |
 | `path` | Existing MS data file supported by `convert_MSData.convert_algorithm`, or Bruker `.d` directory. Relative paths resolve from the input CSV directory. Paths and basenames must be unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens. |
@@ -100,7 +100,7 @@ Settings specific to one child belong in its namespace in the run config. The ta
 
 ### `convert_MSData` — MS data conversion
 
-For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.0 produces mzML for search, library generation, quantitation, and QC. The metapipeline links each converted file under its sample name so mzML and idXML basenames match. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
+For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.1 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
 
 For SCIEX WIFF input, add `scan` to the input CSV and point it at the companion `.wiff.scan` file. The metapipeline validates and passes both paths to conversion. The `scan` column may be omitted for other formats.
 
@@ -262,7 +262,7 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 ├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
 └── <dataset_id>/
     ├── main_workflow/
-    │   ├── convert-MSData-1.1.0/  # file input only
+    │   ├── convert-MSData-1.1.1/  # file input only
     │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
     │   ├── search-ProteomicDIA-<version>/
     │   ├── validate-ProteomicPSM-<version>/

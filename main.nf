@@ -4,7 +4,6 @@ nextflow.enable.dsl = 2
 include { create_config_json } from './module/create_config_json.nf'
 include { create_conversion_csv } from './module/create_conversion_csv.nf'
 include { call_convert_msdata } from './module/call_convert_msdata.nf'
-include { alias_converted_mzml } from './module/alias_converted_mzml.nf'
 include { create_reconstruction_csv } from './module/create_reconstruction_csv.nf'
 include { call_reconstruct_msms } from './module/call_reconstruct_msms.nf'
 include { create_search_csv } from './module/create_search_csv.nf'
@@ -56,9 +55,6 @@ def readAcquisitionCsv(String inputCsv) {
             def isFile = acquisition.isFile()
             if (!isBruker && !isFile) {
                 error "Input for ${sample} must be an MS data file or Bruker .d directory: ${acquisition}"
-            }
-            if (isFile && sample.contains('.')) {
-                error "Sample name '${sample}' cannot contain a dot for converted mzML input"
             }
             def scanPath = row.scan?.trim()
             def isWiff = isFile && acquisition.name.toLowerCase().endsWith('.wiff')
@@ -137,10 +133,13 @@ workflow {
     convertInput = create_conversion_csv.out.input.combine(convertConfig)
         .map { csv, records, config, resources -> [csv, records, config, resources] }
     call_convert_msdata(convertInput)
-    alias_converted_mzml(call_convert_msdata.out.result)
-    converted = alias_converted_mzml.out.result.map { records, directory ->
+    converted = call_convert_msdata.out.result.map { records, directory ->
         records.collect { sample, fraction, acquisition, annotation, scan ->
-            def mzml = file("${directory}/${sample}.mzML")
+            def basename = file(acquisition).baseName
+            def software = params.convert_MSData.convert_algorithm == 'OpenMS' ?
+                "OpenMS-${params.convert_MSData.openms_version}" :
+                "ProteoWizard-${params.convert_MSData.pwiz_version}"
+            def mzml = directory.resolve("${sample}/${software}/output/${basename}.mzML")
             tuple(sample, fraction, mzml.toString(), annotation, '')
         }
     }

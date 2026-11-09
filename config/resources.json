@@ -1,9 +1,5 @@
 {
     "default": {
-        "alias_converted_mzml": {
-            "cpus": {"min": 1, "fraction": 1.0, "max": 1},
-            "memory": {"min": "2 GB", "fraction": 1.0, "max": "2 GB"}
-        },
         "create_conversion_csv": {
             "cpus": {"min": 1, "fraction": 1.0, "max": 1},
             "memory": {"min": "2 GB", "fraction": 1.0, "max": "2 GB"}
