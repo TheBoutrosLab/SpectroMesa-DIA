@@ -10,7 +10,7 @@ process create_quantitation_csv {
 
     script:
         def library = "${libraryDir}/${params.dataset_id}/output/EasyPQP/${params.dataset_id}_library.tsv"
-        def mzmlRows = rawRecords.collect { sample, fraction, mzml, annotation ->
+        def mzmlRows = rawRecords.collect { sample, fraction, mzml, annotation, scan ->
             "printf '%s,%s\\n' '${sample}' '${mzml}' >> quantitation.csv"
         }.join('\n')
         """

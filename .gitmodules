@@ -25,3 +25,6 @@
 [submodule "external/reconstruct-ProteomicMSMS"]
 	path = external/reconstruct-ProteomicMSMS
 	url = git@github.com:TheBoutrosLab/pipeline-reconstruct-ProteomicMSMS.git
+[submodule "external/convert-MSData"]
+	path = external/convert-MSData
+	url = git@github.com:TheBoutrosLab/pipeline-convert-MSData.git

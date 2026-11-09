@@ -4,6 +4,12 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Add `convert-MSData` v1.1.1 for MS data files before DIA search, library generation, quantitation, and QC; route its unprefixed mzML files directly to downstream pipelines while Bruker `.d` acquisitions bypass conversion and continue through diaTracer reconstruction.
+- Accept an optional input CSV `scan` column and pass required SCIEX `.wiff.scan` companions to conversion.
+- Add an NFTest integration case starting from two E. coli Thermo RAW acquisitions.
+
 ## [1.4.0] - 2026-11-03
 
 ### Added

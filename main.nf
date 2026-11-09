@@ -2,6 +2,8 @@
 nextflow.enable.dsl = 2
 
 include { create_config_json } from './module/create_config_json.nf'
+include { create_conversion_csv } from './module/create_conversion_csv.nf'
+include { call_convert_msdata } from './module/call_convert_msdata.nf'
 include { create_reconstruction_csv } from './module/create_reconstruction_csv.nf'
 include { call_reconstruct_msms } from './module/call_reconstruct_msms.nf'
 include { create_search_csv } from './module/create_search_csv.nf'
@@ -27,8 +29,9 @@ def readAcquisitionCsv(String inputCsv) {
     }
 
     return Channel.fromPath(csv).splitCsv(header: true).toList().map { records ->
-        if (!records || records[0].keySet() != (['sample_name', 'fraction_id', 'annotation_id', 'path'] as Set)) {
-            error 'Input CSV must have exactly sample_name,fraction_id,annotation_id,path columns and at least one row'
+        def requiredColumns = ['sample_name', 'fraction_id', 'annotation_id', 'path'] as Set
+        if (!records || !records[0].keySet().containsAll(requiredColumns)) {
+            error 'Input CSV must contain sample_name,fraction_id,annotation_id,path columns and at least one row'
         }
         def seenSamples = [] as Set
         def seenNames = [] as Set
@@ -49,21 +52,37 @@ def readAcquisitionCsv(String inputCsv) {
             if (!raw) error "Missing acquisition path for ${sample}"
             def acquisition = file(raw.startsWith('/') ? raw : "${csv.parent}/${raw}")
             def isBruker = acquisition.isDirectory() && acquisition.name.toLowerCase().endsWith('.d')
-            def isMzml = acquisition.isFile() && acquisition.name.toLowerCase().endsWith('.mzml')
-            if (!isBruker && !isMzml) {
-                error "Input for ${sample} must be an mzML file or Bruker .d directory: ${acquisition}"
+            def isFile = acquisition.isFile()
+            if (!isBruker && !isFile) {
+                error "Input for ${sample} must be an MS data file or Bruker .d directory: ${acquisition}"
             }
-            if ((isMzml && acquisition.baseName.contains('.')) ||
+            def scanPath = row.scan?.trim()
+            def isWiff = isFile && acquisition.name.toLowerCase().endsWith('.wiff')
+            if (isWiff && !scanPath) {
+                error "WIFF input for ${sample} requires a scan companion file in the scan column"
+            }
+            if (scanPath && !isWiff) {
+                error "scan is only supported for WIFF input: ${sample}"
+            }
+            def scan = scanPath ? file(scanPath.startsWith('/') ? scanPath : "${csv.parent}/${scanPath}") : null
+            if (scan && !scan.isFile()) {
+                error "Missing scan companion file for ${sample}: ${scan}"
+            }
+            if (scan && !scan.name.equalsIgnoreCase("${acquisition.name}.scan")) {
+                error "Scan companion for ${sample} must be named ${acquisition.name}.scan: ${scan}"
+            }
+            if ((isFile && acquisition.baseName.contains('.')) ||
                 (isBruker && (!(sample ==~ /[A-Za-z0-9][A-Za-z0-9_-]*/) ||
                               !(fraction ==~ /[A-Za-z0-9][A-Za-z0-9_-]*/))) ||
                 !seenNames.add(acquisition.name.toLowerCase()) ||
                 !seenPaths.add(acquisition.toRealPath().toString())) {
                 error "Invalid or duplicate acquisition name/path for ${sample}: ${acquisition}"
             }
-            tuple(sample, fraction, acquisition.toRealPath().toString(), annotation)
+            tuple(sample, fraction, acquisition.toRealPath().toString(), annotation,
+                scan ? scan.toRealPath().toString() : '')
         }
         if (parsed*.getAt(2).collect { it.toLowerCase().endsWith('.d') }.unique().size() != 1) {
-            error 'Input CSV must contain either Bruker .d directories or mzML files, not both'
+            error 'Input CSV must contain either Bruker .d directories or MS data files, not both'
         }
         parsed
     }
@@ -75,10 +94,11 @@ workflow {
 
     samples = readAcquisitionCsv(params.input_csv)
     acquisitions = samples.branch {
-        bruker: it[0][2].toLowerCase().endsWith('.d')
-        mzml: true
+        bruker: new File(it[0][2]).isDirectory()
+        files: true
     }
     configOptions = Channel.of(
+        ['convert_MSData', params.convert_MSData, params.child_processes_without_memory.convert_MSData ?: []],
         ['reconstruct_ProteomicMSMS', params.reconstruct_ProteomicMSMS, params.child_processes_without_memory.reconstruct_ProteomicMSMS ?: []],
         ['search_ProteomicDIA', params.search_ProteomicDIA, params.child_processes_without_memory.search_ProteomicDIA ?: []],
         ['validate_ProteomicPSM', params.validate_ProteomicPSM, params.child_processes_without_memory.validate_ProteomicPSM ?: []],
@@ -87,6 +107,7 @@ workflow {
         ['qc_ProteomicDIA', params.qc_ProteomicDIA, params.child_processes_without_memory.qc_ProteomicDIA ?: []]
     )
     create_config_json(configOptions)
+    convertConfig = create_config_json.out.config.filter { name, config, resources -> name == 'convert_MSData' }.map { name, config, resources -> [config, resources] }
     reconstructConfig = create_config_json.out.config.filter { name, config, resources -> name == 'reconstruct_ProteomicMSMS' }.map { name, config, resources -> [config, resources] }
     searchConfig = create_config_json.out.config.filter { name, config, resources -> name == 'search_ProteomicDIA' }.map { name, config, resources -> [config, resources] }
     validateConfig = create_config_json.out.config.filter { name, config, resources -> name == 'validate_ProteomicPSM' }.map { name, config, resources -> [config, resources] }
@@ -103,12 +124,26 @@ workflow {
         file(params.bruker_lib_dir ?: projectDir)
     )
     reconstructed = call_reconstruct_msms.out.result.map { records, directory ->
-        records.collect { sample, fraction, acquisition, annotation ->
+        records.collect { sample, fraction, acquisition, annotation, scan ->
             def mzml = file("${directory}/${params.dataset_id}/output/diaTracer/${sample}_${fraction}_diatracer.mzML")
-            tuple(sample, fraction, mzml.toString(), annotation)
+            tuple(sample, fraction, mzml.toString(), annotation, '')
         }
     }
-    searchSamples = acquisitions.mzml.mix(reconstructed)
+    create_conversion_csv(acquisitions.files)
+    convertInput = create_conversion_csv.out.input.combine(convertConfig)
+        .map { csv, records, config, resources -> [csv, records, config, resources] }
+    call_convert_msdata(convertInput)
+    converted = call_convert_msdata.out.result.map { records, directory ->
+        records.collect { sample, fraction, acquisition, annotation, scan ->
+            def basename = file(acquisition).baseName
+            def software = params.convert_MSData.convert_algorithm == 'OpenMS' ?
+                "OpenMS-${params.convert_MSData.openms_version}" :
+                "ProteoWizard-${params.convert_MSData.pwiz_version}"
+            def mzml = directory.resolve("${sample}/${software}/output/${basename}.mzML")
+            tuple(sample, fraction, mzml.toString(), annotation, '')
+        }
+    }
+    searchSamples = converted.mix(reconstructed)
     create_search_csv(searchSamples)
     searchInput = create_search_csv.out.input.combine(searchConfig)
         .map { csv, records, config, resources -> [csv, records, config, resources] }
@@ -136,7 +171,8 @@ workflow {
         }
     call_spectral_library(libraryInput)
 
-    create_quantitation_csv(call_spectral_library.out.result, samples)
+    quantSamples = acquisitions.bruker.mix(converted)
+    create_quantitation_csv(call_spectral_library.out.result, quantSamples)
     quantInput = create_quantitation_csv.out.input.combine(quantConfig)
         .map { inputCsv, libraryTsv, config, resources -> [inputCsv, libraryTsv, config, resources] }
     call_quantitate_dia(quantInput)
@@ -146,7 +182,7 @@ workflow {
         call_validate_psm.out.result.map { records, dir -> dir },
         call_spectral_library.out.result.map { records, dir -> dir },
         call_quantitate_dia.out.result,
-        samples
+        quantSamples
     )
     qcInput = create_qc_inputs.out.input.combine(qcConfig)
         .map { mzmlCsv, searchCsv, filteredCsv, featuresCsv, proteinGroups,

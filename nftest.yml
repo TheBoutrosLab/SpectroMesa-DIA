@@ -5,6 +5,12 @@ global:
   remove_temp: false
   clean_logs: true
 cases:
+  - name: test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
+    message: Integration of raw E. coli DIA conversion, MSFragger, ProteinProphet, EasyPQP, DIA-NN, cohort QC, and ProteoVault
+    nf_script: main.nf
+    nf_config: test/test_integration_MSConvert_MSFragger_ProteinProphet_DIANN/test.config
+    skip: false
+    verbose: true
   - name: test_integration_diaTracer_MSFragger_ProteinProphet_DIANN
     message: Integration of diaTracer, MSFragger, ProteinProphet, EasyPQP, DIA-NN, cohort QC, and ProteoVault on Bruker dia-PASEF data
     nf_script: main.nf

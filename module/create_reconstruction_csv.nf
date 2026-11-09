@@ -10,7 +10,7 @@ process create_reconstruction_csv {
     exec:
         def csv = file("${task.workDir}/reconstruction.csv")
         csv.text = 'sample_name,fraction_id,path\n'
-        records.each { sample, fraction, acquisition, annotation ->
+        records.each { sample, fraction, acquisition, annotation, scan ->
             csv.append("${sample},${fraction},${acquisition}\n")
         }
 }

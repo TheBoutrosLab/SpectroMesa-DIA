@@ -2,6 +2,12 @@
     "max_cpus": 64,
     "max_memory": "500 GB",
     "children": {
+        "convert_MSData": {
+            "convert_msdata_OpenMS": {"cpus": 2, "memory": "16 GB"},
+            "convert_msdata_ProteoWizard": {"cpus": 1, "memory": "16 GB"},
+            "index_msdata": {"cpus": 2, "memory": "16 GB"},
+            "pick_peaks": {"cpus": 4, "memory": "32 GB"}
+        },
         "search_ProteomicDIA": {
             "write_MSFraggerParams": {
                 "cpus": 1
