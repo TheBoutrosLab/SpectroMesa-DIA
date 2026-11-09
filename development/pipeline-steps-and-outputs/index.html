@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/87e3784de806c204289ed7f7f80e2c29ee6ac324/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -92,10 +92,10 @@
               
                 <h2 id="pipeline-steps-and-outputs">Pipeline steps and outputs</h2>
 <ol>
-<li>For <code>.d</code> input, <code>reconstruct-ProteomicMSMS</code> generates pseudo-MS/MS mzML files with diaTracer. <code>search-ProteomicDIA</code> searches each input or reconstructed mzML with MSFragger and produces idXML files.</li>
+<li>For file input, <code>convert-MSData</code> produces mzML; for <code>.d</code> input, <code>reconstruct-ProteomicMSMS</code> generates pseudo-MS/MS mzML with diaTracer. <code>search-ProteomicDIA</code> searches the resulting mzML with MSFragger and produces idXML files.</li>
 <li><code>validate-ProteomicPSM</code> uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when <code>validate_ProteomicPSM.run_protloom = true</code>. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.</li>
 <li><code>generate-ProteomicSpectralLibrary</code> uses those identifications and the search mzML files to produce an EasyPQP library TSV.</li>
-<li><code>quantitate-ProteomicDIA</code> quantifies the original mzML files or Bruker <code>.d</code> directories against that library with DIA-NN.</li>
+<li><code>quantitate-ProteomicDIA</code> quantifies converted mzML files or original Bruker <code>.d</code> directories against that library with DIA-NN.</li>
 <li><code>qc-ProteomicDIA</code> summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.</li>
 <li>For ProteinProphet, Fido, and Epifany runs, ProteoVault builds a validated DuckDB database from the core results, search FASTA, full DIA-NN report, and cohort QC table.</li>
 </ol>
@@ -104,6 +104,7 @@
 ├── &lt;dataset_id&gt;.proteovault.duckdb  # absent for ProtLoom runs
 └── &lt;dataset_id&gt;/
     ├── main_workflow/
+    │   ├── convert-MSData-1.1.1/  # file input only
     │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
     │   ├── search-ProteomicDIA-&lt;version&gt;/
     │   ├── validate-ProteomicPSM-&lt;version&gt;/

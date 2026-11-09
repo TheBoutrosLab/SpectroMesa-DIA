@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Testing</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/87e3784de806c204289ed7f7f80e2c29ee6ac324/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -91,12 +91,13 @@
             <div class="section" itemprop="articleBody">
               
                 <h2 id="testing">Testing</h2>
-<p>The NFTest cases run all five child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy <code>.env-template</code> to <code>.env</code>, set <code>TEST_DATA_DIR</code>, and run:</p>
+<p>The NFTest cases run conversion for file inputs and the downstream child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy <code>.env-template</code> to <code>.env</code>, set <code>TEST_DATA_DIR</code>, and run:</p>
 <pre><code class="language-bash">zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
+zsh test/run-nftest.sh test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
 </code></pre>
-<p>The test runner uses <code>/scratch/$SLURM_JOB_ID/&lt;test-case&gt;</code> for its work and output. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/de5e43e673872da07c1ef016abbd3b44a44a47ec/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
+<p>The test runner uses <code>/scratch/$SLURM_JOB_ID/&lt;test-case&gt;</code> for its work and output. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/87e3784de806c204289ed7f7f80e2c29ee6ac324/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
               
             </div>
           </div><footer>

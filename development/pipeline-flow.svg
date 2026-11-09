@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1850" height="780" viewBox="0 0 1850 780" role="img" aria-labelledby="figure-title figure-description">
   <title id="figure-title">Proteomic DIA pipeline workflow</title>
-  <desc id="figure-description">Bruker .d acquisitions are reconstructed by diaTracer before MSFragger search, validation, and EasyPQP library generation. mzML inputs skip reconstruction. The original acquisitions and the library feed DIA-NN. Quality control summarizes the results, and ProteoVault builds a database for supported protein inference routes. A target-decoy FASTA feeds search and validation.</desc>
+  <desc id="figure-description">MS data files are converted to mzML before search, while Bruker .d acquisitions bypass conversion and are reconstructed by diaTracer. Converted mzML or original Bruker .d and the library feed DIA-NN. Quality control summarizes the results, and ProteoVault builds a database for supported protein inference routes. A target-decoy FASTA feeds search and validation.</desc>
   <defs>
     <style>
       text { font-family: Arial, Helvetica, sans-serif; fill: #183044; }
@@ -20,14 +20,19 @@
   <rect x="50" y="34" width="1750" height="96" rx="16" class="card"/>
   <rect x="50" y="34" width="9" height="96" rx="4" fill="#159a89"/>
   <text x="78" y="73" class="name">Sample acquisitions</text>
-  <text x="78" y="102" class="tool">mzML or Bruker .d · sample_name, fraction_id, annotation_id, path</text>
+  <text x="78" y="102" class="tool">MS data file or Bruker .d · sample_name, fraction_id, annotation_id, path</text>
 
   <path d="M200 130 V250" class="input"/>
   <text x="211" y="191" class="handoff">Bruker .d</text>
-  <path d="M550 130 V250" class="input"/>
-  <text x="561" y="191" class="handoff">mzML bypass</text>
+  <path d="M550 130 V145" class="input"/>
+  <path d="M550 235 V250" class="arrow"/>
   <path d="M1600 130 V250" class="input"/>
-  <text x="1612" y="191" class="handoff">original acquisition</text>
+  <text x="1612" y="191" class="handoff">Bruker .d for DIA-NN</text>
+
+  <rect x="400" y="145" width="300" height="90" rx="14" class="card"/>
+  <rect x="400" y="145" width="300" height="7" rx="4" fill="#3174a4"/>
+  <text x="422" y="181" class="name">Convert MS data</text>
+  <text x="422" y="208" class="tool">convert-MSData · file → mzML</text>
 
   <rect x="50" y="260" width="300" height="170" rx="16" class="card"/>
   <rect x="50" y="260" width="300" height="9" rx="4" fill="#3b8494"/>
@@ -62,7 +67,7 @@
   <text x="1472" y="307" class="name">Quantitate DIA</text>
   <text x="1472" y="338" class="tool">quantitate-ProteomicDIA</text>
   <text x="1472" y="373" class="small">DIA-NN</text>
-  <text x="1472" y="400" class="small">raw data + library TSV</text>
+  <text x="1472" y="400" class="small">converted mzML / .d + library</text>
 
   <path d="M350 345 H390" class="arrow"/>
   <text x="354" y="330" class="handoff">mzML</text>
@@ -84,7 +89,7 @@
   <rect x="750" y="505" width="1050" height="97" rx="16" class="card"/>
   <rect x="750" y="505" width="9" height="97" rx="4" fill="#536aa5"/>
   <text x="778" y="544" class="name">Cohort QC</text>
-  <text x="778" y="573" class="tool">qc-ProteomicDIA · reconstructed mzML, search, validation, library, DIA-NN</text>
+  <text x="778" y="573" class="tool">qc-ProteomicDIA · converted/reconstructed mzML, search, validation, library, DIA-NN</text>
   <path d="M1600 430 V495" class="arrow"/>
 
   <rect x="750" y="642" width="1050" height="106" rx="16" class="card"/>
