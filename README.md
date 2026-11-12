@@ -1,6 +1,6 @@
 # metapipeline-ProteomicDIA
 
-This Boutros Lab metapipeline converts MS data files to mzML or reconstructs Bruker `.d` acquisitions with diaTracer, searches the resulting mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC. Runs without ProtLoom also build a ProteoVault database.
+This Boutros Lab metapipeline converts MS data files to mzML or reconstructs Bruker `.d` acquisitions with diaTracer, searches the resulting mzML files with MSFragger, validates PSMs with MSBooster and Percolator followed by ProtLoom, ProteinProphet, Fido, or Epifany, builds an EasyPQP spectral library, quantifies the cohort with DIA-NN, and summarizes acquisition, identification, library, and quantitation QC. Runs without ProtLoom also build a ProteoVault database after QC.
 
 ![DIA metapipeline schematic](docs/pipeline-flow.svg)
 
@@ -50,15 +50,16 @@ The input CSV requires four columns and accepts an optional `scan` column. Addit
 ```csv
 sample_name,fraction_id,annotation_id,path,scan
 sample_01,1,reference,/data/sample_01.mzML,
+sample_01,2,reference,/data/sample_01_fraction_2.mzML,
 sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 ```
 
 | Input | Requirement |
 | --- | --- |
-| `sample_name` | Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs. |
-| `fraction_id` | Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name. |
-| `annotation_id` | Required CSV column. When ProtLoom is enabled, it must match an `annotations[].annotation_id` in its project YAML. |
-| `path` | Existing MS data file supported by `convert_MSData.convert_algorithm`, or Bruker `.d` directory. Relative paths resolve from the input CSV directory. Paths and basenames must be unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens. |
+| `sample_name` | Biological sample name; repeat it for each fraction. Each sample/fraction pair must be unique. |
+| `fraction_id` | Required nonempty fraction identifier. Search, library generation, and quantitation use it to group acquisitions by fraction; it is not appended to the biological sample name. |
+| `annotation_id` | Required CSV column; use the same value for every fraction of a sample. When ProtLoom is enabled, it must match an `annotations[].annotation_id` in its project YAML. |
+| `path` | Existing MS data file supported by `convert_MSData.convert_algorithm`, or Bruker `.d` directory. Relative paths resolve from the input CSV directory. Paths must be unique. File basenames may repeat across fractions of the same sample; conversion adds fraction suffixes in that case. Basenames shared across samples and Bruker `.d` basenames must remain unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens. |
 | `scan` | Optional column, required for each SCIEX `.wiff` row. Give the companion `.wiff.scan` file path; leave blank for other inputs. Relative paths resolve from the input CSV directory. |
 | `decoy_database` | Existing target-decoy FASTA used by search and validation. |
 | `msfragger_executable` | Separately obtained MSFragger JAR. |
@@ -70,7 +71,7 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 
 Start from [config/protloom-project.example.yaml](config/protloom-project.example.yaml). Provide `schema_version: 1`, `annotations` with a unique `annotation_id` and existing GTF file for each annotation, and `database.output_fasta` and `database.output_entries_tsv` pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include `fasta_sources` when this YAML also describes the database sources used by ProtLoom `buildDB`; validation uses the built database outputs and annotations.
 
-Do not maintain a `samples` section in this input file. The metapipeline checks each CSV `annotation_id` against `annotations`, writes `protloom-project.generated.yaml` under the output `manifests/` directory, and passes that file to `validate-ProteomicPSM`. If the input YAML contains an older `samples` section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.
+Do not maintain a `samples` section in this input file. The metapipeline checks each sample's CSV `annotation_id` against `annotations`, writes `protloom-project.generated.yaml` under the output `manifests/` directory, and passes that file to `validate-ProteomicPSM`. If the input YAML contains an older `samples` section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.
 
 ## Parameters
 
@@ -91,7 +92,8 @@ Set shared values once at the root of the run config. `methods.setup()` derives 
 | `output_dir` | Required | Root directory for published results and logs. |
 | `dataset_id` | `cohort` | Name of this cohort's result directory. |
 | `child_profile` | `standard` | Nextflow profile applied to each child pipeline run; set with the matching parent `-profile` runtime. |
-| `proteovault_version` | `0.1.0` | Version used for the ProteoVault image. |
+| `run_proteovault` | `true` | Set to `false` to skip ProteoVault without changing protein inference. |
+| `proteovault_version` | `0.2.2` | Version used for the ProteoVault image. |
 | `docker_image_proteovault` | `ghcr.io/theboutroslab/proteovault:${params.proteovault_version}` | Image for the parent ProteoVault process. |
 | `compute_profile` | Set by `-profile pines` or `-profile boutroslab_aws` | Resource profile name; set directly to select a profile from `additional_resource_profile_dir`. |
 | `additional_resource_profile_dir` | None | Optional PATH-style list of directories containing `<compute_profile>.json` files. |
@@ -178,8 +180,8 @@ The child [MSFragger schema](external/search-ProteomicDIA/config/schema.yaml) gi
 | `epifany_greedy_group_resolution` | Child default: `none` | Optional Epifany shared-peptide resolution: `none`, `remove_associations_only`, or `remove_proteins_wo_evidence`. |
 | `docker_image_fido` | Child default: `ghcr.io/theboutroslab/fido:1.0` | Standalone Fido container image. |
 | `export_easypqp_reports` | Fixed: `true` | Export cohort PSM and peptide TSVs from the selected route. |
-| `merge_consensus` | Fixed: `false` | One search engine and one mzML per sample. |
-| `fractionated` | Fixed: `false` | One search engine and one mzML per sample. |
+| `merge_consensus` | Fixed: `false` | Search already merges fraction idXML files for each sample; validation receives one search engine per sample. |
+| `fractionated` | Automatic | Enabled when the cohort contains more than one fraction ID. |
 | `protloom_project_yaml` | Required with ProtLoom | Base project YAML with database files, annotation GTFs, and marker settings; samples are generated from the input CSV. |
 | `protloom_pc_order` | `proteotypic` | Peptide-class and protein-tier priorities. |
 | `protloom_pt_order` | `canonical` | Peptide-class and protein-tier priorities. |
@@ -216,7 +218,7 @@ See the [validation pipeline parameters](external/validate-ProteomicPSM/README.m
 
 | Parameter | Template value or source | Purpose |
 | --- | --- | --- |
-| `fractionated` | Fixed: `false` | Current workflow accepts one mzML per sample. |
+| `fractionated` | Automatic | Enabled when the cohort contains more than one fraction ID; produces one annotated library TSV with `fraction_id`. |
 | `idxml_score_type` | `ProtLoom PEP`, or `Posterior Error Probability` when ProtLoom is disabled | Score read from each unfiltered validation idXML hit. |
 | `easypqp_score_type` | Metapipeline default: `PEP` | Meaning of the selected score. |
 | `easypqp_version` | Child default: `0.1.59` | EasyPQP version and container. |
@@ -231,18 +233,19 @@ See the [library pipeline parameter reference](external/generate-ProteomicSpectr
 | `DIA-NN.matrix_qvalue` | `0.01` | Quantitation matrix q-value cutoff. |
 | `DIA-NN.no_ifs_removal` | `true` | Disable fragment interference correction. |
 | `DIA-NN.no_prot_inf` | `true` | Disable protein inference for the generated EasyPQP TSV. |
+| `docker_image_diann_rpackage` | Child default: `ghcr.io/theboutroslab/diann-rpackage:af538f6` | R image used to aggregate fraction-level quantities; override if using a locally built image. |
 
-Set these in `quantitate_ProteomicDIA { 'DIA-NN' { ... } }`. The metapipeline passes the generated EasyPQP TSV as the child's `library` input and the original acquisition paths as its sample input.
+Set these in `quantitate_ProteomicDIA { 'DIA-NN' { ... } }`. The metapipeline passes the generated EasyPQP TSV as the child's `library` input and the original acquisition paths as its sample input. For fractionated cohorts, the TSV and quantitation CSV carry `fraction_id`; DIA-NN runs by fraction and the child publishes a final aggregated report and sample-level matrices.
 
 See the [quantitation pipeline parameter reference](external/quantitate-ProteomicDIA/README.md#parameters).
 
 ### `qc_ProteomicDIA` — cohort quality control
 
-All `qc_ProteomicDIA` parameters are set automatically by the metapipeline. It passes reconstructed mzML paths and original acquisition paths separately, so Bruker MS1 and acquisition QC use the `.d` directory.
+All `qc_ProteomicDIA` parameters are set automatically by the metapipeline. It passes reconstructed mzML paths and original acquisition paths separately, so Bruker MS1 and acquisition QC use the `.d` directory. QC receives one acquisition row per sample/fraction pair, one identification row per sample, and the final aggregated DIA-NN report.
 
 ### ProteoVault — cohort database
 
-After QC, the metapipeline builds the core ProteoVault layer with the search FASTA, adds the `quant-details` layer from the full DIA-NN report, and validates the DuckDB database. The core build also imports the published cohort QC table when available. ProteoVault is skipped when `validate_ProteomicPSM.run_protloom = true`, because its current importer does not support the ProtLoom output layout. `proteovault_version` defaults to `0.1.0`; `docker_image_proteovault` uses that version by default.
+After QC, the metapipeline builds and validates the ProteoVault database with the search FASTA. The core build imports the DIA-NN report and published cohort QC table. ProteoVault starts after QC succeeds when `run_proteovault = true` and `validate_ProteomicPSM.run_protloom = false`. Set the root `run_proteovault = false` to skip it independently of protein inference. `proteovault_version` defaults to `0.2.2`; `docker_image_proteovault` uses that version by default. Fractionated DIA runs require a ProteoVault image that supports `sample_name,fraction_id,path` quantitation manifests and sample-level matrix headers.
 
 See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
@@ -250,8 +253,8 @@ See [config/template.config](config/template.config) for an editable run configu
 
 1. For file input, `convert-MSData` produces mzML; for `.d` input, `reconstruct-ProteomicMSMS` generates pseudo-MS/MS mzML with diaTracer. `search-ProteomicDIA` searches the resulting mzML with MSFragger and produces idXML files.
 2. `validate-ProteomicPSM` uses MSBooster and Percolator, then ProteinProphet by default, Fido or Epifany when selected, or ProtLoom when `validate_ProteomicPSM.run_protloom = true`. Its unfiltered idXML files and cohort PSM and peptide reports feed the library stage.
-3. `generate-ProteomicSpectralLibrary` uses those identifications and the search mzML files to produce an EasyPQP library TSV.
-4. `quantitate-ProteomicDIA` quantifies converted mzML files or original Bruker `.d` directories against that library with DIA-NN.
+3. `generate-ProteomicSpectralLibrary` uses those identifications and the search mzML files to produce an EasyPQP library TSV, combining per-fraction libraries into one TSV when needed.
+4. `quantitate-ProteomicDIA` quantifies converted mzML files or original Bruker `.d` directories against that library with DIA-NN, running each fraction separately and aggregating sample-level quantities for fractionated cohorts.
 5. `qc-ProteomicDIA` summarizes mzML, search, filtered identifications, protein groups, library, and DIA-NN results across the cohort.
 6. For ProteinProphet, Fido, and Epifany runs, ProteoVault builds a validated DuckDB database from the core results, search FASTA, full DIA-NN report, and cohort QC table.
 
@@ -268,12 +271,12 @@ Versioned child pipeline directories and the handoff CSVs are published at:
     │   ├── validate-ProteomicPSM-<version>/
     │   ├── generate-ProteomicSpectralLibrary-<version>/
     │   ├── quantitate-ProteomicDIA-<version>/
-    │   ├── qc-ProteomicDIA-1.2.0/
+    │   ├── qc-ProteomicDIA-1.2.1/
     │   └── manifests/
     └── log-metapipeline-ProteomicDIA-<version>-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`, including the QC sample and PSM feature manifests. The combined QC table is in `qc-ProteomicDIA-1.2.0/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample metric tables, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core, FASTA, QC, and quant-details layers. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes `fraction_id` and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in `qc-ProteomicDIA-1.2.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
@@ -282,6 +285,7 @@ The NFTest cases run conversion for file inputs and the downstream child pipelin
 ```bash
 zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
 zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
+zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN_multifraction
 zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
 zsh test/run-nftest.sh test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
 ```

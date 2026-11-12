@@ -27,7 +27,6 @@ process build_proteovault {
         vault="\$PWD/${params.dataset_id}.proteovault.duckdb"
         fasta="\$(realpath '${databaseFasta}')"
         proteovault build --pipeline-output "\$source_root" --fasta "\$fasta" --output "\$vault"
-        proteovault add-layer "\$vault" --layer quant-details
         proteovault validate "\$vault"
         """
 }

@@ -95,7 +95,7 @@
   <rect x="750" y="642" width="1050" height="106" rx="16" class="card"/>
   <rect x="750" y="642" width="9" height="106" rx="4" fill="#765996"/>
   <text x="778" y="681" class="name">ProteoVault</text>
-  <text x="778" y="710" class="tool">Core + FASTA + quant-details → DuckDB</text>
+  <text x="778" y="710" class="tool">Core quantitation + FASTA + QC → DuckDB</text>
   <text x="778" y="734" class="small">Skipped for ProtLoom runs</text>
   <path d="M1275 602 V632" class="arrow"/>
   <path d="M500 602 V695 H740" class="input"/>
