@@ -57,6 +57,10 @@ child_profile:
   type: 'String'
   required: true
   help: 'Nextflow profile for each component pipeline'
+run_proteovault:
+  type: 'Bool'
+  required: false
+  help: 'Build ProteoVault after QC when ProtLoom is disabled'
 proteovault_version:
   type: 'String'
   required: false

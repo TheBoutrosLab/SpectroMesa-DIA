@@ -200,11 +200,8 @@ workflow {
         .map { inputCsv, libraryTsv, config, resources -> [inputCsv, libraryTsv, config, resources] }
     call_quantitate_dia(quantInput)
 
-    qcEligible = call_search_dia.out.result.filter { records, dir ->
-        records.collect { it[1] }.toSet().size() == 1
-    }
     create_qc_inputs(
-        qcEligible,
+        call_search_dia.out.result,
         call_validate_psm.out.result.map { records, dir -> dir },
         call_spectral_library.out.result.map { records, dir -> dir },
         call_quantitate_dia.out.result,
@@ -218,7 +215,7 @@ workflow {
         }
     call_qc_dia(qcInput)
 
-    if (!params.validate_ProteomicPSM.run_protloom) {
+    if (params.run_proteovault && !params.validate_ProteomicPSM.run_protloom) {
         build_proteovault(
             call_search_dia.out.result.map { records, dir -> dir },
             call_validate_psm.out.result.map { records, dir -> dir },

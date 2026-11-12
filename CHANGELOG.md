@@ -6,8 +6,19 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ### Added
 
+- Update the ProteoVault image default to v0.2.2.
+- Add `run_proteovault` to skip ProteoVault independently of protein inference.
+- Update `qc-ProteomicDIA` to v1.2.1 for per-fraction acquisition QC and sample-level metrics from the aggregated DIA-NN report.
+
+### Fixed
+
+- Avoid the Nextflow 24 compilation error in the fractionated QC manifest process by splitting its command builder into acquisition and sample helpers.
+- Schedule QC and ProteoVault for fractionated DIA cohorts and pass sample/fraction acquisitions with the final aggregated DIA-NN report to QC.
+
+### Added
+
 - Update child submodules to `search-ProteomicDIA` v0.2.2, `generate-ProteomicSpectralLibrary` v1.1.0, and `quantitate-ProteomicDIA` v1.3.0, including their new process resource profiles.
-- Route multiple fractions per sample through search, validation, per-fraction library generation, and DIA-NN quantitation with sample-level aggregation, including converted mzML fraction suffixes when raw basenames repeat; skip QC and ProteoVault for fractionated cohorts until their input contracts support them.
+- Route multiple fractions per sample through search, validation, per-fraction library generation, and DIA-NN quantitation with sample-level aggregation, including converted mzML fraction suffixes when raw basenames repeat.
 - Add an NFTest integration case for fractionated E. coli DIA inputs.
 
 ## [1.5.0] - 2026-11-09
