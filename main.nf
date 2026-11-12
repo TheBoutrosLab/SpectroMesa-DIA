@@ -19,8 +19,7 @@ include { create_qc_inputs } from './module/create_qc_inputs.nf'
 include { call_qc_dia } from './module/call_qc_dia.nf'
 include { build_proteovault } from './module/build_proteovault.nf'
 
-// Current child pipelines accept one mzML per sample. Retain fraction_id and
-// annotation_id in the records for downstream validation and future fractions.
+// Keep one record per acquisition; a sample may have multiple fractions.
 def readAcquisitionCsv(String inputCsv) {
     def csv = file(inputCsv)
     if (!csv.isFile()) error "Input CSV does not exist: ${csv}"
@@ -33,8 +32,9 @@ def readAcquisitionCsv(String inputCsv) {
         if (!records || !records[0].keySet().containsAll(requiredColumns)) {
             error 'Input CSV must contain sample_name,fraction_id,annotation_id,path columns and at least one row'
         }
-        def seenSamples = [] as Set
-        def seenNames = [] as Set
+        def seenFractions = [] as Set
+        def annotations = [:]
+        def seenNames = [:]
         def seenPaths = [] as Set
         def parsed = records.collect { row ->
             def sample = row.sample_name?.trim()
@@ -45,9 +45,13 @@ def readAcquisitionCsv(String inputCsv) {
                 !(annotation ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/)) {
                 error "Invalid sample_name, fraction_id, or annotation_id: ${row}"
             }
-            if (!seenSamples.add(sample)) {
-                error "Multiple fractions for sample '${sample}' are not supported yet"
+            if (!seenFractions.add([sample, fraction])) {
+                error "Duplicate sample/fraction pair: ${sample}, ${fraction}"
             }
+            if (annotations.containsKey(sample) && annotations[sample] != annotation) {
+                error "Conflicting annotation_id for sample '${sample}'"
+            }
+            annotations[sample] = annotation
             def raw = row.path?.trim()
             if (!raw) error "Missing acquisition path for ${sample}"
             def acquisition = file(raw.startsWith('/') ? raw : "${csv.parent}/${raw}")
@@ -74,15 +78,31 @@ def readAcquisitionCsv(String inputCsv) {
             if ((isFile && acquisition.baseName.contains('.')) ||
                 (isBruker && (!(sample ==~ /[A-Za-z0-9][A-Za-z0-9_-]*/) ||
                               !(fraction ==~ /[A-Za-z0-9][A-Za-z0-9_-]*/))) ||
-                !seenNames.add(acquisition.name.toLowerCase()) ||
                 !seenPaths.add(acquisition.toRealPath().toString())) {
                 error "Invalid or duplicate acquisition name/path for ${sample}: ${acquisition}"
             }
+            def acquisitionName = acquisition.name.toLowerCase()
+            if (seenNames.containsKey(acquisitionName) &&
+                (seenNames[acquisitionName] != sample || isBruker)) {
+                error "Acquisition basename is reused across samples or Bruker fractions: ${acquisition}"
+            }
+            seenNames[acquisitionName] = sample
             tuple(sample, fraction, acquisition.toRealPath().toString(), annotation,
                 scan ? scan.toRealPath().toString() : '')
         }
         if (parsed*.getAt(2).collect { it.toLowerCase().endsWith('.d') }.unique().size() != 1) {
             error 'Input CSV must contain either Bruker .d directories or MS data files, not both'
+        }
+        if (!parsed[0][2].toLowerCase().endsWith('.d')) {
+            def suffixFractions = parsed.countBy { [it[0], file(it[2]).baseName] }
+                .values().any { it > 1 }
+            def outputNames = parsed.collect { row ->
+                def basename = file(row[2]).baseName
+                (suffixFractions ? "${basename}_${row[1]}" : basename).toLowerCase()
+            }
+            if (outputNames.size() != outputNames.toSet().size()) {
+                error 'Converted mzML basenames must be unique across all samples and fractions'
+            }
         }
         parsed
     }
@@ -134,12 +154,15 @@ workflow {
         .map { csv, records, config, resources -> [csv, records, config, resources] }
     call_convert_msdata(convertInput)
     converted = call_convert_msdata.out.result.map { records, directory ->
+        def suffixFractions = records.countBy { [it[0], file(it[2]).baseName] }
+            .values().any { it > 1 }
         records.collect { sample, fraction, acquisition, annotation, scan ->
             def basename = file(acquisition).baseName
+            def outputName = suffixFractions ? "${basename}_${fraction}" : basename
             def software = params.convert_MSData.convert_algorithm == 'OpenMS' ?
                 "OpenMS-${params.convert_MSData.openms_version}" :
                 "ProteoWizard-${params.convert_MSData.pwiz_version}"
-            def mzml = directory.resolve("${sample}/${software}/output/${basename}.mzML")
+            def mzml = directory.resolve("${sample}/${software}/output/${outputName}.mzML")
             tuple(sample, fraction, mzml.toString(), annotation, '')
         }
     }
@@ -177,8 +200,11 @@ workflow {
         .map { inputCsv, libraryTsv, config, resources -> [inputCsv, libraryTsv, config, resources] }
     call_quantitate_dia(quantInput)
 
+    qcEligible = call_search_dia.out.result.filter { records, dir ->
+        records.collect { it[1] }.toSet().size() == 1
+    }
     create_qc_inputs(
-        call_search_dia.out.result,
+        qcEligible,
         call_validate_psm.out.result.map { records, dir -> dir },
         call_spectral_library.out.result.map { records, dir -> dir },
         call_quantitate_dia.out.result,

@@ -6,6 +6,7 @@ process call_validate_psm {
     output:
         tuple val(records), path('validate-ProteomicPSM-*'), emit: result
     script:
+        def fractionated = records.collect { it[1] }.toSet().size() > 1
         def projectArgument = params.validate_ProteomicPSM.run_protloom ?
             "--protloom_project_yaml \$(realpath ${projectYaml})" : ''
         """
@@ -26,7 +27,7 @@ process call_validate_psm {
             --run_protloom ${params.validate_ProteomicPSM.run_protloom} \
             --export_easypqp_reports true \
             --merge_consensus false \
-            --fractionated false \
+            --fractionated ${fractionated} \
             --output_dir \$(pwd)
         """
 }

@@ -4,6 +4,12 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update child submodules to `search-ProteomicDIA` v0.2.2, `generate-ProteomicSpectralLibrary` v1.1.0, and `quantitate-ProteomicDIA` v1.3.0, including their new process resource profiles.
+- Route multiple fractions per sample through search, validation, per-fraction library generation, and DIA-NN quantitation with sample-level aggregation, including converted mzML fraction suffixes when raw basenames repeat; skip QC and ProteoVault for fractionated cohorts until their input contracts support them.
+- Add an NFTest integration case for fractionated E. coli DIA inputs.
+
 ## [1.5.0] - 2026-11-09
 
 ### Added

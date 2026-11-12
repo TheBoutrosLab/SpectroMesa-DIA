@@ -8,7 +8,7 @@ process create_validation_csv {
         tuple val(records), path('validation.csv'), path('validation-mzml.csv'), emit: input
 
     script:
-        def ids = records.collect { sample, fraction, mzml, annotation, scan ->
+        def ids = records.collect { it }.unique { it[0] }.collect { sample, fraction, mzml, annotation, scan ->
             def run = sample
             def id = "${searchDir}/${params.dataset_id}/output/MSFragger/${run}_MSFragger.idXML"
             """
