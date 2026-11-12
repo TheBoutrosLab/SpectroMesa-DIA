@@ -84,7 +84,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Inputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/021f517dc025f5d8863c8f10b8f7b901b6f867d4/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/82f150bda3be23285b248d5204bcd904564c0587/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -96,6 +96,7 @@
 <p>The input CSV requires four columns and accepts an optional <code>scan</code> column. Additional columns are allowed and ignored. Use either MS data files or Bruker <code>.d</code> directories throughout one run:</p>
 <pre><code class="language-csv">sample_name,fraction_id,annotation_id,path,scan
 sample_01,1,reference,/data/sample_01.mzML,
+sample_01,2,reference,/data/sample_01_fraction_2.mzML,
 sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 </code></pre>
 <table>
@@ -108,19 +109,19 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 <tbody>
 <tr>
 <td><code>sample_name</code></td>
-<td>Unique per row. The current workflow accepts one acquisition per sample and uses this name in child pipeline outputs.</td>
+<td>Biological sample name; repeat it for each fraction. Each sample/fraction pair must be unique.</td>
 </tr>
 <tr>
 <td><code>fraction_id</code></td>
-<td>Required nonempty identifier. It is retained in handoff CSVs for future multi-fraction support but is not appended to the sample name.</td>
+<td>Required nonempty fraction identifier. Search, library generation, and quantitation use it to group acquisitions by fraction; it is not appended to the biological sample name.</td>
 </tr>
 <tr>
 <td><code>annotation_id</code></td>
-<td>Required CSV column. When ProtLoom is enabled, it must match an <code>annotations[].annotation_id</code> in its project YAML.</td>
+<td>Required CSV column; use the same value for every fraction of a sample. When ProtLoom is enabled, it must match an <code>annotations[].annotation_id</code> in its project YAML.</td>
 </tr>
 <tr>
 <td><code>path</code></td>
-<td>Existing MS data file supported by <code>convert_MSData.convert_algorithm</code>, or Bruker <code>.d</code> directory. Relative paths resolve from the input CSV directory. Paths and basenames must be unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens.</td>
+<td>Existing MS data file supported by <code>convert_MSData.convert_algorithm</code>, or Bruker <code>.d</code> directory. Relative paths resolve from the input CSV directory. Paths must be unique. File basenames may repeat across fractions of the same sample; conversion adds fraction suffixes in that case. Basenames shared across samples and Bruker <code>.d</code> basenames must remain unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens.</td>
 </tr>
 <tr>
 <td><code>scan</code></td>
@@ -149,8 +150,8 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 </tbody>
 </table>
 <h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
-<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/021f517dc025f5d8863c8f10b8f7b901b6f867d4/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
-<p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
+<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/82f150bda3be23285b248d5204bcd904564c0587/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
+<p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each sample's CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
               
             </div>
           </div><footer>
