@@ -4,22 +4,21 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-12
+
 ### Added
 
 - Update the ProteoVault image default to v0.2.2.
 - Add `run_proteovault` to skip ProteoVault independently of protein inference.
 - Update `qc-ProteomicDIA` to v1.2.1 for per-fraction acquisition QC and sample-level metrics from the aggregated DIA-NN report.
+- Update child submodules to `search-ProteomicDIA` v0.2.2, `generate-ProteomicSpectralLibrary` v1.1.0, and `quantitate-ProteomicDIA` v1.3.0, including their new process resource profiles.
+- Route multiple fractions per sample through search, validation, per-fraction library generation, and DIA-NN quantitation with sample-level aggregation, including converted mzML fraction suffixes when raw basenames repeat.
+- Add an NFTest integration case for fractionated E. coli DIA inputs.
 
 ### Fixed
 
 - Avoid the Nextflow 24 compilation error in the fractionated QC manifest process by splitting its command builder into acquisition and sample helpers.
 - Schedule QC and ProteoVault for fractionated DIA cohorts and pass sample/fraction acquisitions with the final aggregated DIA-NN report to QC.
-
-### Added
-
-- Update child submodules to `search-ProteomicDIA` v0.2.2, `generate-ProteomicSpectralLibrary` v1.1.0, and `quantitate-ProteomicDIA` v1.3.0, including their new process resource profiles.
-- Route multiple fractions per sample through search, validation, per-fraction library generation, and DIA-NN quantitation with sample-level aggregation, including converted mzML fraction suffixes when raw basenames repeat.
-- Add an NFTest integration case for fractionated E. coli DIA inputs.
 
 ## [1.5.0] - 2026-11-09
 
@@ -113,4 +112,5 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 [1.3.2]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.1...v1.3.2
 [1.4.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.2...v1.4.0
 [1.5.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.4.0...v1.5.0
-[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.5.0...HEAD
+[1.6.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.5.0...v1.6.0
+[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.0...HEAD
