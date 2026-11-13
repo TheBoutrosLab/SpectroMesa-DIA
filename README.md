@@ -245,7 +245,7 @@ All `qc_ProteomicDIA` parameters are set automatically by the metapipeline. It p
 
 ### ProteoVault — cohort database
 
-After QC, the metapipeline builds and validates the ProteoVault database with the search FASTA. The core build imports the DIA-NN report and published cohort QC table. ProteoVault starts after QC succeeds when `run_proteovault = true` and `validate_ProteomicPSM.run_protloom = false`. Set the root `run_proteovault = false` to skip it independently of protein inference. `proteovault_version` defaults to `0.2.3`; `docker_image_proteovault` uses that version by default. Fractionated DIA runs require a ProteoVault image that supports `sample_name,fraction_id,path` quantitation manifests and sample-level matrix headers.
+After QC, the metapipeline builds and validates the ProteoVault database with the search FASTA. The core build imports the DIA-NN report and published cohort QC table. It also stages the quantitation manifest so ProteoVault maps DIA-NN run names to the metapipeline sample names. ProteoVault starts after QC succeeds when `run_proteovault = true` and `validate_ProteomicPSM.run_protloom = false`. Set the root `run_proteovault = false` to skip it independently of protein inference. `proteovault_version` defaults to `0.2.3`; `docker_image_proteovault` uses that version by default. Fractionated DIA runs require a ProteoVault image that supports `sample_name,fraction_id,path` quantitation manifests and sample-level matrix headers.
 
 See [config/template.config](config/template.config) for an editable run configuration and [config/schema.yaml](config/schema.yaml) for root parameter validation.
 
