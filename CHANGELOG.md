@@ -4,6 +4,8 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-13
+
 ### Added
 
 - Update the ProteoVault image default to v0.2.3.
@@ -119,4 +121,5 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 [1.4.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.2...v1.4.0
 [1.5.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.4.0...v1.5.0
 [1.6.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.5.0...v1.6.0
-[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.0...HEAD
+[1.6.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.0...v1.6.1
+[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.1...HEAD
