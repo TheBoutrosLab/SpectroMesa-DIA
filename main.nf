@@ -222,6 +222,7 @@ workflow {
             call_spectral_library.out.result.map { records, dir -> dir },
             call_quantitate_dia.out.result,
             call_qc_dia.out.result,
+            create_quantitation_csv.out.input.map { inputCsv, libraryTsv -> inputCsv },
             database
         )
     }

@@ -8,6 +8,7 @@ process build_proteovault {
         path libraryDir
         path quantDir
         path qcDir
+        path quantManifest
         path databaseFasta
 
     output:
@@ -24,6 +25,8 @@ process build_proteovault {
         for input_dir in '${searchDir}' '${validationDir}' '${libraryDir}' '${quantDir}' '${qcDir}'; do
             ln -s "\$(realpath "\$input_dir")" "\$workflow_root/\$(basename "\$input_dir")"
         done
+        mkdir -p "\$workflow_root/manifests"
+        cp '${quantManifest}' "\$workflow_root/manifests/quantitation.csv"
         vault="\$PWD/${params.dataset_id}.proteovault.duckdb"
         fasta="\$(realpath '${databaseFasta}')"
         proteovault build --pipeline-output "\$source_root" --fasta "\$fasta" --output "\$vault"
