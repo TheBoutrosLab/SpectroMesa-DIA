@@ -4,6 +4,11 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update the ProteoVault image default to v0.2.3.
+- Update `qc-ProteomicDIA` to v1.3.0 for standardized acquisition, identification, inference, and quantification metrics.
+
 ## [1.6.0] - 2026-11-12
 
 ### Added
