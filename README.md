@@ -102,7 +102,7 @@ Settings specific to one child belong in its namespace in the run config. The ta
 
 ### `convert_MSData` — MS data conversion
 
-For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.1 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
+For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.3 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
 
 For SCIEX WIFF input, add `scan` to the input CSV and point it at the companion `.wiff.scan` file. The metapipeline validates and passes both paths to conversion. The `scan` column may be omitted for other formats.
 
@@ -265,7 +265,7 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 ├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
 └── <dataset_id>/
     ├── main_workflow/
-    │   ├── convert-MSData-1.1.1/  # file input only
+    │   ├── convert-MSData-1.1.3/  # file input only
     │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
     │   ├── search-ProteomicDIA-<version>/
     │   ├── validate-ProteomicPSM-<version>/

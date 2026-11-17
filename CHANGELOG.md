@@ -4,6 +4,10 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+### Added
+
+- Update `convert-MSData` to v1.1.3 for ProteoWizard Wine setup under the Apptainer profile.
+
 ## [1.6.1] - 2026-11-13
 
 ### Added
