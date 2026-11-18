@@ -4,6 +4,8 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-11-18
+
 ### Added
 
 - Update `qc-ProteomicDIA` to v1.3.1 so Nextflow caches Apptainer images before parallel QC tasks start ([#31](https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/issues/31)).
@@ -130,4 +132,5 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 [1.5.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.4.0...v1.5.0
 [1.6.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.5.0...v1.6.0
 [1.6.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.0...v1.6.1
-[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.1...HEAD
+[1.6.2]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.1...v1.6.2
+[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.2...HEAD
