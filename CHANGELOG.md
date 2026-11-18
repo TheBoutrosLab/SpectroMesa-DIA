@@ -6,7 +6,11 @@ All notable changes to metapipeline-ProteomicDIA are documented here. The format
 
 ### Added
 
+- Update `qc-ProteomicDIA` to v1.3.1 so Nextflow caches Apptainer images before parallel QC tasks start ([#31](https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/issues/31)).
+- Update `quantitate-ProteomicDIA` to v1.3.1 to use staged filenames in the DIA-NN file list ([#29](https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/issues/29)) and set an inherited unlimited stack limit to 8 MiB before running DIA-NN ([#30](https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/issues/30)).
 - Update `convert-MSData` to v1.1.3 for ProteoWizard Wine setup under the Apptainer profile.
+- Add `NFT_RUN_ROOT` and `NFT_CLUSTER` support to the NFTest runner for AWS Slurm and Pines execution.
+- Use compact NFTest work directories to shorten paths passed to DIA-NN on Pines.
 
 ## [1.6.1] - 2026-11-13
 

@@ -221,10 +221,12 @@ __marimo__/
 # VScode
 .vscode
 
-# Nextflow
+# Nextflow and local NFTest runs
 work/
 .nextflow/
 *.nextflow.log*
+/.nftest-temp/
+/test_integration_*/
 
 ## Molecular files
 
