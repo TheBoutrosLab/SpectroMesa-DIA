@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Testing</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/498ce38389bf09959b2b114ca488f1505e6eab52/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/27b68f4a2e94b57e4b8f2f7ca62b3e0680bf71e9/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -98,7 +98,7 @@ python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN_multi
 python3 test/run-nftest.py test_integration_MSFragger_Epifany_DIANN
 python3 test/run-nftest.py test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
 </code></pre>
-<p>The test runner uses <code>NFT_RUN_ROOT</code> as its base. <code>boutroslab_aws</code> adds <code>$SLURM_JOB_ID</code>; <code>pines</code> uses the base directly and selects the <code>apptainer,pines</code> Nextflow profiles. Relative roots resolve against the repository, and an unset root defaults there. Results are under <code>&lt;run-root&gt;/&lt;test-case&gt;/</code>, while temporary files are under <code>&lt;run-root&gt;/.nftest-temp/&lt;12-character case ID&gt;/</code>. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/498ce38389bf09959b2b114ca488f1505e6eab52/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
+<p>The test runner uses <code>NFT_RUN_ROOT</code> as its base. <code>boutroslab_aws</code> adds <code>$SLURM_JOB_ID</code>; <code>pines</code> uses the base directly and selects the <code>apptainer,pines</code> Nextflow profiles. Relative roots resolve against the repository, and an unset root defaults there. Results are under <code>&lt;run-root&gt;/&lt;test-case&gt;/</code>, while temporary files are under <code>&lt;run-root&gt;/.nftest-temp/&lt;12-character case ID&gt;/</code>. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/27b68f4a2e94b57e4b8f2f7ca62b3e0680bf71e9/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
               
             </div>
           </div><footer>
