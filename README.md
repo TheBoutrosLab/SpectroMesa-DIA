@@ -25,6 +25,18 @@ This Boutros Lab metapipeline converts MS data files to mzML or reconstructs Bru
 
 The scratch path above is an example for a Slurm job; use another suitable work directory outside Slurm. Select `pines` for a 64 CPU, 500 GB node or `boutroslab_aws` for a 32 CPU, 128 GB node. Add `standard` or `docker` for Docker, `apptainer` for Apptainer, or `singularity` for Singularity, for example `-profile pines,apptainer`. The runtime profile configures the parent ProteoVault process and passes the matching `child_profile` to every child pipeline. `standard` uses Docker by default when no runtime profile is selected. Apptainer and Singularity pull the ProteoVault OCI image through their Nextflow settings. Nextflow's `-c` option adds the run configuration to the project's configuration; see the [Nextflow configuration documentation](https://www.nextflow.io/docs/latest/config.html).
 
+### Reusing Apptainer images across runs
+
+For runs with `-profile pines,apptainer`, export the cache location before starting Nextflow. Child pipelines inherit it even though each has its own work directory. Choose a persistent directory you own that all workers can access. For example, if your home directory is shared across workers:
+
+```bash
+export NXF_APPTAINER_CACHEDIR="$HOME/.cache/nextflow/apptainer"
+mkdir -p "$NXF_APPTAINER_CACHEDIR"
+```
+
+- **QC** uses `apptainer.ociAutoPull = false`. Nextflow stores the converted image in `NXF_APPTAINER_CACHEDIR` so later runs can reuse it. Without a configured cache, QC uses its own `child-work/apptainer/` directory.
+- **Tasks with `apptainer.ociAutoPull = true`**, including ProteoVault, use Apptainer’s own cache. It defaults to `$HOME/.apptainer/cache`. To relocate it, export `APPTAINER_CACHEDIR` with a separate, persistent directory owned by your account.
+
 ### Resource profiles
 
 | Profile | Node budget | Parent launch processes | Child allocations |
@@ -102,7 +114,7 @@ Settings specific to one child belong in its namespace in the run config. The ta
 
 ### `convert_MSData` — MS data conversion
 
-For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.1 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
+For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.3 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
 
 For SCIEX WIFF input, add `scan` to the input CSV and point it at the companion `.wiff.scan` file. The metapipeline validates and passes both paths to conversion. The `scan` column may be omitted for other formats.
 
@@ -265,32 +277,32 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 ├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
 └── <dataset_id>/
     ├── main_workflow/
-    │   ├── convert-MSData-1.1.1/  # file input only
+    │   ├── convert-MSData-1.1.3/  # file input only
     │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
     │   ├── search-ProteomicDIA-<version>/
     │   ├── validate-ProteomicPSM-<version>/
     │   ├── generate-ProteomicSpectralLibrary-<version>/
     │   ├── quantitate-ProteomicDIA-<version>/
-    │   ├── qc-ProteomicDIA-1.3.0/
+    │   ├── qc-ProteomicDIA-1.3.1/
     │   └── manifests/
     └── log-metapipeline-ProteomicDIA-<version>-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes `fraction_id` and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in `qc-ProteomicDIA-1.3.0/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes `fraction_id` and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in `qc-ProteomicDIA-1.3.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
-The NFTest cases run conversion for file inputs and the downstream child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, inside a Slurm job, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and run:
+The NFTest cases run conversion for file inputs and the downstream child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, copy `.env-template` to `.env`, set `TEST_DATA_DIR`, `NFT_RUN_ROOT`, and `NFT_CLUSTER`, then run a case (inside a Slurm job when `NFT_CLUSTER=boutroslab_aws`):
 
 ```bash
-zsh test/run-nftest.sh test_integration_MSFragger_ProtLoom_DIANN
-zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN
-zsh test/run-nftest.sh test_integration_MSFragger_ProteinProphet_DIANN_multifraction
-zsh test/run-nftest.sh test_integration_MSFragger_Epifany_DIANN
-zsh test/run-nftest.sh test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
+python3 test/run-nftest.py test_integration_MSFragger_ProtLoom_DIANN
+python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN
+python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN_multifraction
+python3 test/run-nftest.py test_integration_MSFragger_Epifany_DIANN
+python3 test/run-nftest.py test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
 ```
 
-The test runner uses `/scratch/$SLURM_JOB_ID/<test-case>` for its work and output. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
+The test runner uses `NFT_RUN_ROOT` as its base. `boutroslab_aws` adds `$SLURM_JOB_ID`; `pines` uses the base directly and selects the `apptainer,pines` Nextflow profiles. Relative roots resolve against the repository, and an unset root defaults there. Results are under `<run-root>/<test-case>/`, while temporary files are under `<run-root>/.nftest-temp/<12-character case ID>/`. The test CSV and ProtLoom project YAML expand `$TEST_DATA_DIR` through [test/csv_environment_expander.groovy](test/csv_environment_expander.groovy).
 
 ## License
 
