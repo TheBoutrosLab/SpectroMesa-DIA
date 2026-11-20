@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Pipeline steps and outputs - metapipeline-ProteomicDIA</title>
+    <title>Pipeline steps and outputs - SpectroMesa-DIA</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> metapipeline-ProteomicDIA
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
         </a>
       </div>
 
@@ -73,7 +73,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">metapipeline-ProteomicDIA</a>
+          <a href="..">SpectroMesa-DIA</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -82,7 +82,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps and outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/fab0ac3b19e81cb0d0eb12cb082cf70a842731b5/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/463dfe5ee579aa0e9dc42bce7fda0926ccc9ba96/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -104,17 +104,17 @@
 ├── &lt;dataset_id&gt;.proteovault.duckdb  # absent for ProtLoom runs
 └── &lt;dataset_id&gt;/
     ├── main_workflow/
-    │   ├── convert-MSData-1.1.3/  # file input only
-    │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
+    │   ├── convert-MSData-1.1.4/  # file input only
+    │   ├── reconstruct-ProteomicMSMS-1.0.1/  # .d input only
     │   ├── search-ProteomicDIA-&lt;version&gt;/
     │   ├── validate-ProteomicPSM-&lt;version&gt;/
     │   ├── generate-ProteomicSpectralLibrary-&lt;version&gt;/
     │   ├── quantitate-ProteomicDIA-&lt;version&gt;/
-    │   ├── qc-ProteomicDIA-1.3.1/
+    │   ├── qc-ProteomicDIA-1.3.2/
     │   └── manifests/
     └── log-SpectroMesa-DIA-&lt;version&gt;-&lt;timestamp&gt;/
 </code></pre>
-<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes <code>fraction_id</code> and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in <code>qc-ProteomicDIA-1.3.1/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as <code>--pipeline-output</code> when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
+<p>The metapipeline creates each stage's input CSV in <code>manifests/</code>. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes <code>fraction_id</code> and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in <code>qc-ProteomicDIA-1.3.2/&lt;dataset_id&gt;/output/&lt;dataset_id&gt;_QC_metrics.tsv</code>, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as <code>--pipeline-output</code> when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.</p>
               
             </div>
           </div><footer>
@@ -143,7 +143,7 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     

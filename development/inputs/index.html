@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Inputs - metapipeline-ProteomicDIA</title>
+    <title>Inputs - SpectroMesa-DIA</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> metapipeline-ProteomicDIA
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
         </a>
       </div>
 
@@ -75,7 +75,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">metapipeline-ProteomicDIA</a>
+          <a href="..">SpectroMesa-DIA</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -84,7 +84,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Inputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/fab0ac3b19e81cb0d0eb12cb082cf70a842731b5/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/463dfe5ee579aa0e9dc42bce7fda0926ccc9ba96/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -150,7 +150,7 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
 </tbody>
 </table>
 <h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
-<p>Start from <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/blob/fab0ac3b19e81cb0d0eb12cb082cf70a842731b5/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
+<p>Start from <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/463dfe5ee579aa0e9dc42bce7fda0926ccc9ba96/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
 <p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each sample's CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
               
             </div>
@@ -180,7 +180,7 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     
