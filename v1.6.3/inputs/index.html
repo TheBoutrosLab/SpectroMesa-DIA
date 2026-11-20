@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Inputs - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Inputs";
+        var mkdocs_page_input_path = "inputs.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../quick-start/">Quick start</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Inputs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#protloom-project-yaml">ProtLoom project YAML</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps-and-outputs/">Pipeline steps and outputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Inputs</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/v1.6.3/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="inputs">Inputs</h2>
+<p>The input CSV requires four columns and accepts an optional <code>scan</code> column. Additional columns are allowed and ignored. Use either MS data files or Bruker <code>.d</code> directories throughout one run:</p>
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path,scan
+sample_01,1,reference,/data/sample_01.mzML,
+sample_01,2,reference,/data/sample_01_fraction_2.mzML,
+sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sample_name</code></td>
+<td>Biological sample name; repeat it for each fraction. Each sample/fraction pair must be unique.</td>
+</tr>
+<tr>
+<td><code>fraction_id</code></td>
+<td>Required nonempty fraction identifier. Search, library generation, and quantitation use it to group acquisitions by fraction; it is not appended to the biological sample name.</td>
+</tr>
+<tr>
+<td><code>annotation_id</code></td>
+<td>Required CSV column; use the same value for every fraction of a sample. When ProtLoom is enabled, it must match an <code>annotations[].annotation_id</code> in its project YAML.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>Existing MS data file supported by <code>convert_MSData.convert_algorithm</code>, or Bruker <code>.d</code> directory. Relative paths resolve from the input CSV directory. Paths must be unique. File basenames may repeat across fractions of the same sample; conversion adds fraction suffixes in that case. Basenames shared across samples and Bruker <code>.d</code> basenames must remain unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens.</td>
+</tr>
+<tr>
+<td><code>scan</code></td>
+<td>Optional column, required for each SCIEX <code>.wiff</code> row. Give the companion <code>.wiff.scan</code> file path; leave blank for other inputs. Relative paths resolve from the input CSV directory.</td>
+</tr>
+<tr>
+<td><code>decoy_database</code></td>
+<td>Existing target-decoy FASTA used by search and validation.</td>
+</tr>
+<tr>
+<td><code>msfragger_executable</code></td>
+<td>Separately obtained MSFragger JAR.</td>
+</tr>
+<tr>
+<td><code>diatracer_executable</code></td>
+<td>diaTracer JAR, required for <code>.d</code> input.</td>
+</tr>
+<tr>
+<td><code>bruker_lib_dir</code></td>
+<td>MSFragger <code>ext/bruker</code> directory containing <code>libtimsdata-2-21-0-4.so</code>, required for <code>.d</code> input.</td>
+</tr>
+<tr>
+<td><code>validate_ProteomicPSM.protloom_project_yaml</code></td>
+<td>Required only for the ProtLoom route. The metapipeline supplies its <code>samples</code> section from the CSV.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
+<p>Start from <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/add8640f3586a1f426e1c3abaf4a54086925affe/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
+<p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each sample's CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../quick-start/" class="btn btn-neutral float-left" title="Quick start"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../parameters/" class="btn btn-neutral float-right" title="Parameters">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/tree/v1.6.3" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../quick-start/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../parameters/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
