@@ -15,3 +15,6 @@ jobs:
 
     steps:
       - uses: TheBoutrosLab/tool-static-analysis@v1
+        env:
+          # SpectroMesa intentionally omits the standard repository prefix.
+          IGNORE_NAMED_TESTS: repo-name
