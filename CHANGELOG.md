@@ -9,6 +9,17 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 - Rename the pipeline from `metapipeline-ProteomicDIA` to `SpectroMesa-DIA`. New runs publish to `<output_dir>/SpectroMesa-DIA-<version>/`.
 - Update ProteoVault to v0.2.5 and select the DIA importer explicitly when building the vault.
 
+### Changed
+
+- Migrate the metapipeline license from GPL to BSD 3-Clause and update license documentation; shared code and third-party tools retain their respective licenses.
+- Update `search-ProteomicDIA` from v0.2.2 to v0.2.3, including the BSD 3-Clause license migration.
+- Update `validate-ProteomicPSM` from v2.4.1 to v2.4.3, including BSD 3-Clause licensing, isolated OpenMS temporary directories, and environment-variable expansion in ProtLoom paths.
+- Update `generate-ProteomicSpectralLibrary` from v1.1.0 to v1.1.1, including the BSD 3-Clause license migration.
+- Update `quantitate-ProteomicDIA` from v1.3.1 to v1.3.2, including the BSD 3-Clause license migration.
+- Update `qc-ProteomicDIA` from v1.3.1 to v1.3.2, including the BSD 3-Clause license migration.
+- Update `reconstruct-ProteomicMSMS` from v1.0.0 to v1.0.1, including the BSD 3-Clause license migration.
+- Update `convert-MSData` from v1.1.3 to v1.1.4, including the BSD 3-Clause license migration.
+
 ## [1.6.2] - 2026-11-18
 
 ### Added
