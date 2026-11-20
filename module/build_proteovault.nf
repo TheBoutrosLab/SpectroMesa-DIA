@@ -29,7 +29,7 @@ process build_proteovault {
         cp '${quantManifest}' "\$workflow_root/manifests/quantitation.csv"
         vault="\$PWD/${params.dataset_id}.proteovault.duckdb"
         fasta="\$(realpath '${databaseFasta}')"
-        proteovault build --pipeline-output "\$source_root" --fasta "\$fasta" --output "\$vault"
+        proteovault build --workflow-type DIA --pipeline-output "\$source_root" --fasta "\$fasta" --output "\$vault"
         proteovault validate "\$vault"
         """
 }

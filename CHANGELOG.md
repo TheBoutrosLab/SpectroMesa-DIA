@@ -1,8 +1,13 @@
 # Changelog
 
-All notable changes to metapipeline-ProteomicDIA are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to SpectroMesa-DIA are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- Rename the pipeline from `metapipeline-ProteomicDIA` to `SpectroMesa-DIA`. New runs publish to `<output_dir>/SpectroMesa-DIA-<version>/`.
+- Update ProteoVault to v0.2.5 and select the DIA importer explicitly when building the vault.
 
 ## [1.6.2] - 2026-11-18
 
