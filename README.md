@@ -114,7 +114,7 @@ Settings specific to one child belong in its namespace in the run config. The ta
 
 ### `convert_MSData` — MS data conversion
 
-For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.3 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
+For file inputs, [convert-MSData](external/convert-MSData/README.md) v1.1.4 produces mzML for search, library generation, quantitation, and QC. The metapipeline passes those mzML files directly to downstream pipelines. Bruker `.d` directories bypass this stage. The default uses ProteoWizard with vendor peak picking; set `convert_MSData.convert_algorithm = 'OpenMS'` for OpenMS conversion. `output_format` must remain `mzML`. Other conversion options, including `peak_picking_vendor`, `peak_picking_openms`, `run_index`, and `pwiz_extra_args`, belong in this namespace. The metapipeline supplies `input_csv` and `output_dir`.
 
 For SCIEX WIFF input, add `scan` to the input CSV and point it at the companion `.wiff.scan` file. The metapipeline validates and passes both paths to conversion. The `scan` column may be omitted for other formats.
 
@@ -277,18 +277,18 @@ Versioned child pipeline directories and the handoff CSVs are published at:
 ├── <dataset_id>.proteovault.duckdb  # absent for ProtLoom runs
 └── <dataset_id>/
     ├── main_workflow/
-    │   ├── convert-MSData-1.1.3/  # file input only
-    │   ├── reconstruct-ProteomicMSMS-1.0.0/  # .d input only
+    │   ├── convert-MSData-1.1.4/  # file input only
+    │   ├── reconstruct-ProteomicMSMS-1.0.1/  # .d input only
     │   ├── search-ProteomicDIA-<version>/
     │   ├── validate-ProteomicPSM-<version>/
     │   ├── generate-ProteomicSpectralLibrary-<version>/
     │   ├── quantitate-ProteomicDIA-<version>/
-    │   ├── qc-ProteomicDIA-1.3.1/
+    │   ├── qc-ProteomicDIA-1.3.2/
     │   └── manifests/
     └── log-SpectroMesa-DIA-<version>-<timestamp>/
 ```
 
-The metapipeline creates each stage's input CSV in `manifests/`. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes `fraction_id` and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in `qc-ProteomicDIA-1.3.1/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
+The metapipeline creates each stage's input CSV in `manifests/`. It writes one search mzML and one library mzML row per fraction, one merged validation and library idXML row per sample, and one quantitation row per raw acquisition. For fractionated cohorts, quantitation CSV includes `fraction_id` and the QC caller writes one acquisition row per sample/fraction. The combined QC table is in `qc-ProteomicDIA-1.3.2/<dataset_id>/output/<dataset_id>_QC_metrics.tsv`, alongside per-sample identification tables, per-fraction acquisition and MS1 outputs, PSM feature summaries when available, and MS1 HTML plots. The child directories contain the scientific results and their own logs. When produced, the ProteoVault database contains the core quantitation, FASTA, and QC data. It is published at the versioned metapipeline root, which is the directory to supply as `--pipeline-output` when updating recorded paths. ProteoVault records source paths from the build work directory; the metapipeline does not rewrite paths inside the DuckDB file when publishing it. The timestamped metapipeline log directory contains the parent Nextflow reports and effective parameters.
 
 ## Testing
 
@@ -306,4 +306,7 @@ The test runner uses `NFT_RUN_ROOT` as its base. `boutroslab_aws` adds `$SLURM_J
 
 ## License
 
-This pipeline is licensed under GNU GPL version 2. See [LICENSE](LICENSE).
+The code in SpectroMesa-DIA is licensed under the BSD 3-Clause License (`BSD-3-Clause`).
+See [LICENSE](LICENSE) for the terms. Shared code and third-party tools retain their respective licenses.
+
+Copyright (C) 2026 Sanford Burnham Prebys Medical Discovery Institute ("Boutros Lab")
