@@ -4,6 +4,8 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-11-20
+
 ### Added
 
 - Rename the pipeline from `metapipeline-ProteomicDIA` to `SpectroMesa-DIA`. New runs publish to `<output_dir>/SpectroMesa-DIA-<version>/`.
@@ -137,16 +139,17 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 - Versioned child pipeline directories under `params.final_output_dir` and handoff CSVs under its `manifests/` directory.
 - Root-level shared database and decoy/contaminant markers, with child-specific values derived by `methods.setup()` and checked against the ProtLoom YAML.
 
-[1.0.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/releases/tag/v1.0.0
-[1.1.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.0.0...v1.1.0
-[1.1.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.1.0...v1.1.1
-[1.2.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.1.1...v1.2.0
-[1.3.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.2.0...v1.3.0
-[1.3.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.0...v1.3.1
-[1.3.2]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.1...v1.3.2
-[1.4.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.3.2...v1.4.0
-[1.5.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.4.0...v1.5.0
-[1.6.0]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.5.0...v1.6.0
-[1.6.1]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.0...v1.6.1
-[1.6.2]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.1...v1.6.2
-[unreleased]: https://github.com/TheBoutrosLab/metapipeline-ProteomicDIA/compare/v1.6.2...HEAD
+[1.0.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/releases/tag/v1.0.0
+[1.1.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.0.0...v1.1.0
+[1.1.1]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.1.0...v1.1.1
+[1.2.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.1.1...v1.2.0
+[1.3.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.2.0...v1.3.0
+[1.3.1]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.3.0...v1.3.1
+[1.3.2]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.3.1...v1.3.2
+[1.4.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.3.2...v1.4.0
+[1.5.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.4.0...v1.5.0
+[1.6.0]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.5.0...v1.6.0
+[1.6.1]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.0...v1.6.1
+[1.6.2]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.1...v1.6.2
+[1.6.3]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.2...v1.6.3
+[unreleased]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.3...HEAD
