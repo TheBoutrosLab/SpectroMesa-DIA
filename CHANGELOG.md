@@ -4,9 +4,7 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 
 ## [Unreleased]
 
-### Fixed
-
-- Prevent documentation publishing from refetching initialized submodules without SSH credentials (2026-11-21).
+## [1.6.4] - 2026-11-21
 
 ### Added
 
@@ -15,6 +13,10 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 ### Changed
 
 - Use the minimal README as the documentation home page and build pipeline figures directly from recursively checked-out submodules.
+
+### Fixed
+
+- Prevent documentation publishing from refetching initialized submodules without SSH credentials (2026-11-21).
 
 ## [1.6.3] - 2026-11-20
 
@@ -164,4 +166,5 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 [1.6.1]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.0...v1.6.1
 [1.6.2]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.1...v1.6.2
 [1.6.3]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.2...v1.6.3
-[unreleased]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.3...HEAD
+[1.6.4]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.3...v1.6.4
+[unreleased]: https://github.com/TheBoutrosLab/SpectroMesa-DIA/compare/v1.6.4...HEAD
