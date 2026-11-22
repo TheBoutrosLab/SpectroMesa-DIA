@@ -4,6 +4,10 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 
 ## [Unreleased]
 
+### Fixed
+
+- Prevent documentation publishing from refetching initialized submodules without SSH credentials (2026-11-21).
+
 ### Added
 
 - Add the SpectroMesa-DIA documentation site with installation, input preparation, configuration, execution, results, testing, and individual pipeline references (2026-11-21).

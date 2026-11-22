@@ -23,6 +23,11 @@ jobs:
           token: ${{ secrets.BL_SBP_REPO_READ_TOKEN_YP }}
           persist-credentials: false
 
+      # The publisher fetches tags after checkout has removed submodule credentials.
+      # Reuse the initialized submodules instead of fetching them again over SSH.
+      - name: Keep publishing fetches in the main repository
+        run: git config --local fetch.recurseSubmodules false
+
       - uses: theboutroslab/tool-generate-docs@v1
         with:
           readme: README.md
