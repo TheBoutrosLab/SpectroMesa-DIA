@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Configuring an analysis - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuring an analysis";
+        var mkdocs_page_input_path = "configuration.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Configuring an analysis</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#create-a-run-configuration">Create a run configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#set-inputs-and-outputs">Set inputs and outputs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-identification-and-protein-grouping">Configure identification and protein grouping</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#digestion-and-modifications">Digestion and modifications</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mass-tolerances">Mass tolerances</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#protein-grouping-and-identification-thresholds">Protein grouping and identification thresholds</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-quantitation-and-outputs">Configure quantitation and outputs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#choose-the-execution-environment">Choose the execution environment</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#container-runtime">Container runtime</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#computing-resources">Computing resources</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#a-complete-example">A complete example</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Configuring an analysis</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/v1.6.4/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuring-an-analysis">Configuring an analysis</h1>
+<p>Your run configuration tells SpectroMesa-DIA where to find your inputs, how to analyze them, and where to save the results. Start from the supplied template, fill in your paths, and review the scientific settings for your experiment. This guide focuses on the settings you are most likely to change. For the full parameter tables and an explanation of each step, see the <a href="../parameters/">pipeline reference</a>.</p>
+<h2 id="create-a-run-configuration">Create a run configuration</h2>
+<p>Create a dedicated directory for your analysis and copy the installed pipeline's template into it. Replace these example paths with your own:</p>
+<pre><code class="language-bash">mkdir -p /project/analyses/human_dia_cohort
+cd /project/analyses/human_dia_cohort
+cp /path/to/SpectroMesa-DIA/config/template.config run.config
+</code></pre>
+<p>Use this analysis directory when launching and resuming the run. Nextflow finds the pipeline through the path supplied to <code>nextflow run</code>, so you can keep the pipeline installation separate.</p>
+<p>Open <code>run.config</code> in a text editor. Shared settings, such as <code>input_csv</code> and <code>output_dir</code>, belong directly inside <code>params</code>. The template groups the remaining settings by analysis step. Edit search settings in the <code>MSFragger</code> block under <code>search_ProteomicDIA</code>, and protein grouping settings under <code>validate_ProteomicPSM</code>.</p>
+<p>Values in quotes are text, <code>true</code> and <code>false</code> are switches, and lines beginning with <code>//</code> are comments. The template supplies starting analysis settings. The <a href="../pipelines/search/#search-settings">search reference</a> identifies the peak-count setting that differs from the underlying default. Fill in your paths and change settings where your experiment requires it. The examples below show the matching blocks in your copied file.</p>
+<div class="admonition important">
+<p class="admonition-title">Keep the template's setup statements</p>
+<p>Preserve the <code>includeConfig</code> statements at the top and the final <code>methods.setup()</code> call. They load the defaults and check that your configuration is ready to use. Place your parameter changes before <code>methods.setup()</code>.</p>
+</div>
+<h2 id="set-inputs-and-outputs">Set inputs and outputs</h2>
+<p>Use full paths for files and directories in the run configuration so their meaning does not depend on where you launch the analysis.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What to provide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_csv</code></td>
+<td>Your acquisition CSV, with valid paths to the mass spectrometry data.</td>
+</tr>
+<tr>
+<td><code>decoy_database</code></td>
+<td>The combined target-decoy FASTA, including contaminants if you added them.</td>
+</tr>
+<tr>
+<td><code>msfragger_executable</code></td>
+<td>The full path to the MSFragger JAR.</td>
+</tr>
+<tr>
+<td><code>output_dir</code></td>
+<td>The directory in which to save published results and logs.</td>
+</tr>
+<tr>
+<td><code>dataset_id</code></td>
+<td>A name for this analysis, such as <code>human_dia_cohort</code>. The default is <code>cohort</code>; change it if you want a more descriptive name.</td>
+</tr>
+</tbody>
+</table>
+<p>Check that <code>decoy_string</code>, <code>decoy_position</code>, <code>contam_string</code>, and <code>contam_position</code> match your FASTA. The defaults use <code>DECOY_</code> and <code>CONTAMINANT_</code>, both as prefixes. Change only the values that differ from your database; the input guide uses <code>CONTAM_</code>, so that example requires <code>contam_string = 'CONTAM_'</code>. The <a href="../inputs/#match-the-database-markers-in-your-run-configuration">database preparation guide</a> shows a matching MSPtools command and configuration.</p>
+<p>For Bruker <code>.d</code> input, also set <code>diatracer_executable</code> to the diaTracer JAR and <code>bruker_lib_dir</code> to the MSFragger <code>ext/bruker</code> directory. See <a href="../installation/#additional-files-for-bruker-diapasef-data">Installation</a> for the required files.</p>
+<p>Published analysis results are organized under:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;/main_workflow/
+</code></pre>
+<p>Execution logs are stored alongside <code>main_workflow</code>. Nextflow's work directory holds intermediate task files and is configured separately when launching the analysis; allow space for both work files and published results.</p>
+<h2 id="configure-identification-and-protein-grouping">Configure identification and protein grouping</h2>
+<h3 id="digestion-and-modifications">Digestion and modifications</h3>
+<p>Review the <code>search_ProteomicDIA { MSFragger { ... } }</code> block against your sample preparation. The supplied template uses the following settings:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Template value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_enzyme_name_1</code></td>
+<td><code>'stricttrypsin'</code></td>
+<td>The search enzyme name.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_cut_1</code></td>
+<td><code>'KR'</code></td>
+<td>Cleavage at lysine or arginine.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_nocut_1</code></td>
+<td><code>''</code></td>
+<td>No following residue blocks cleavage in this configuration.</td>
+</tr>
+<tr>
+<td><code>search_enzyme_sense_1</code></td>
+<td><code>'C'</code></td>
+<td>Cleavage on the C-terminal side.</td>
+</tr>
+<tr>
+<td><code>allowed_missed_cleavage_1</code></td>
+<td><code>2</code></td>
+<td>Allowed missed cleavages.</td>
+</tr>
+<tr>
+<td><code>num_enzyme_termini</code></td>
+<td><code>2</code></td>
+<td>Require two enzymatic termini.</td>
+</tr>
+<tr>
+<td><code>add_C_cysteine</code></td>
+<td><code>57.02146</code></td>
+<td>Fixed cysteine carbamidomethylation.</td>
+</tr>
+<tr>
+<td><code>variable_mod_01</code></td>
+<td><code>'15.9949 M 3'</code></td>
+<td>Variable methionine oxidation.</td>
+</tr>
+<tr>
+<td><code>variable_mod_02</code></td>
+<td><code>'42.0106 [^ 1'</code></td>
+<td>Variable protein N-terminal acetylation.</td>
+</tr>
+<tr>
+<td><code>max_variable_mods_per_peptide</code></td>
+<td><code>3</code></td>
+<td>Maximum variable modifications per peptide.</td>
+</tr>
+</tbody>
+</table>
+<p>These are starting settings, not assumptions the pipeline can infer from your data. For example, review the fixed cysteine modification if your preparation used a different alkylation chemistry. If you change the enzyme, review all of its cleavage settings together and set <code>validate_ProteomicPSM.enzyme</code> to the corresponding OpenMS enzyme name. Search and validation use different enzyme naming conventions.</p>
+<h3 id="mass-tolerances">Mass tolerances</h3>
+<p>The template uses these mass tolerances, all expressed in <strong>parts per million (ppm)</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Tolerance</th>
+<th>Template value</th>
+<th>Settings in the <code>MSFragger</code> block</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Precursor search window</td>
+<td>−25 to +25 ppm</td>
+<td><code>precursor_mass_lower</code>, <code>precursor_mass_upper</code></td>
+</tr>
+<tr>
+<td>Calibrated precursor tolerance</td>
+<td>4 ppm</td>
+<td><code>precursor_true_tolerance</code></td>
+</tr>
+<tr>
+<td>Fragment mass tolerance</td>
+<td>50 ppm</td>
+<td><code>fragment_mass_tolerance</code></td>
+</tr>
+</tbody>
+</table>
+<p>Adjust these values in the <code>MSFragger</code> block to suit your instrument and acquisition method before running the full cohort.</p>
+<h3 id="protein-grouping-and-identification-thresholds">Protein grouping and identification thresholds</h3>
+<p>ProteinProphet is selected by default. To use another method, change <code>validate_ProteomicPSM.protein_inference_algorithm</code> to the corresponding value:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Configuration value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ProteinProphet, the default</td>
+<td><code>'ProteinProphet'</code></td>
+</tr>
+<tr>
+<td>Fido</td>
+<td><code>'Fido'</code></td>
+</tr>
+<tr>
+<td>EPIFANY</td>
+<td><code>'Epifany'</code></td>
+</tr>
+</tbody>
+</table>
+<p>MSBooster and Percolator validate the search results before protein grouping. Accepted identifications are then used to build the spectral library. Two relevant thresholds in <code>validate_ProteomicPSM</code> are:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter_psm_score_peptide</code></td>
+<td><code>0.01</code></td>
+<td>Filtering threshold for the validated PSM output.</td>
+</tr>
+<tr>
+<td><code>easypqp_psm_qvalue</code></td>
+<td><code>0.01</code></td>
+<td>Maximum PSM q-value for export to spectral library generation.</td>
+</tr>
+</tbody>
+</table>
+<p>Protein-group export also has a method-specific minimum probability: <code>proteinprophet_min_probability</code> defaults to <code>0.0</code>, while <code>fido_min_probability</code> and <code>epifany_min_probability</code> default to <code>0.01</code>. Only the setting for the selected method applies.</p>
+<div class="admonition note">
+<p class="admonition-title">Protein-group probabilities are not FDR thresholds</p>
+<p>A minimum group probability of <code>0.01</code> is not a 1% FDR cutoff. Keep the meaning of each threshold in mind when changing identification filters or comparing protein-grouping methods.</p>
+</div>
+<h2 id="configure-quantitation-and-outputs">Configure quantitation and outputs</h2>
+<p>The following DIA-NN settings are already supplied by default and shown in the template. Review them in the quoted <code>'DIA-NN'</code> block inside <code>quantitate_ProteomicDIA</code>:</p>
+<pre><code class="language-groovy">quantitate_ProteomicDIA {
+    'DIA-NN' {
+        qvalue = 0.01
+        matrix_qvalue = 0.01
+        no_ifs_removal = true
+        no_prot_inf = true
+    }
+}
+</code></pre>
+<p><code>qvalue</code> controls the main report precursor q-value cutoff, and <code>matrix_qvalue</code> controls the quantitation matrix q-value cutoff. The template also sets <code>no_ifs_removal = true</code>, which disables DIA-NN's fragment interference correction. Review that choice if you are changing the quantitation strategy.</p>
+<div class="admonition important">
+<p class="admonition-title">Retain upstream protein groups</p>
+<p><code>no_prot_inf</code> defaults to <code>true</code>; leave it unchanged. You do not need to add this setting yourself. This keeps DIA-NN protein inference disabled and retains the protein groups assigned by ProteinProphet, Fido, or EPIFANY. Setting it to <code>false</code> would allow DIA-NN to infer new protein groups.</p>
+</div>
+<p>Fraction handling is derived from the acquisition CSV. You do not need to set a separate fractionation switch: the pipeline prepares the library and quantitation inputs, runs quantitation by fraction when needed, and produces sample-level quantitative outputs.</p>
+<p>QC follows quantitation, and ProteoVault database assembly is enabled by default (<code>run_proteovault = true</code>). Leave this unchanged to generate the database. To skip database assembly while retaining the analysis and QC outputs, set <code>run_proteovault = false</code> directly inside <code>params</code>.</p>
+<h2 id="choose-the-execution-environment">Choose the execution environment</h2>
+<h3 id="container-runtime">Container runtime</h3>
+<p>Choose the profile matching the container runtime available on your machine:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Nextflow profile option</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td><code>-profile docker</code></td>
+</tr>
+<tr>
+<td>Apptainer</td>
+<td><code>-profile apptainer</code></td>
+</tr>
+<tr>
+<td>Singularity</td>
+<td><code>-profile singularity</code></td>
+</tr>
+</tbody>
+</table>
+<p>Select one of these profiles when launching the analysis. Your choice applies to all analysis steps. The <code>standard</code> profile uses Docker.</p>
+<h3 id="computing-resources">Computing resources</h3>
+<p>The bundled resource profiles are configured for machines with the following resources:</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>CPUs</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pines</code></td>
+<td>64</td>
+<td>500 GB</td>
+</tr>
+<tr>
+<td><code>boutroslab_aws</code></td>
+<td>32</td>
+<td>128 GB</td>
+</tr>
+</tbody>
+</table>
+<p>Combine a resource profile with a runtime profile, for example <code>-profile pines,apptainer</code>. For a smaller workstation or a different cluster allocation, prepare a custom resource profile as described below.</p>
+<div class="admonition important">
+<p class="admonition-title">Profiles do not reserve a cluster node</p>
+<p>Request a cluster allocation with enough CPUs and memory before launching the pipeline. The profiles specify how much each analysis step can use; they do not submit a Slurm job for you.</p>
+</div>
+<p>To adapt the resources, copy a bundled JSON file from <code>config/resource_profiles/</code> to a directory you control, give it a name such as <code>my_cluster.json</code>, and adjust its <code>max_cpus</code>, <code>max_memory</code>, and the CPU and memory settings for each analysis step. Set:</p>
+<pre><code class="language-groovy">params.compute_profile = 'my_cluster'
+params.additional_resource_profile_dir = '/path/to/resource_profiles'
+</code></pre>
+<p>Place these assignments before <code>methods.setup()</code>, then select your container profile when launching. Keep all entries in the copied JSON file, including the memory setting for <code>search_database_MSFragger</code>; edit their values to fit the resources available to you.</p>
+<h2 id="a-complete-example">A complete example</h2>
+<p>This example configures an unfractionated human DIA cohort with ProteinProphet and the database prepared in <a href="../inputs/">Preparing inputs</a>. Replace the paths with your own and review the search settings for your preparation and instrument. Save the file as <code>run.config</code> and select the runtime and resource profiles when launching.</p>
+<pre><code class="language-groovy">includeConfig &quot;${projectDir}/config/default.config&quot;
+includeConfig &quot;${projectDir}/config/methods.config&quot;
+includeConfig &quot;${projectDir}/nextflow.config&quot;
+includeConfig &quot;${projectDir}/config/profiles.config&quot;
+
+params {
+    // Inputs and tools
+    input_csv = '/project/inputs/acquisitions.csv'
+    decoy_database = '/project/database/UP000005640_9606-decoy_contam.fasta'
+    decoy_string = 'DECOY_'
+    decoy_position = 'prefix'
+    contam_string = 'CONTAM_' // Matches the database prepared in the inputs guide
+    contam_position = 'prefix'
+    msfragger_executable = '/tools/MSFragger/MSFragger.jar'
+
+    // Outputs
+    output_dir = '/project/results'
+    dataset_id = 'human_dia_cohort'
+    run_proteovault = true
+
+    search_ProteomicDIA {
+        MSFragger {
+            precursor_mass_lower = -25 // ppm
+            precursor_mass_upper = 25 // ppm
+            precursor_true_tolerance = 4 // ppm
+            fragment_mass_tolerance = 50 // ppm
+            isotope_error = '0/1/2'
+            output_report_topN = 5
+            search_enzyme_name_1 = 'stricttrypsin'
+            search_enzyme_cut_1 = 'KR'
+            search_enzyme_nocut_1 = ''
+            search_enzyme_sense_1 = 'C'
+            allowed_missed_cleavage_1 = 2
+            num_enzyme_termini = 2
+            clip_nTerm_M = 1
+            variable_mod_01 = '15.9949 M 3'
+            variable_mod_02 = '42.0106 [^ 1'
+            allow_multiple_variable_mods_on_residue = 0
+            max_variable_mods_per_peptide = 3
+            digest_min_length = 7
+            digest_max_length = 50
+            digest_mass_range = '500.0 5000.0'
+            max_fragment_charge = 2
+            minimum_peaks = 15
+            use_topN_peaks = 150
+            min_matched_fragments = 4
+            add_C_cysteine = 57.02146
+        }
+    }
+
+    validate_ProteomicPSM {
+        protein_inference_algorithm = 'ProteinProphet'
+        filter_psm_score_peptide = 0.01
+        easypqp_psm_qvalue = 0.01
+    }
+
+    quantitate_ProteomicDIA {
+        'DIA-NN' {
+            qvalue = 0.01
+            matrix_qvalue = 0.01
+            no_ifs_removal = true
+            no_prot_inf = true
+        }
+    }
+}
+
+methods.setup()
+</code></pre>
+<p>For Bruker diaPASEF data, point the CSV at the original <code>.d</code> directories and add these paths inside <code>params</code>:</p>
+<pre><code class="language-groovy">diatracer_executable = '/tools/diaTracer/diaTracer.jar'
+bruker_lib_dir = '/tools/MSFragger/ext/bruker'
+</code></pre>
+<p>Before launching, check that your input and tool paths exist, your FASTA markers match, your search settings reflect the experiment, and your selected resource profile fits the available machine or allocation. Keep the final configuration with your analysis records.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../inputs/" class="btn btn-neutral float-left" title="Preparing inputs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../execution/" class="btn btn-neutral float-right" title="Running and resuming">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/tree/v1.6.4" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../inputs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../execution/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Overview - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "overview.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#major-components">Major components</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ms-data-preparation">MS data preparation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#peptide-identification">Peptide identification</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#identification-validation-and-protein-inference">Identification validation and protein inference</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#spectral-library-generation">Spectral library generation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dia-quantitation">DIA quantitation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#quality-control">Quality control</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#results-database">Results database</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#references">References</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Overview</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/v1.6.4/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="spectromesa-dia-overview">SpectroMesa-DIA overview</h1>
+<p>SpectroMesa-DIA is designed to support most major data-independent acquisition (DIA) proteomics data types, including Thermo RAW (<code>.raw</code>), SCIEX SWATH (<code>.wiff</code>), and Bruker diaPASEF (<code>.d</code>), across both unfractionated and fractionated experiments.</p>
+<p>The pipeline uses <strong>Nextflow</strong> to orchestrate individual tools and analysis steps. <a href="#ref-1">1</a> It follows a spectrum-based approach similar to <strong>FragPipe</strong>, involving database searching, peptide-spectrum match (PSM) validation, protein grouping, spectral library generation, and peptide and protein quantitation. <a href="#ref-6">6</a></p>
+<h2 id="workflow">Workflow</h2>
+<p><img alt="SpectroMesa-DIA workflow from file conversion or Bruker reconstruction through search, validation, spectral library generation, DIA-NN, quality control, and ProteoVault" src="../pipeline-flow.svg" /></p>
+<p><em>MS data files pass through conversion, while Bruker <code>.d</code> acquisitions pass through MS/MS reconstruction. Both routes feed search, validation, and library generation. DIA-NN quantifies converted mzML files or the original Bruker acquisitions using the resulting library. QC follows quantitation, with optional ProteoVault database assembly afterward.</em></p>
+<h2 id="major-components">Major components</h2>
+<h3 id="ms-data-preparation">MS data preparation</h3>
+<p>For file inputs, <strong>ProteoWizard msconvert</strong> produces mzML for downstream analysis; <strong>OpenMS</strong> provides an alternative conversion route for supported formats. For Bruker diaPASEF data, <strong>diaTracer</strong> reconstructs precursor-resolved pseudo-MS/MS spectra for peptide identification. The original Bruker acquisitions are retained for quantitation rather than being replaced by those reconstructed spectra. <a href="#ref-2">2</a>, <a href="#ref-3">3</a>, <a href="#ref-4">4</a></p>
+<h3 id="peptide-identification">Peptide identification</h3>
+<p><strong>MSFragger</strong> searches the prepared spectra against a target-decoy protein sequence database to generate candidate peptide-spectrum matches (PSMs). Its DIA search capabilities support identification from complex DIA spectra, while the Bruker route supplies spectra reconstructed by diaTracer. These candidate identifications are then evaluated by the validation stage. <a href="#ref-5">5</a>, <a href="#ref-6">6</a></p>
+<h3 id="identification-validation-and-protein-inference">Identification validation and protein inference</h3>
+<p><strong>MSBooster</strong> adds features derived from predicted peptide properties, and <strong>Percolator</strong> uses them to rescore PSMs and estimate identification confidence. Protein inference then relates peptide evidence to protein groups: <strong>ProteinProphet</strong> is the default, with <strong>Fido</strong> and <strong>EPIFANY</strong> available as alternatives. <a href="#ref-7">7</a>, <a href="#ref-8">8</a>, <a href="#ref-9">9</a>, <a href="#ref-10">10</a>, <a href="#ref-11">11</a></p>
+<h3 id="spectral-library-generation">Spectral library generation</h3>
+<p><strong>EasyPQP</strong> combines the identified peptides with their observed spectra to build a cohort spectral library for DIA-NN. It uses the accepted PSM and peptide reports from validation, preserving the selected protein assignments. For fractionated cohorts, the workflow builds libraries by fraction and combines them while retaining fraction information.</p>
+<h3 id="dia-quantitation">DIA quantitation</h3>
+<div class="admonition important">
+<p class="admonition-title">Upstream protein groups are retained</p>
+<p><strong>DIA-NN</strong> is used for quantitation only, with its protein inference disabled by default. It quantifies peptides and proteins using the generated spectral library while retaining the protein groups assigned upstream by <strong>ProteinProphet</strong>, <strong>Fido</strong>, or <strong>EPIFANY</strong>.</p>
+</div>
+<p>DIA-NN receives converted mzML files for the file-input route and the original <code>.d</code> acquisitions for the Bruker route; fractionated analyses run quantitation by fraction and aggregate the results into sample-level reports and abundance matrices. <a href="#ref-12">12</a></p>
+<h3 id="quality-control">Quality control</h3>
+<p>The DIA QC pipeline uses <strong>pyOpenMS</strong> and dedicated summary scripts to examine acquisition data, search and validation results, protein inference, the spectral library, and DIA-NN quantitation. Cohort QC tables and interactive MS1 plots help inspect signal quality and variation across samples and fractions; Bruker acquisition QC uses the original <code>.d</code> data. <a href="#ref-2">2</a></p>
+<h3 id="results-database">Results database</h3>
+<p><strong><a href="https://github.com/TheBoutrosLab/package-ProteoVault">ProteoVault</a></strong> optionally combines the DIA-NN report, protein sequence database, and cohort QC results into a validated <strong>DuckDB</strong> database. This provides a common entry point for querying the cohort alongside the published library and quantitative outputs. Database assembly is currently available for the ProteinProphet, Fido, and EPIFANY routes. The generated DuckDB database can be imported and analyzed in R using <a href="https://github.com/TheBoutrosLab/package-ProteoVaultR">ProteoVaultR</a>.</p>
+<h2 id="references">References</h2>
+<ol>
+<li><a id="ref-1"></a><strong>Nextflow:</strong> Di Tommaso P et al. (2017). Nextflow enables reproducible computational workflows. <em>Nature Biotechnology</em>. <a href="https://doi.org/10.1038/nbt.3820">doi:10.1038/nbt.3820</a>.</li>
+<li><a id="ref-2"></a><strong>OpenMS:</strong> Pfeuffer J et al. (2024). OpenMS 3 enables reproducible analysis of large-scale mass spectrometry data. <em>Nature Methods</em>. <a href="https://doi.org/10.1038/s41592-024-02197-7">doi:10.1038/s41592-024-02197-7</a>.</li>
+<li><a id="ref-3"></a><strong>ProteoWizard:</strong> Kessner D et al. (2008). ProteoWizard: open source software for rapid proteomics tools development. <em>Bioinformatics</em>. <a href="https://doi.org/10.1093/bioinformatics/btn323">doi:10.1093/bioinformatics/btn323</a>.</li>
+<li><a id="ref-4"></a><strong>diaTracer:</strong> Li K et al. (2025). diaTracer enables spectrum-centric analysis of diaPASEF proteomics data. <em>Nature Communications</em>. <a href="https://doi.org/10.1038/s41467-024-55448-8">doi:10.1038/s41467-024-55448-8</a>.</li>
+<li><a id="ref-5"></a><strong>MSFragger:</strong> Kong AT et al. (2017). MSFragger: ultrafast and comprehensive peptide identification in mass spectrometry-based proteomics. <em>Nature Methods</em>. <a href="https://doi.org/10.1038/nmeth.4256">doi:10.1038/nmeth.4256</a>.</li>
+<li><a id="ref-6"></a><strong>MSFragger-DIA:</strong> Yu F et al. (2023). Analysis of DIA proteomics data using MSFragger-DIA and FragPipe computational platform. <em>Nature Communications</em>. <a href="https://doi.org/10.1038/s41467-023-39869-5">doi:10.1038/s41467-023-39869-5</a>.</li>
+<li><a id="ref-7"></a><strong>MSBooster:</strong> Yang KL et al. (2023). MSBooster: improving peptide identification rates using deep learning-based features. <em>Nature Communications</em>. <a href="https://doi.org/10.1038/s41467-023-40129-9">doi:10.1038/s41467-023-40129-9</a>.</li>
+<li><a id="ref-8"></a><strong>Percolator:</strong> Käll L et al. (2007). Semi-supervised learning for peptide identification from shotgun proteomics datasets. <em>Nature Methods</em>. <a href="https://doi.org/10.1038/nmeth1113">doi:10.1038/nmeth1113</a>.</li>
+<li><a id="ref-9"></a><strong>ProteinProphet:</strong> Nesvizhskii AI et al. (2003). A statistical model for identifying proteins by tandem mass spectrometry. <em>Analytical Chemistry</em>. <a href="https://doi.org/10.1021/ac0341261">doi:10.1021/ac0341261</a>.</li>
+<li><a id="ref-10"></a><strong>Fido:</strong> Serang O, MacCoss MJ, Noble WS (2010). Efficient marginalization to compute protein posterior probabilities from shotgun mass spectrometry data. <em>Journal of Proteome Research</em>. <a href="https://doi.org/10.1021/pr100594k">doi:10.1021/pr100594k</a>.</li>
+<li><a id="ref-11"></a><strong>EPIFANY:</strong> Pfeuffer J et al. (2020). EPIFANY: a method for efficient high-confidence protein inference. <em>Journal of Proteome Research</em>. <a href="https://doi.org/10.1021/acs.jproteome.9b00566">doi:10.1021/acs.jproteome.9b00566</a>.</li>
+<li><a id="ref-12"></a><strong>DIA-NN:</strong> Demichev V et al. (2020). DIA-NN: neural networks and interference correction enable deep proteome coverage in high throughput. <em>Nature Methods</em>. <a href="https://doi.org/10.1038/s41592-019-0638-x">doi:10.1038/s41592-019-0638-x</a>.</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../installation/" class="btn btn-neutral float-right" title="Installation">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/tree/v1.6.4" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../installation/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

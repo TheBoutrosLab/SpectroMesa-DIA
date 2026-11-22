@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Installation - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Installation";
+        var mkdocs_page_input_path = "installation.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Installation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#set-up-nextflow">Set up Nextflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#get-the-pipeline">Get the pipeline</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#download-a-release-recommended">Download a release (recommended)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#clone-with-git-alternative">Clone with Git (alternative)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#check-the-container-runtime">Check the container runtime</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#obtain-msfragger">Obtain MSFragger</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#additional-files-for-bruker-diapasef-data">Additional files for Bruker diaPASEF data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#storage-and-compute-environment">Storage and compute environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#verify-the-setup">Verify the setup</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/v1.6.4/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="installing-spectromesa-dia">Installing SpectroMesa-DIA</h1>
+<h2 id="requirements">Requirements</h2>
+<p>SpectroMesa-DIA can be run on a Linux workstation or a cluster compute node with an x86-64 processor. Before you begin, make sure you can access your mass spectrometry data and protein sequence database from that machine, and leave about 5-10x free disk or scratch space for the files the pipeline creates along the way.</p>
+<p>Install or load the following on the machine that launches the pipeline:</p>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nextflow</td>
+<td><strong>24.10.6</strong> with the <strong>v1 syntax parser</strong> is recommended. See below for selecting the version and parser.</td>
+</tr>
+<tr>
+<td>Container runtime</td>
+<td>Docker, Apptainer, or Singularity. Choose the runtime available on your workstation or cluster.</td>
+</tr>
+</tbody>
+</table>
+<p>Most analysis tools, including OpenMS, MSBooster, Percolator, EasyPQP, DIA-NN, and ProteoVault, are supplied through the configured container images. MSFragger must be obtained separately; Bruker data also require diaTracer and the Bruker reader libraries described below.</p>
+<h2 id="set-up-nextflow">Set up Nextflow</h2>
+<p>We recommend <strong>Nextflow 24.10.6</strong>. If you already have a newer Nextflow launcher installed, you can select the recommended version and syntax parser with these environment variables:</p>
+<pre><code class="language-bash">export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+</code></pre>
+<p><code>NXF_VER</code> selects the Nextflow version, and <code>NXF_SYNTAX_PARSER</code> selects its syntax parser. To use a newer version, set <code>NXF_VER</code> to that release and keep <code>NXF_SYNTAX_PARSER=v1</code>, provided the release still supports the v1 parser. Version 24.10.6 remains our tested recommendation.</p>
+<p>If Nextflow is not installed, use the <a href="https://docs.seqera.io/nextflow/install">official launcher</a>. For a user-local installation, run the following with the environment settings above already exported:</p>
+<pre><code class="language-bash">mkdir -p &quot;$HOME/.local/bin&quot;
+curl -fsSL https://get.nextflow.io -o &quot;$HOME/.local/bin/nextflow&quot;
+chmod +x &quot;$HOME/.local/bin/nextflow&quot;
+export PATH=&quot;$HOME/.local/bin:$PATH&quot;
+nextflow -version
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Bruker reconstruction selects its own Nextflow version</p>
+<p>Bruker data reconstruction uses Nextflow 25.10.5, which the pipeline selects automatically. Keep your Nextflow settings as shown above, and allow Nextflow to download this additional version when it is first needed.</p>
+</div>
+<h2 id="get-the-pipeline">Get the pipeline</h2>
+<h3 id="download-a-release-recommended">Download a release (recommended)</h3>
+<p>The easiest way to get started is to <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/releases/latest/download/source_code_with_submodules.tar.gz">download the latest release with all submodules</a>.</p>
+<p>To download the latest release from a terminal, use either <code>wget</code>:</p>
+<pre><code class="language-bash">wget -O source_code_with_submodules.tar.gz https://github.com/TheBoutrosLab/metapipeline-DIA/releases/latest/download/source_code_with_submodules.tar.gz
+</code></pre>
+<p>or <code>curl</code>:</p>
+<pre><code class="language-bash">curl -fL -o source_code_with_submodules.tar.gz https://github.com/TheBoutrosLab/metapipeline-DIA/releases/latest/download/source_code_with_submodules.tar.gz
+</code></pre>
+<p>From the directory containing your download, extract it into a folder for the pipeline:</p>
+<pre><code class="language-bash">mkdir -p SpectroMesa-DIA
+tar -xzf source_code_with_submodules.tar.gz -C SpectroMesa-DIA --strip-components=1
+cd SpectroMesa-DIA
+</code></pre>
+<p>You can now continue to <a href="#check-the-container-runtime">check the container runtime</a>.</p>
+<h3 id="clone-with-git-alternative">Clone with Git (alternative)</h3>
+<p>If you prefer to work from a Git checkout, clone the repository with all nested submodules:</p>
+<pre><code class="language-bash">git clone --recurse-submodules git@github.com:TheBoutrosLab/metapipeline-DIA.git SpectroMesa-DIA
+cd SpectroMesa-DIA
+</code></pre>
+<p>The repository and its submodules use GitHub SSH URLs, so this command requires working GitHub SSH authentication and access to the repositories. To use HTTPS instead, use this alternative clone command:</p>
+<pre><code class="language-bash">git -c 'url.https://github.com/.insteadOf=git@github.com:' \
+    clone --recurse-submodules \
+    https://github.com/TheBoutrosLab/metapipeline-DIA.git SpectroMesa-DIA
+cd SpectroMesa-DIA
+</code></pre>
+<p>For an existing checkout, initialize any missing submodules from its root:</p>
+<pre><code class="language-bash">git submodule update --init --recursive
+</code></pre>
+<p>When using HTTPS, apply the same command-scoped URL rewrite:</p>
+<pre><code class="language-bash">git -c 'url.https://github.com/.insteadOf=git@github.com:' \
+    submodule update --init --recursive
+</code></pre>
+<p>The submodules provide the analysis software and configuration included with this pipeline. Keep their versions matched to the pipeline checkout. Check their status with:</p>
+<pre><code class="language-bash">git submodule status --recursive
+</code></pre>
+<p>A leading space indicates the recorded revision is checked out. A leading <code>-</code> means a submodule is not initialized; <code>+</code> means it differs from the recorded revision.</p>
+<h2 id="check-the-container-runtime">Check the container runtime</h2>
+<p>Choose one runtime and use its matching Nextflow profile when launching an analysis:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Check</th>
+<th>Pipeline profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td><code>docker info</code></td>
+<td><code>-profile docker</code></td>
+</tr>
+<tr>
+<td>Apptainer</td>
+<td><code>apptainer --version</code></td>
+<td><code>-profile apptainer</code></td>
+</tr>
+<tr>
+<td>Singularity</td>
+<td><code>singularity --version</code></td>
+<td><code>-profile singularity</code></td>
+</tr>
+</tbody>
+</table>
+<p>Make sure Docker is running and accessible to your account, or that Apptainer or Singularity is installed on the machines where the analysis will run. The selected profile applies your choice throughout the analysis.</p>
+<p>For Apptainer, configure persistent caches before launching a run. Use directories you own that are accessible from the execution nodes:</p>
+<pre><code class="language-bash">export NXF_APPTAINER_CACHEDIR=&quot;$HOME/.cache/nextflow/apptainer&quot;
+export APPTAINER_CACHEDIR=&quot;$HOME/.apptainer/cache&quot;
+mkdir -p &quot;$NXF_APPTAINER_CACHEDIR&quot; &quot;$APPTAINER_CACHEDIR&quot;
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Reuse container images across runs</p>
+<p>Use shared filesystem paths instead if your home directory is not available on those nodes. Both caches are relevant: some stages use Nextflow-managed images, while others use Apptainer's own image cache.</p>
+</div>
+<h2 id="obtain-msfragger">Obtain MSFragger</h2>
+<p>Download MSFragger through its <a href="https://github.com/Nesvilab/MSFragger">official download instructions</a> under the license appropriate to your use. Keep the extracted distribution in a persistent directory accessible to the analysis tasks. The pipeline requires the path to the JAR, not the containing directory.</p>
+<p>In your run configuration, set:</p>
+<pre><code class="language-groovy">params.msfragger_executable = '/path/to/MSFragger/MSFragger.jar'
+</code></pre>
+<p>Replace the example with the actual filename, which may include a version number. The pipeline does not download this JAR for you.</p>
+<h2 id="additional-files-for-bruker-diapasef-data">Additional files for Bruker diaPASEF data</h2>
+<p>For <code>.d</code> acquisitions, also obtain the <strong>diaTracer JAR</strong> from its <a href="https://github.com/Nesvilab/diaTracer#download">official repository</a> and retain the <strong><code>ext/bruker</code> directory</strong> from the compatible MSFragger distribution.</p>
+<p>Set both paths in the run configuration:</p>
+<pre><code class="language-groovy">params.diatracer_executable = '/path/to/diaTracer/diaTracer.jar'
+params.bruker_lib_dir = '/path/to/MSFragger/ext/bruker'
+</code></pre>
+<p>The current reconstruction workflow expects <code>libtimsdata-2-21-0-4.so</code> inside that Bruker library directory. Keep the complete directory and use the actual diaTracer JAR filename. These additional files are not required for the file-input conversion route.</p>
+<h2 id="storage-and-compute-environment">Storage and compute environment</h2>
+<p>Keep the repository, external tools, input data, and work and output directories accessible to the execution environment. Allow working storage for converted or reconstructed mzML files, copied Bruker acquisitions, intermediate results, and container images. Space requirements depend on the cohort and should not be estimated from final output size alone.</p>
+<div class="admonition important">
+<p class="admonition-title">Request cluster resources before launching</p>
+<p>Request a cluster allocation before launching the analysis. The bundled <code>pines</code> and <code>boutroslab_aws</code> profiles specify CPU and memory settings; they do not submit a Slurm job for you. Combine the resource and container profiles, for example <code>-profile pines,apptainer</code>.</p>
+</div>
+<h2 id="verify-the-setup">Verify the setup</h2>
+<p>From the pipeline directory, check:</p>
+<pre><code class="language-bash">export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+nextflow -version
+test -f main.nf
+test -f config/template.config
+test -f external/search-ProteomicDIA/main.nf
+test -f external/validate-ProteomicPSM/main.nf
+test -f external/generate-ProteomicSpectralLibrary/main.nf
+test -f external/quantitate-ProteomicDIA/main.nf
+</code></pre>
+<p>Confirm the expected Nextflow version, a working container runtime, and readable tool files. If you installed through Git, also check the submodule status as described above. The <code>test</code> commands produce no output when successful and return a nonzero exit status if a file is missing. These checks verify installation prerequisites; they do not run a proteomics analysis or validate all container images.</p>
+<p>Next, prepare the acquisition table and target-decoy FASTA and create a run configuration from the repository's <code>config/template.config</code>. Preserve its <code>includeConfig</code> statements and final <code>methods.setup()</code> call. Input preparation, scientific settings, and analysis execution are separate from installation.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../overview/" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../inputs/" class="btn btn-neutral float-right" title="Preparing inputs">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/tree/v1.6.4" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../overview/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../inputs/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
