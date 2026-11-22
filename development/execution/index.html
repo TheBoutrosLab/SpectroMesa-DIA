@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Running and resuming - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Running and resuming";
+        var mkdocs_page_input_path = "execution.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Running and resuming</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#choose-a-work-directory">Choose a work directory</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#start-an-analysis">Start an analysis</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#on-a-workstation">On a workstation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#on-a-slurm-cluster">On a Slurm cluster</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#monitor-progress">Monitor progress</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume-an-interrupted-run">Resume an interrupted run</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#find-your-results">Find your results</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Running and resuming</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/execution.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="running-and-resuming-an-analysis">Running and resuming an analysis</h1>
+<p>Once you have <a href="../installation/">installed SpectroMesa-DIA</a>, <a href="../inputs/">prepared your inputs</a>, and <a href="../configuration/">created a run configuration</a>, you can launch the analysis with Nextflow. Start with a small representative subset of your data to check the setup before processing the full cohort.</p>
+<h2 id="choose-a-work-directory">Choose a work directory</h2>
+<p>Nextflow stores intermediate files in a work directory, separate from the results directory specified by <code>output_dir</code>. Choose a location with enough space and keep it available until you have finished the analysis and no longer need to resume it.</p>
+<p>Use the same work path each time you launch or resume this analysis. In the examples below, replace <code>/scratch/your_user/human_dia_cohort/work</code> with a suitable location on your system. All machines running the analysis must be able to access it.</p>
+<div class="admonition important">
+<p class="admonition-title">Keep a stable work path between jobs</p>
+<p>Avoid using <code>$SLURM_JOB_ID</code> in the work path if you want to resume across cluster jobs: each job has a different ID. Also check your site's scratch retention policy. A stable path is only useful for resuming while its contents remain available.</p>
+</div>
+<p>For initial planning, allow roughly 5–10 times the acquisition data size in additional free storage for intermediate files and published results. This is an estimate, not a measured guarantee; conversion, fractionation, and cohort size affect peak usage. Check storage use during your pilot run.</p>
+<h2 id="start-an-analysis">Start an analysis</h2>
+<h3 id="on-a-workstation">On a workstation</h3>
+<p>Use a dedicated directory for each analysis, such as <code>/project/analyses/human_dia_cohort</code>. Keep your prepared <code>run.config</code> there and launch Nextflow from that directory. Nextflow stores its run history and <code>.nextflow.log</code> there, while the pipeline itself can remain in a separate installation directory:</p>
+<pre><code class="language-bash">cd /project/analyses/human_dia_cohort
+export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+
+nextflow run /path/to/SpectroMesa-DIA/main.nf \
+    -c /project/analyses/human_dia_cohort/run.config \
+    -profile docker \
+    -work-dir /scratch/your_user/human_dia_cohort/work
+</code></pre>
+<p>Replace the example paths with your own. This example uses Docker; choose <code>apptainer</code> or <code>singularity</code> if that is what you installed. Review the <a href="../configuration/#computing-resources">computing resource settings</a> to make sure the analysis fits your workstation. Keep the terminal session running until Nextflow finishes.</p>
+<p><code>-c</code> selects your run configuration, <code>-profile</code> selects the execution environment, and <code>-work-dir</code> sets the intermediate-file location. The results still go to the <code>output_dir</code> in your configuration.</p>
+<h3 id="on-a-slurm-cluster">On a Slurm cluster</h3>
+<p>Run the analysis inside a compute allocation. For example, the following submission script requests resources matching the bundled <code>boutroslab_aws</code> resource profile and uses Apptainer. That profile can be used on a suitably sized node; its name does not require an AWS environment.</p>
+<p>Save this as <code>run-dia.sh</code> in your analysis directory, replace the paths, and adjust the time limit and any partition or account settings required by your cluster:</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+#SBATCH --job-name=human_dia
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=128G
+#SBATCH --time=24:00:00
+#SBATCH --output=human_dia-%j.log
+
+set -euo pipefail
+
+# Load Java, Nextflow, and Apptainer here if your cluster uses modules.
+cd /project/analyses/human_dia_cohort
+export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+
+nextflow run /path/to/SpectroMesa-DIA/main.nf \
+    -c /project/analyses/human_dia_cohort/run.config \
+    -profile boutroslab_aws,apptainer \
+    -work-dir /scratch/your_user/human_dia_cohort/work
+</code></pre>
+<p>Submit it from the same analysis directory:</p>
+<pre><code class="language-bash">cd /project/analyses/human_dia_cohort
+sbatch run-dia.sh
+</code></pre>
+<p>The 24-hour limit is an example, not an expected runtime. Choose an appropriate limit for your cohort and cluster. The profile sets CPU and memory use; <code>sbatch</code> requests the allocation. For a different allocation, use a matching <a href="../configuration/#computing-resources">custom resource profile</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Keep container images available between runs</p>
+<p>For Apptainer, use persistent image caches as described in <a href="../installation/#check-the-container-runtime">Installation</a>. Export those cache settings in your submission script as well. This avoids downloading and converting the same images repeatedly.</p>
+</div>
+<h2 id="monitor-progress">Monitor progress</h2>
+<p>Nextflow prints progress and any errors to the terminal. For the Slurm example, this output is saved to <code>human_dia-&lt;job-id&gt;.log</code> in the directory from which you submitted the script. The launch directory also contains <code>.nextflow.log</code> with more detailed messages.</p>
+<p>A stage such as searching or quantitation may take a long time without changing the top-level progress display. Check its logs before assuming that the analysis has stopped.</p>
+<p>The pipeline writes execution reports under:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;/
+  log-SpectroMesa-DIA-&lt;version&gt;-&lt;timestamp&gt;/nextflow-log/
+    trace.txt
+    timeline.html
+    report.html
+</code></pre>
+<p>The HTML reports are most useful after the run finishes. They summarize task execution, timing, and resource use. Analysis stages also save their own logs alongside their outputs.</p>
+<p>A successful run exits with status <code>0</code> and has no failed tasks. On a cluster, check the job's final status as well as the Nextflow log. The presence of some result files alone does not mean the whole analysis completed successfully, because results are written as stages finish.</p>
+<p>If the run fails, read the reported error and the failed task's <code>.command.err</code> and <code>.command.out</code> files in the work directory shown by Nextflow. Correct the cause before trying to resume.</p>
+<h2 id="resume-an-interrupted-run">Resume an interrupted run</h2>
+<p>Add <code>-resume</code> to the original command, using the same launch directory, configuration, profiles, and work path. For the workstation example:</p>
+<pre><code class="language-bash">cd /project/analyses/human_dia_cohort
+export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+
+nextflow run /path/to/SpectroMesa-DIA/main.nf \
+    -c /project/analyses/human_dia_cohort/run.config \
+    -profile docker \
+    -work-dir /scratch/your_user/human_dia_cohort/work \
+    -resume
+</code></pre>
+<p>For the Slurm example, add <code>-resume</code> to the Nextflow command in <code>run-dia.sh</code> and submit the script again after the previous job has stopped.</p>
+<div class="admonition warning">
+<p class="admonition-title">An interrupted stage starts again</p>
+<p>Resume currently works at the level of completed analysis stages. Nextflow can reuse a completed stage when its cached results are available and its inputs and settings still match. Work completed inside an unfinished stage is not automatically resumed. For example, if searching stops halfway through the cohort, expect the search stage to run again; completed earlier stages may be reused.</p>
+</div>
+<p>Return to the same analysis directory when resuming, and keep its <code>.nextflow</code> folder and the original work directory. Published results alone are not enough to resume. Changing inputs, settings, or pipeline code can cause affected stages to run again. See <a href="https://docs.seqera.io/nextflow/cache-and-resume">Nextflow's resume documentation</a> for the cache requirements.</p>
+<p>Plain <code>-resume</code> selects the most recent run. If you have launched another analysis from the same directory, list previous runs with:</p>
+<pre><code class="language-bash">nextflow log
+</code></pre>
+<p>Then use <code>-resume RUN_NAME</code>, replacing <code>RUN_NAME</code> with the name of the intended run. Do not start two attempts to resume the same run at once.</p>
+<h2 id="find-your-results">Find your results</h2>
+<p>The main analysis outputs are under:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;/main_workflow/
+</code></pre>
+<p>Look for the versioned <code>quantitate-ProteomicDIA-*</code> directory for quantitative reports and matrices, and <code>qc-ProteomicDIA-*</code> for QC summaries and plots.</p>
+<p>ProteoVault database assembly is enabled by default. When generated, the database is published one level above the dataset directory:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;.proteovault.duckdb
+</code></pre>
+<p>You can load the generated DuckDB database into R and analyze the results using <a href="https://github.com/TheBoutrosLab/package-ProteoVaultR">ProteoVaultR</a>.</p>
+<p>Keep the run configuration and logs with your results. Once the analysis is complete, review the QC summaries before interpreting the quantitative comparisons. Retain the work directory if you expect to resume or investigate individual analysis steps.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../configuration/" class="btn btn-neutral float-left" title="Configuring an analysis"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../results/" class="btn btn-neutral float-right" title="Understanding results">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../configuration/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../results/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

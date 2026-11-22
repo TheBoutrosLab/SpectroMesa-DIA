@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Understanding results - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Understanding results";
+        var mkdocs_page_input_path = "results.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Understanding results</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#quantitation-tables">Quantitation tables</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#choose-a-matrix">Choose a matrix</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inspect-the-detailed-report">Inspect the detailed report</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#review-quality-control">Review quality control</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interpret-fractionated-experiments">Interpret fractionated experiments</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#identification-results">Identification results</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#analyze-the-results-with-proteovaultr">Analyze the results with ProteoVaultR</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Understanding results</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/results.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="understanding-results">Understanding results</h1>
+<p>SpectroMesa-DIA produces quantitative tables, quality-control summaries, and identification results. By default, it also assembles a ProteoVault database that you can explore in R. Start by checking the QC summaries, then choose the quantitative table that matches your analysis question.</p>
+<p>The main output directory is:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;/main_workflow/
+</code></pre>
+<p>Within it, results are grouped into versioned directories. The <code>*</code> in the paths below stands for the software version recorded in your run.</p>
+<table>
+<thead>
+<tr>
+<th>To find…</th>
+<th>Look under…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quantitative reports and matrices</td>
+<td><code>quantitate-ProteomicDIA-*/&lt;dataset_id&gt;/output/DIA-NN/</code></td>
+</tr>
+<tr>
+<td>QC summaries and plots</td>
+<td><code>qc-ProteomicDIA-*/&lt;dataset_id&gt;/output/</code></td>
+</tr>
+<tr>
+<td>Validated identifications and protein groups</td>
+<td><code>validate-ProteomicPSM-*/</code></td>
+</tr>
+<tr>
+<td>Original search results</td>
+<td><code>search-ProteomicDIA-*/</code></td>
+</tr>
+</tbody>
+</table>
+<p>The ProteoVault database is published separately, as shown in <a href="#analyze-the-results-with-proteovaultr">Analyze the results with ProteoVaultR</a>.</p>
+<h2 id="quantitation-tables">Quantitation tables</h2>
+<h3 id="choose-a-matrix">Choose a matrix</h3>
+<p>For most protein-level comparisons, start with the <strong>protein-group matrix</strong>. Use precursor or peptide tables when your question requires more detail.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Rows represent</th>
+<th>Values represent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;dataset_id&gt;-report.pg_matrix.tsv</code></td>
+<td>Protein groups</td>
+<td>Protein-group abundance estimates.</td>
+</tr>
+<tr>
+<td><code>&lt;dataset_id&gt;-report.pr_matrix.tsv</code></td>
+<td>Precursors: a peptide sequence with a particular modification state and charge</td>
+<td>Normalized precursor quantities.</td>
+</tr>
+<tr>
+<td><code>&lt;dataset_id&gt;-report.modified_peptide_matrix.tsv</code></td>
+<td>Modified peptide sequences, with charge states combined</td>
+<td>Summed precursor quantities; generated for fractionated analyses.</td>
+</tr>
+<tr>
+<td><code>&lt;dataset_id&gt;-report.stripped_peptide_matrix.tsv</code></td>
+<td>Peptide sequences, with modifications and charge states combined</td>
+<td>Summed precursor quantities; generated for fractionated analyses.</td>
+</tr>
+</tbody>
+</table>
+<p>The identifying columns describe each row; the remaining columns hold quantities for individual samples or runs. Use <code>acquisitions.tsv</code> in the same directory to match acquisition names to the <code>sample_name</code> values in your input CSV. Fractionated matrices use sample names directly, with one quantity column per sample. Technical replicates remain separate only when you gave them distinct sample names.</p>
+<p>These are abundance measurements, not differential-abundance test results or absolute protein concentrations. Blank cells indicate missing quantities. Keep missing values distinct from measured zeros when preparing a matrix for downstream analysis.</p>
+<div class="admonition important">
+<p class="admonition-title">A protein-group row can represent several proteins</p>
+<p>Protein groups are assigned upstream by ProteinProphet, Fido, or EPIFANY and retained by DIA-NN under the default configuration. A group quantity does not establish a separate abundance for every member of that group. Preserve the group identifiers when joining results to annotations.</p>
+</div>
+<p>Unfractionated analyses retain DIA-NN's native quantitative outputs. Fractionated analyses produce combined matrices as described below. DIA-NN's <a href="https://github.com/vdemichev/DiaNN#output">output documentation</a> explains the native report and matrix conventions; the exact output depends on the DIA-NN version and settings used in your run.</p>
+<h3 id="inspect-the-detailed-report">Inspect the detailed report</h3>
+<p><code>&lt;dataset_id&gt;-report.tsv</code> provides precursor observations and their associated protein groups, quantities, scores, and other measurements. It is useful when you need to investigate an individual peptide, inspect filtering, or build a custom summary.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>How to read it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Run</code></td>
+<td>The acquisition or sample associated with the observation.</td>
+</tr>
+<tr>
+<td><code>Precursor.Id</code></td>
+<td>The precursor identifier.</td>
+</tr>
+<tr>
+<td><code>Protein.Group</code></td>
+<td>The assigned protein group.</td>
+</tr>
+<tr>
+<td><code>Modified.Sequence</code>, <code>Stripped.Sequence</code>, <code>Precursor.Charge</code></td>
+<td>The peptide's modification state, unmodified sequence, and charge.</td>
+</tr>
+<tr>
+<td><code>Precursor.Quantity</code>, <code>Precursor.Normalised</code></td>
+<td>Precursor quantities before and after normalization.</td>
+</tr>
+<tr>
+<td><code>PG.Quantity</code>, <code>PG.Normalised</code>, <code>PG.MaxLFQ</code></td>
+<td>Different protein-group abundance summaries. Use one consistent measure for a comparison.</td>
+</tr>
+<tr>
+<td><code>Q.Value</code>, <code>PG.Q.Value</code></td>
+<td>Precursor and protein-group confidence measures. These describe identification confidence, not differential-abundance significance.</td>
+</tr>
+</tbody>
+</table>
+<p>Protein-group quantities can be repeated on multiple precursor rows. Use the protein-group matrix for group-level comparisons rather than summing those repeated values. A report and its matrices may contain different sets of entries because their filtering rules differ.</p>
+<h2 id="review-quality-control">Review quality control</h2>
+<p>Open <code>&lt;dataset_id&gt;_QC_metrics.tsv</code> in the QC output directory for a combined summary. Each row records a metric, its value and unit, and the sample or cohort it describes. <code>layer</code> identifies the analysis stage; <code>sample_name</code> and <code>fraction_id</code> indicate which acquisition or sample the metric belongs to. A blank sample name can indicate a cohort-wide metric.</p>
+<p>Before comparing abundances, review:</p>
+<ul>
+<li><strong>Acquisition quality:</strong> signal distributions, scan counts, and the MS1 plots. Look for acquisitions that differ markedly from otherwise comparable samples or fractions.</li>
+<li><strong>Identification results:</strong> search and validated identification counts, mass-error summaries, and available PSM feature distributions. Large changes can help identify acquisitions or search settings that need investigation.</li>
+<li><strong>Quantitation:</strong> quantified precursor and protein-group counts, quantity distributions, and missingness across comparable samples.</li>
+</ul>
+<p>Interpret differences alongside the experimental design. Different biological samples or fractions may have different signal and identification counts without indicating a failed run.</p>
+<div class="admonition note">
+<p class="admonition-title">Unavailable QC values are not zero</p>
+<p>A metric marked <code>status=unavailable</code> could not be calculated from the available information. Do not treat it as a measured zero. Some optional measurements are omitted when their source information is absent.</p>
+</div>
+<p>Interactive MS1 plots are under:</p>
+<pre><code class="language-text">mzML/&lt;sample_name&gt;/&lt;fraction_id&gt;/&lt;sample_name&gt;_&lt;fraction_id&gt;_MS1_landscape.html
+</code></pre>
+<p>Open these HTML files in a browser; they work offline. They display a selection of strong MS1 peaks, rather than every recorded peak. Colors show intensity percentiles within each acquisition, so the same color does not indicate the same absolute intensity in different samples.</p>
+<h2 id="interpret-fractionated-experiments">Interpret fractionated experiments</h2>
+<p>For fractionated data, DIA-NN quantifies each fraction separately. The final tables combine the accepted precursor observations across fractions, so the matrices have one quantity column per sample rather than one per fraction.</p>
+<p>Repeated precursor quantities are summed across observed fractions. Modified-peptide and stripped-peptide quantities are then summed from those precursor quantities. Protein-group MaxLFQ estimates are recalculated from the combined precursor quantities using the DIA-NN R package; they are not obtained by summing the fraction-level <code>PG.MaxLFQ</code> values. No additional intensity scaling is applied between fractions.</p>
+<p>Use <code>&lt;dataset_id&gt;-report.fraction_coverage.tsv</code> to inspect the observed precursor coverage and signal for each sample/fraction pair. The accompanying <code>acquisitions.tsv</code> preserves the mapping back to the original acquisitions. Acquisition QC remains fraction-specific, while the final quantitation QC is sample-level.</p>
+<div class="admonition important">
+<p class="admonition-title">Some report fields describe one representative fraction</p>
+<p>The combined report retains scores, retention times, q-values, and other fields that cannot meaningfully be summed from a representative observation with the lowest precursor q-value. <code>Representative.Fraction.ID</code> identifies that fraction, and <code>Uncombined.Fields.Scope</code> labels these fields. The retained q-values are not newly calculated across fractions.</p>
+</div>
+<p>The fractionated protein-group matrix uses the pipeline's combined MaxLFQ estimates. Keep this distinction in mind when comparing it with native DIA-NN outputs from an unfractionated experiment. Fraction-specific DIA-NN reports remain in the Nextflow work directory; the published report is the combined sample-level result.</p>
+<h2 id="identification-results">Identification results</h2>
+<p>Validated identifications are available as filtered idXML and mzTab files under each sample's validation output directory. Use these when inspecting the spectra and PSMs supporting an identification. Unfiltered files are also retained for specific processing steps, so choose the filtered results when you need the final accepted identification set.</p>
+<p>The selected protein-grouping method also produces cohort outputs under <code>&lt;dataset_id&gt;/&lt;method&gt;/output/</code> within the validation directory. Use its protein-group results to inspect the assignments underlying your quantitation.</p>
+<h2 id="analyze-the-results-with-proteovaultr">Analyze the results with ProteoVaultR</h2>
+<p>ProteoVault database assembly is enabled by default. The generated DuckDB file is located at:</p>
+<pre><code class="language-text">&lt;output_dir&gt;/SpectroMesa-DIA-&lt;version&gt;/&lt;dataset_id&gt;.proteovault.duckdb
+</code></pre>
+<p>The database brings together the imported quantitative measurements, protein sequences, and QC summaries. <a href="https://github.com/TheBoutrosLab/package-ProteoVaultR">ProteoVaultR</a> provides read-only access from R, with functions for querying results, extracting matrices, plotting QC, and preparing downstream analyses. Follow its repository instructions to install the package, then open your database:</p>
+<pre><code class="language-r">library(ProteoVaultR)
+
+vault &lt;- open_vault(
+    path = &quot;/project/results/SpectroMesa-DIA-&lt;version&gt;/human_dia_cohort.proteovault.duckdb&quot;
+)
+
+vault_info(vault)
+list_vault_tables(vault)
+counts &lt;- summarize_quantified_counts(vault)
+protein_abundance &lt;- matrix_protein_abundance(vault)
+precursor_abundance &lt;- matrix_precursor_abundance(vault)
+
+close_vault(vault)
+</code></pre>
+<p>Replace the example path, including <code>&lt;version&gt;</code>, with your database's actual location. The extracted matrices have features in rows and samples in columns. By default, the matrix functions use imported matrix measurements when available; they do not apply an additional normalization or transformation. Missing combinations remain <code>NA</code>.</p>
+<p>Use the <a href="https://github.com/TheBoutrosLab/package-ProteoVaultR#quick-start">ProteoVaultR analysis guides</a> for sample metadata, QC plots, and differential-abundance analysis. Keep your experimental design and replicate assignments alongside the quantitative data when preparing comparisons.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../execution/" class="btn btn-neutral float-left" title="Running and resuming"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../testing/" class="btn btn-neutral float-right" title="Running tests">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../execution/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../testing/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

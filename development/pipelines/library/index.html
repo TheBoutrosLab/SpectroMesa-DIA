@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>generate-ProteomicSpectralLibrary - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "generate-ProteomicSpectralLibrary";
+        var mkdocs_page_input_path = "pipelines/library.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">generate-ProteomicSpectralLibrary</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inputs-and-outputs">Inputs and outputs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#parameter-reference">Parameter reference</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#analysis-settings">Analysis settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#software-and-containers">Software and containers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#automatically-supplied-settings">Automatically supplied settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#computing-and-temporary-files">Computing and temporary files</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#related-steps">Related steps</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#references">References</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Pipeline reference</li>
+      <li class="breadcrumb-item active">generate-ProteomicSpectralLibrary</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/pipelines/library.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="spectral-library-generation">Spectral library generation</h1>
+<p><strong>EasyPQP</strong> combines validated identification evidence and measured spectra into the library used by DIA-NN for quantitation. Protein labels come from the upstream grouping method.</p>
+<p><img alt="Spectral library generation workflow" src="../flowcharts/library.svg" /></p>
+<p><a href="../flowcharts/library.svg">Open the original flowchart at full size</a>.</p>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li>Match each sample’s validated idXML to its mzML acquisitions. For samples with multiple fractions, OpenMS IDRipper separates the identification records by source acquisition.</li>
+<li>Prepare an EasyPQP-compatible idXML using Percolator posterior error probabilities, then extract the corresponding PSM and fragment-peak information.</li>
+<li>Build the library using the accepted PSM and peptide reports from validation. These reports determine the accepted evidence and protein labels.</li>
+<li>For fractionated experiments, build a library for each <code>fraction_id</code> across samples, label its rows by fraction, and combine the fraction libraries into one TSV for <a href="../quantitation/">quantitation</a>.</li>
+</ol>
+<h2 id="inputs-and-outputs">Inputs and outputs</h2>
+<p>All inputs are supplied automatically: mzML acquisitions, validated idXML files, and the cohort PSM and peptide reports. The main output is the EasyPQP TSV used by the next step, with a SHA-512 checksum. Optional intermediate files can help investigate a failed library build.</p>
+<p>Use the same <code>fraction_id</code> for corresponding fractions across samples. mzML basenames must be unique across the experiment and must not contain extra dots; see <a href="../../inputs/">Preparing inputs</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">The score is selected for you</p>
+<p>SpectroMesa-DIA sets <code>idxml_score_type</code> to <code>Posterior Error Probability</code> for the documented validation routes, and <code>easypqp_score_type</code> already defaults to <code>PEP</code>. Keep these aligned: a q-value and a posterior error probability have different meanings.</p>
+</div>
+<h2 id="parameter-reference">Parameter reference</h2>
+<p>Use the <code>generate_ProteomicSpectralLibrary</code> block inside <code>params</code> in your run configuration. Values below describe this step as used by SpectroMesa-DIA. Settings marked automatically supplied do not need to be repeated.</p>
+<h3 id="analysis-settings">Analysis settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>easypqp_score_type</code></td>
+<td>Text</td>
+<td>PEP</td>
+<td>Meaning of the selected score; use the exact score type required by EasyPQP. Choices: <code>PEP</code>, <code>q-value</code>.</td>
+</tr>
+<tr>
+<td><code>save_intermediate_files</code></td>
+<td>Boolean</td>
+<td>false</td>
+<td>Publish additional intermediate files for inspection. Final outputs and execution logs are retained independently.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="software-and-containers">Software and containers</h3>
+<p>These defaults record the software environment. When replacing an image, check its compatibility with the workflow; a version label alone does not guarantee the required tools are installed.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>easypqp_version</code></td>
+<td>Text</td>
+<td>0.1.59</td>
+<td>EasyPQP container version</td>
+</tr>
+<tr>
+<td><code>docker_image_easypqp</code></td>
+<td>Text</td>
+<td>ghcr.io/theboutroslab/easypqp:0.1.59</td>
+<td>Container image used for easypqp. Change only when using a compatible replacement image.</td>
+</tr>
+<tr>
+<td><code>openms_version</code></td>
+<td>Text</td>
+<td>3.5.0</td>
+<td>OpenMS version used for IDRipper</td>
+</tr>
+<tr>
+<td><code>docker_image_openms</code></td>
+<td>Text</td>
+<td>ghcr.io/theboutroslab/openms-thirdparty:3.5.0</td>
+<td>Container image used for openms. Change only when using a compatible replacement image.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="automatically-supplied-settings">Automatically supplied settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dataset_id</code></td>
+<td>Text</td>
+<td>Shared dataset_id</td>
+<td>Analysis name used to organize and name outputs.</td>
+</tr>
+<tr>
+<td><code>mzml_csv</code></td>
+<td>Path</td>
+<td>Generated mzML manifest</td>
+<td>CSV with sample_name,fraction_id,mzML columns; one raw fraction per row</td>
+</tr>
+<tr>
+<td><code>idxml_csv</code></td>
+<td>Path</td>
+<td>Generated validation-result manifest</td>
+<td>CSV with sample_name,idXML columns; one merged identification file per sample</td>
+</tr>
+<tr>
+<td><code>fractionated</code></td>
+<td>Boolean</td>
+<td>Detected from the acquisition manifest</td>
+<td>Handle multiple fractions. SpectroMesa-DIA sets this from the fraction identifiers in your input CSV.</td>
+</tr>
+<tr>
+<td><code>idxml_score_type</code></td>
+<td>Text</td>
+<td>Posterior Error Probability</td>
+<td>Read this primary score from validated idXML files. SpectroMesa-DIA selects Percolator posterior error probabilities automatically.</td>
+</tr>
+<tr>
+<td><code>psm_tsv</code></td>
+<td>Path</td>
+<td>Accepted PSM report from validation</td>
+<td>Cohort-level EasyPQP psm.tsv report</td>
+</tr>
+<tr>
+<td><code>peptide_tsv</code></td>
+<td>Path</td>
+<td>Peptide and protein-group report from validation</td>
+<td>Cohort-level EasyPQP peptide.tsv report</td>
+</tr>
+<tr>
+<td><code>output_dir</code></td>
+<td>Path</td>
+<td>Assigned within the analysis output</td>
+<td>Destination for this step. Set the shared output_dir for the complete analysis.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="computing-and-temporary-files">Computing and temporary files</h3>
+<p>The <a href="../../parameters/#computing-and-temporary-files">shared parameter reference</a> describes CPU, memory, work-directory, and container-cache settings. This pipeline declares: <code>work_dir</code>, <code>apptainer_library</code>, <code>apptainer_cache</code>, <code>base_resource_update</code>, <code>resource_allocation_profile_tag</code>, <code>max_cpus</code>, <code>max_memory</code>, <code>min_cpus</code>, <code>min_memory</code>.</p>
+<p>The tables were checked against the <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/tree/4e9b3b93f2763980df342b649ef0725b7228f88e/config">individual pipeline configuration</a> and the SpectroMesa-DIA settings that select this workflow.</p>
+<h2 id="related-steps">Related steps</h2>
+<p><a href="../../overview/">Overview</a> · <a href="../../parameters/">Shared parameters</a> · <a href="../../configuration/">Configuring an analysis</a></p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://doi.org/10.1038/s41592-024-02197-7">OpenMS 3 (2024)</a>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../validation/" class="btn btn-neutral float-left" title="validate-ProteomicPSM"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../quantitation/" class="btn btn-neutral float-right" title="quantitate-ProteomicDIA">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../validation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../quantitation/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+      <script src="../../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

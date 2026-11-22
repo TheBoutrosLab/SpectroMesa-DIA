@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Testing - SpectroMesa-DIA</title>
+    <title>Running tests - SpectroMesa-DIA</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Testing";
+        var mkdocs_page_name = "Running tests";
         var mkdocs_page_input_path = "testing.md";
         var mkdocs_page_url = null;
       </script>
@@ -32,7 +32,11 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
           <a href=".." class="icon icon-home"> SpectroMesa-DIA
-        </a>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -41,30 +45,67 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../quick-start/">Quick start</a>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Inputs</a>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                <li class="toctree-l1"><a class="reference internal" href="../inputs/">Preparing inputs</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps-and-outputs/">Pipeline steps and outputs</a>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Testing</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Running tests</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#install-the-test-tools">Install the test tools</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#download-the-test-data">Download the test data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-the-required-software-and-database-settings">Add the required software and database settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configure-the-test-environment">Configure the test environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run-a-test-case">Run a test case</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#check-results-and-investigate-failures">Check results and investigate failures</a>
+    </li>
     </ul>
                 </li>
               </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
               </ul>
       </div>
     </div>
@@ -80,9 +121,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Testing</li>
+      <li class="breadcrumb-item active">Running tests</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/add8640f3586a1f426e1c3abaf4a54086925affe/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/testing.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -90,21 +131,180 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="testing">Testing</h2>
-<p>The NFTest cases run conversion for file inputs and the downstream child pipelines using ProtLoom, ProteinProphet, or Epifany for validation; the ProteinProphet and Epifany cases also run ProteoVault. From the repository root, copy <code>.env-template</code> to <code>.env</code>, set <code>TEST_DATA_DIR</code>, <code>NFT_RUN_ROOT</code>, and <code>NFT_CLUSTER</code>, then run a case (inside a Slurm job when <code>NFT_CLUSTER=boutroslab_aws</code>):</p>
-<pre><code class="language-bash">python3 test/run-nftest.py test_integration_MSFragger_ProtLoom_DIANN
-python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN
-python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN_multifraction
-python3 test/run-nftest.py test_integration_MSFragger_Epifany_DIANN
-python3 test/run-nftest.py test_integration_MSConvert_MSFragger_ProteinProphet_DIANN
+                <h1 id="running-the-tests">Running the tests</h1>
+<p>The integration tests run SpectroMesa-DIA on small reference datasets to check that the analysis completes in your computing environment. You will need the installed pipeline, the public test data, the required search software, and <strong>UCLA NFTest</strong>. Start with one case before trying the other acquisition and protein-grouping routes.</p>
+<h2 id="install-the-test-tools">Install the test tools</h2>
+<p>Complete the <a href="../installation/">pipeline installation</a>, including its submodules, Java, Nextflow, and the container runtime you will use. The test launcher also needs Python 3.8 or newer and <a href="https://github.com/uclahs-cds/tool-NFTest">UCLA NFTest (<code>uclahs-cds/tool-NFTest</code>)</a>.</p>
+<p>You can keep the Python tools in a dedicated environment:</p>
+<pre><code class="language-bash">python3 -m venv &quot;$HOME/.venvs/spectromesa-tests&quot;
+source &quot;$HOME/.venvs/spectromesa-tests/bin/activate&quot;
+python3 -m pip install \
+    &quot;git+https://github.com/uclahs-cds/tool-NFTest.git&quot; \
+    PyYAML python-dotenv
+python3 -m nftest --help
 </code></pre>
-<p>The test runner uses <code>NFT_RUN_ROOT</code> as its base. <code>boutroslab_aws</code> adds <code>$SLURM_JOB_ID</code>; <code>pines</code> uses the base directly and selects the <code>apptainer,pines</code> Nextflow profiles. Relative roots resolve against the repository, and an unset root defaults there. Results are under <code>&lt;run-root&gt;/&lt;test-case&gt;/</code>, while temporary files are under <code>&lt;run-root&gt;/.nftest-temp/&lt;12-character case ID&gt;/</code>. The test CSV and ProtLoom project YAML expand <code>$TEST_DATA_DIR</code> through <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/add8640f3586a1f426e1c3abaf4a54086925affe/test/csv_environment_expander.groovy">test/csv_environment_expander.groovy</a>.</p>
+<p>Activate this environment whenever you run a test, including inside a cluster job. The launcher uses NFTest from the same Python environment as <code>python3</code>.</p>
+<p>Use the tested Nextflow settings:</p>
+<pre><code class="language-bash">export NXF_VER=24.10.6
+export NXF_SYNTAX_PARSER=v1
+</code></pre>
+<p>The Bruker reconstruction step selects its own Nextflow runtime automatically, as explained in <a href="../installation/#set-up-nextflow">Installation</a>.</p>
+<h2 id="download-the-test-data">Download the test data</h2>
+<p>The Boutros Lab public S3 location is <code>s3://boutroslab-public/test-data/</code>. SpectroMesa fixtures are under <code>spectromesa/</code>. Install the <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI</a> if <code>aws</code> is not already available.</p>
+<p>Choose a data directory outside the pipeline installation. The following commands download the database and E. coli DIA fixtures needed for the E. coli cases:</p>
+<pre><code class="language-bash">export TEST_DATA_DIR=/project/test-data/spectromesa
+mkdir -p &quot;$TEST_DATA_DIR&quot;
+
+aws s3 sync \
+    s3://boutroslab-public/test-data/spectromesa/database/ \
+    &quot;$TEST_DATA_DIR/database/&quot; --no-sign-request
+
+aws s3 sync \
+    s3://boutroslab-public/test-data/spectromesa/ecoli_dia/ \
+    &quot;$TEST_DATA_DIR/ecoli_dia/&quot; --no-sign-request
+</code></pre>
+<p>For the diaPASEF case, also download:</p>
+<pre><code class="language-bash">aws s3 sync \
+    s3://boutroslab-public/test-data/spectromesa/hela_diapasef/ \
+    &quot;$TEST_DATA_DIR/hela_diapasef/&quot; --no-sign-request
+</code></pre>
+<p><code>--no-sign-request</code> allows these public downloads without AWS credentials. You can rerun the <a href="https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html">sync commands</a> to retrieve missing or updated files. Keep the folder names and the contents of each Bruker <code>.d</code> directory intact.</p>
+<p>Set <code>TEST_DATA_DIR</code> to the directory containing <code>database/</code>, <code>ecoli_dia/</code>, and, when downloaded, <code>hela_diapasef/</code>. Do not point it to the directory above <code>spectromesa/</code>.</p>
+<h2 id="add-the-required-software-and-database-settings">Add the required software and database settings</h2>
+<p>Obtain MSFragger and diaTracer separately, following the links in <a href="../installation/">Installation</a>. The test configurations expect these paths:</p>
+<table>
+<thead>
+<tr>
+<th>File or directory under <code>TEST_DATA_DIR</code></th>
+<th>Needed for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MSFragger-4.4.1.jar</code></td>
+<td>Every case listed below</td>
+</tr>
+<tr>
+<td><code>diaTracer-2.2.1.jar</code></td>
+<td>The diaPASEF case</td>
+</tr>
+<tr>
+<td><code>MSFragger-4.4.1/ext/bruker/</code></td>
+<td>The diaPASEF case; must contain <code>libtimsdata-2-21-0-4.so</code></td>
+</tr>
+</tbody>
+</table>
+<p>The public data download does not install these tools. Place the separately obtained files at the expected paths, or update the corresponding paths in the test configuration you plan to use.</p>
+<div class="admonition important">
+<p class="admonition-title">Use the public E. coli database</p>
+<p>The current E. coli test configurations name an older FASTA that is not in the public download. Before running an E. coli case, update its <code>test/&lt;test-case&gt;/test.config</code> to use the published database and matching markers below. The diaPASEF case already points to its published human database.</p>
+</div>
+<p>Replace the database settings inside the existing <code>params</code> block of each E. coli case you intend to run:</p>
+<pre><code class="language-groovy">decoy_database = &quot;${TEST_DATA_DIR}/database/UP000000625_83333-FragPipe/2026-11-12-decoys-contam-input.fasta.fas&quot;
+decoy_string = 'DECOY_'
+decoy_position = 'prefix'
+contam_string = 'contam_'
+contam_position = 'prefix'
+</code></pre>
+<p>The case configuration already reads <code>TEST_DATA_DIR</code> from the environment. Keep its setup statements and final <code>methods.setup()</code> call. Changing the database path alone is insufficient: its decoy marker must also match.</p>
+<h2 id="configure-the-test-environment">Configure the test environment</h2>
+<p>The test launcher reads <code>.env</code> and <code>nftest.yml</code> from the pipeline installation directory. Run the test commands from that directory, while keeping the downloaded data and generated results elsewhere. Normal analyses can continue to use the <a href="../execution/#start-an-analysis">separate analysis-directory layout</a>.</p>
+<p>If the installation does not already have a <code>.env</code> file, create one from the template:</p>
+<pre><code class="language-bash">cd /path/to/SpectroMesa-DIA
+cp .env-template .env
+</code></pre>
+<p>Edit the existing file if you have already configured it. For the bundled AWS test setup, use:</p>
+<pre><code class="language-dotenv">NXF_VER=24.10.6
+NXF_SYNTAX_PARSER=v1
+TEST_DATA_DIR=/project/test-data/spectromesa
+NFT_CLUSTER=boutroslab_aws
+NFT_RUN_ROOT=/scratch/your_user/spectromesa-tests
+</code></pre>
+<p>Use full paths accessible from the compute node. The launcher loads <code>.env</code> with precedence over exported shell values, so update this file when changing the data path or cluster selection.</p>
+<table>
+<thead>
+<tr>
+<th><code>NFT_CLUSTER</code></th>
+<th>Runtime and resource plan</th>
+<th>Location of test runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boutroslab_aws</code></td>
+<td>Docker; 32 CPUs and 128 GB memory</td>
+<td><code>NFT_RUN_ROOT/&lt;SLURM_JOB_ID&gt;/</code>; requires an active Slurm job</td>
+</tr>
+<tr>
+<td><code>pines</code></td>
+<td>Apptainer; 64 CPUs and 500 GB memory</td>
+<td><code>NFT_RUN_ROOT/</code></td>
+</tr>
+<tr>
+<td>Empty</td>
+<td>Docker with the AWS resource plan</td>
+<td><code>NFT_RUN_ROOT/</code>; no Slurm job-ID requirement</td>
+</tr>
+</tbody>
+</table>
+<p>These are the supplied test configurations, not resource reservations. For another environment, adapt the case's runtime and resource settings using the <a href="../configuration/#computing-resources">configuration guide</a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Launch inside your compute allocation</p>
+<p>On a cluster, obtain an allocation matching the selected resource plan before running the test. The launcher does not submit a job for you. <code>NFT_CLUSTER=boutroslab_aws</code> checks for <code>SLURM_JOB_ID</code> and stops if it is absent.</p>
+</div>
+<p>For Apptainer, you can also set the image-cache variables described in <a href="../installation/#check-the-container-runtime">Installation</a> in <code>.env</code> to reuse downloaded images between tests.</p>
+<h2 id="run-a-test-case">Run a test case</h2>
+<p>With the Python environment active and your compute allocation ready, start with the E. coli mzML case:</p>
+<pre><code class="language-bash">cd /path/to/SpectroMesa-DIA
+python3 test/run-nftest.py test_integration_MSFragger_ProteinProphet_DIANN
+</code></pre>
+<p>Choose another case by replacing the final argument:</p>
+<table>
+<thead>
+<tr>
+<th>Test case</th>
+<th>What it exercises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_integration_MSFragger_ProteinProphet_DIANN</code></td>
+<td>E. coli mzML input, MSFragger, ProteinProphet grouping, and DIA-NN quantitation</td>
+</tr>
+<tr>
+<td><code>test_integration_MSFragger_Epifany_DIANN</code></td>
+<td>The E. coli mzML workflow with EPIFANY grouping</td>
+</tr>
+<tr>
+<td><code>test_integration_MSFragger_ProteinProphet_DIANN_multifraction</code></td>
+<td>Two E. coli samples with three fractions each, including fraction-aware library generation and quantitation aggregation</td>
+</tr>
+<tr>
+<td><code>test_integration_MSConvert_MSFragger_ProteinProphet_DIANN</code></td>
+<td>Two E. coli Thermo RAW files, including conversion before searching</td>
+</tr>
+<tr>
+<td><code>test_integration_diaTracer_MSFragger_ProteinProphet_DIANN</code></td>
+<td>A HeLa Bruker diaPASEF acquisition, including reconstruction for search and quantitation from the original <code>.d</code> data</td>
+</tr>
+</tbody>
+</table>
+<p>All cases listed here also run QC and build the ProteoVault results database. These are integration runs using the actual analysis tools, so they take longer than a configuration check. The current cases check pipeline execution; they do not define numerical assertions for expected identification counts or intensities.</p>
+<h2 id="check-results-and-investigate-failures">Check results and investigate failures</h2>
+<p>The launcher prints the selected case, work directory, and output root before NFTest starts. Check its completion message and exit status, then inspect the published outputs using <a href="../results/">Understanding results</a>.</p>
+<p>The resolved run root is <code>NFT_RUN_ROOT</code>, with the Slurm job-ID directory added for <code>boutroslab_aws</code>:</p>
+<pre><code class="language-text">&lt;run-root&gt;/
+  &lt;test-case&gt;/                 Published analysis results
+  .nftest-temp/&lt;case-id&gt;/      Test launch files and temporary work
+</code></pre>
+<p>Temporary files are retained by the supplied test settings. If a case fails, keep them while inspecting the NFTest log, <code>.nextflow.log</code>, and the failed task's command logs. Common setup problems are a mismatched <code>TEST_DATA_DIR</code>, a missing JAR, a database path or marker that does not match the downloaded FASTA, or a container runtime unavailable on the compute node.</p>
+<p>The test launcher does not add <code>-resume</code>. Rerunning a case should not be assumed to resume the failed analysis; see the <a href="../execution/#resume-an-interrupted-run">resume guide</a> for the separate analysis workflow.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../pipeline-steps-and-outputs/" class="btn btn-neutral float-left" title="Pipeline steps and outputs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../license/" class="btn btn-neutral float-right" title="License">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../results/" class="btn btn-neutral float-left" title="Understanding results"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../parameters/" class="btn btn-neutral float-right" title="Shared parameters">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -127,14 +327,14 @@ python3 test/run-nftest.py test_integration_MSConvert_MSFragger_ProteinProphet_D
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     
-      <span><a href="../pipeline-steps-and-outputs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../results/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../license/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../parameters/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -142,6 +342,7 @@ python3 test/run-nftest.py test_integration_MSConvert_MSFragger_ProteinProphet_D
     <script>var base_url = "..";</script>
     <script src="../js/theme_extra.js"></script>
     <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
       <script src="../js/version-select.js"></script>
     <script>
         jQuery(function () {

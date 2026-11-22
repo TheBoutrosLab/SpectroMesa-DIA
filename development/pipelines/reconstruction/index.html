@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>reconstruct-ProteomicMSMS - SpectroMesa-DIA</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "reconstruct-ProteomicMSMS";
+        var mkdocs_page_input_path = "pipelines/reconstruction.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> SpectroMesa-DIA
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../inputs/">Preparing inputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuring an analysis</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../execution/">Running and resuming</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../results/">Understanding results</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../testing/">Running tests</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">reconstruct-ProteomicMSMS</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inputs-and-outputs">Inputs and outputs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#parameter-reference">Parameter reference</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#analysis-settings">Analysis settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#software-and-containers">Software and containers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#automatically-supplied-settings">Automatically supplied settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#computing-and-temporary-files">Computing and temporary files</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#related-steps">Related steps</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#references">References</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../proteovault/">ProteoVault</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">SpectroMesa-DIA</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Pipeline reference</li>
+      <li class="breadcrumb-item active">reconstruct-ProteomicMSMS</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/pipelines/reconstruction.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="diapasef-reconstruction">diaPASEF reconstruction</h1>
+<p>For <strong>Bruker diaPASEF <code>.d</code> acquisitions</strong>, diaTracer reconstructs precursor-associated pseudo-MS/MS spectra for database searching. This step replaces ordinary file conversion for the Bruker route.</p>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li>Copy each <code>.d</code> acquisition into its task directory so reconstruction can write its working files without changing the source data.</li>
+<li>Run diaTracer once per acquisition, linking precursor and fragment features by retention time, ion mobility, and signal correlation.</li>
+<li>Publish the reconstructed mzML and its SHA-512 checksum.</li>
+<li>Send the reconstructed spectra to <a href="../search/">database search</a>, while retaining the original <code>.d</code> acquisitions for <a href="../quantitation/">DIA-NN quantitation</a> and acquisition QC.</li>
+</ol>
+<h2 id="inputs-and-outputs">Inputs and outputs</h2>
+<p>The acquisition CSV supplies the sample name, fraction identifier, and <code>.d</code> directory. Set the shared <code>diatracer_executable</code> and <code>bruker_lib_dir</code> paths as described in <a href="../../installation/#additional-files-for-bruker-diapasef-data">Installation</a>. SpectroMesa-DIA passes them to this step automatically.</p>
+<p>The output is one pseudo-MS/MS mzML per acquisition, named from its sample and fraction, plus a checksum. Reconstruction uses the separately configured Nextflow runtime; <code>reconstruct_nextflow_version</code> already defaults to <code>25.10.5</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Allow space for the acquisition copies</p>
+<p>Each active reconstruction task needs room for a copy of its <code>.d</code> directory, the reconstructed mzML, and working files. <code>diatracer_write_inter</code> already defaults to <code>0</code>, which avoids retaining optional diaTracer intermediates.</p>
+</div>
+<h2 id="parameter-reference">Parameter reference</h2>
+<p>Use the <code>reconstruct_ProteomicMSMS</code> block inside <code>params</code> in your run configuration. Values below describe this step as used by SpectroMesa-DIA. Settings marked automatically supplied do not need to be repeated.</p>
+<h3 id="analysis-settings">Analysis settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diatracer_write_inter</code></td>
+<td>Number</td>
+<td>0</td>
+<td>Write diaTracer intermediate files: 0 disables them; 1 enables them. Leave 0 to reduce disk use.</td>
+</tr>
+<tr>
+<td><code>diatracer_delta_apex_im</code></td>
+<td>Number</td>
+<td>0.01</td>
+<td>Maximum ion-mobility apex difference for linking precursor and fragment features.</td>
+</tr>
+<tr>
+<td><code>diatracer_delta_apex_rt</code></td>
+<td>Number</td>
+<td>3</td>
+<td>Apex-scan matching range for linking precursor and fragment features.</td>
+</tr>
+<tr>
+<td><code>diatracer_ms1_ms2_corr</code></td>
+<td>Number</td>
+<td>0.3</td>
+<td>Minimum correlation between precursor and fragment chromatographic signals.</td>
+</tr>
+<tr>
+<td><code>diatracer_mass_defect_filter</code></td>
+<td>Number</td>
+<td>1</td>
+<td>Apply the mass-defect filter: 1 enables it; 0 disables it.</td>
+</tr>
+<tr>
+<td><code>diatracer_mass_defect_offset</code></td>
+<td>Number</td>
+<td>0.1</td>
+<td>Offset used by the mass-defect filter.</td>
+</tr>
+<tr>
+<td><code>diatracer_rf_max</code></td>
+<td>Number</td>
+<td>500</td>
+<td>Maximum number of peaks retained in each reconstructed spectrum.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="software-and-containers">Software and containers</h3>
+<p>These defaults record the software environment. When replacing an image, check its compatibility with the workflow; a version label alone does not guarantee the required tools are installed.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fragpipe_docker_repo</code></td>
+<td>Text</td>
+<td>fcyucn/fragpipe</td>
+<td>FragPipe Docker repository without a version tag</td>
+</tr>
+<tr>
+<td><code>fragpipe_version</code></td>
+<td>Text</td>
+<td>24.0</td>
+<td>FragPipe Docker image version tag</td>
+</tr>
+<tr>
+<td><code>docker_image_fragpipe</code></td>
+<td>Text</td>
+<td>fcyucn/fragpipe:24.0</td>
+<td>Container image used for fragpipe. Change only when using a compatible replacement image.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="automatically-supplied-settings">Automatically supplied settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default / supplied value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dataset_id</code></td>
+<td>Text</td>
+<td>Shared dataset_id</td>
+<td>Analysis name used to organize and name outputs.</td>
+</tr>
+<tr>
+<td><code>input_csv</code></td>
+<td>Path</td>
+<td>Generated Bruker acquisition manifest</td>
+<td>CSV with sample_name,fraction_id,path columns and one Bruker .d directory per row</td>
+</tr>
+<tr>
+<td><code>diatracer_executable</code></td>
+<td>Path</td>
+<td>Shared diatracer_executable</td>
+<td>Path to a separately obtained diaTracer JAR</td>
+</tr>
+<tr>
+<td><code>bruker_lib_dir</code></td>
+<td>Path</td>
+<td>Shared bruker_lib_dir</td>
+<td>Path to the MSFragger ext/bruker directory with libtimsdata-2-21-0-4.so</td>
+</tr>
+<tr>
+<td><code>output_dir</code></td>
+<td>Path</td>
+<td>Assigned within the analysis output</td>
+<td>Destination for this step. Set the shared output_dir for the complete analysis.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="computing-and-temporary-files">Computing and temporary files</h3>
+<p>The <a href="../../parameters/#computing-and-temporary-files">shared parameter reference</a> describes CPU, memory, work-directory, and container-cache settings. This pipeline declares: <code>work_dir</code>, <code>base_resource_update</code>, <code>max_cpus</code>, <code>max_memory</code>, <code>min_cpus</code>, <code>min_memory</code>, <code>resource_allocation_profile_tag</code>.</p>
+<p>The tables were checked against the <a href="https://github.com/TheBoutrosLab/pipeline-reconstruct-ProteomicMSMS/tree/7317624cf464a05480ee1eb6f4c58c0296eb88c1/config">individual pipeline configuration</a> and the SpectroMesa-DIA settings that select this workflow. See the <a href="https://github.com/Nesvilab/diaTracer#standalone-usage-in-command-line-interface">diaTracer option descriptions</a> for the reconstruction controls.</p>
+<h2 id="related-steps">Related steps</h2>
+<p><a href="../../overview/">Overview</a> · <a href="../../parameters/">Shared parameters</a> · <a href="../../configuration/">Configuring an analysis</a></p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://doi.org/10.1038/s41467-024-55448-8">diaTracer enables spectrum-centric analysis of diaPASEF proteomics data (2025)</a>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../conversion/" class="btn btn-neutral float-left" title="convert-MSData"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../search/" class="btn btn-neutral float-right" title="search-ProteomicDIA">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../conversion/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../search/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+      <script src="../../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

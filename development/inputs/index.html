@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Inputs - SpectroMesa-DIA</title>
+    <title>Preparing inputs - SpectroMesa-DIA</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Inputs";
+        var mkdocs_page_name = "Preparing inputs";
         var mkdocs_page_input_path = "inputs.md";
         var mkdocs_page_url = null;
       </script>
@@ -32,7 +32,11 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
           <a href=".." class="icon icon-home"> SpectroMesa-DIA
-        </a>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -41,32 +45,83 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../quick-start/">Quick start</a>
+                <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Inputs</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Preparing inputs</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#protloom-project-yaml">ProtLoom project YAML</a>
+    <li class="toctree-l2"><a class="reference internal" href="#input-csv">Input CSV</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#columns">Columns</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#unfractionated-experiments">Unfractionated experiments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fractionated-experiments">Fractionated experiments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acquisition-paths-and-filenames">Acquisition paths and filenames</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sciex-wiff-files">SCIEX WIFF files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bruker-diapasef-acquisitions">Bruker diaPASEF acquisitions</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#protein-sequence-database">Protein sequence database</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#choose-a-reference-proteome">Choose a reference proteome</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add-contaminants-and-generate-decoys">Add contaminants and generate decoys</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#match-the-database-markers-in-your-run-configuration">Match the database markers in your run configuration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#before-you-run">Before you run</a>
     </li>
     </ul>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuring an analysis</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps-and-outputs/">Pipeline steps and outputs</a>
+                <li class="toctree-l1"><a class="reference internal" href="../execution/">Running and resuming</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                <li class="toctree-l1"><a class="reference internal" href="../results/">Understanding results</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Running tests</a>
                 </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../parameters/">Shared parameters</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/conversion/">convert-MSData</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/reconstruction/">reconstruct-ProteomicMSMS</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/search/">search-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/validation/">validate-ProteomicPSM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/library/">generate-ProteomicSpectralLibrary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/quantitation/">quantitate-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/qc/">qc-ProteomicDIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipelines/proteovault/">ProteoVault</a>
+                  </li>
               </ul>
       </div>
     </div>
@@ -82,9 +137,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Inputs</li>
+      <li class="breadcrumb-item active">Preparing inputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/add8640f3586a1f426e1c3abaf4a54086925affe/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA/edit/main/docs/inputs.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -92,72 +147,180 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="inputs">Inputs</h2>
-<p>The input CSV requires four columns and accepts an optional <code>scan</code> column. Additional columns are allowed and ignored. Use either MS data files or Bruker <code>.d</code> directories throughout one run:</p>
-<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path,scan
-sample_01,1,reference,/data/sample_01.mzML,
-sample_01,2,reference,/data/sample_01_fraction_2.mzML,
-sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
-</code></pre>
+                <h1 id="preparing-inputs">Preparing inputs</h1>
+<p>SpectroMesa-DIA requires two main inputs: an <strong>input CSV</strong> listing your mass spectrometry acquisitions and their sample and fraction assignments, and a <strong>target-decoy protein sequence database</strong> in FASTA format. The CSV is valid only when its acquisition paths point to existing files or directories accessible to the pipeline. This guide walks through preparing the CSV and database. Software requirements, including MSFragger and the additional tools for Bruker data, are covered in <a href="../installation/">Installation</a>.</p>
+<h2 id="input-csv">Input CSV</h2>
+<p>Create a CSV with one row per acquisition. Save it somewhere accessible to the machine running the pipeline, and use its path for <code>input_csv</code> in your run configuration.</p>
+<h3 id="columns">Columns</h3>
 <table>
 <thead>
 <tr>
-<th>Input</th>
-<th>Requirement</th>
+<th>Column</th>
+<th>What to enter</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>sample_name</code></td>
-<td>Biological sample name; repeat it for each fraction. Each sample/fraction pair must be unique.</td>
+<td>The sample identifier used to group acquisitions for analysis. Repeat it for all fractions of the same sample, but give each biological or technical replicate a unique name.</td>
 </tr>
 <tr>
 <td><code>fraction_id</code></td>
-<td>Required nonempty fraction identifier. Search, library generation, and quantitation use it to group acquisitions by fraction; it is not appended to the biological sample name.</td>
+<td>A fraction identifier. For unfractionated data, use the same value, such as <code>1</code>, for every sample.</td>
 </tr>
 <tr>
 <td><code>annotation_id</code></td>
-<td>Required CSV column; use the same value for every fraction of a sample. When ProtLoom is enabled, it must match an <code>annotations[].annotation_id</code> in its project YAML.</td>
+<td>Usually the species name, such as <code>human</code> or <code>mouse</code>. This field is not currently used, but please include it.</td>
 </tr>
 <tr>
 <td><code>path</code></td>
-<td>Existing MS data file supported by <code>convert_MSData.convert_algorithm</code>, or Bruker <code>.d</code> directory. Relative paths resolve from the input CSV directory. Paths must be unique. File basenames may repeat across fractions of the same sample; conversion adds fraction suffixes in that case. Basenames shared across samples and Bruker <code>.d</code> basenames must remain unique. File basenames cannot contain another dot; Bruker sample and fraction IDs may contain only letters, numbers, underscores, and hyphens.</td>
+<td>The path to the acquisition file, or to the complete Bruker <code>.d</code> directory.</td>
 </tr>
 <tr>
 <td><code>scan</code></td>
-<td>Optional column, required for each SCIEX <code>.wiff</code> row. Give the companion <code>.wiff.scan</code> file path; leave blank for other inputs. Relative paths resolve from the input CSV directory.</td>
-</tr>
-<tr>
-<td><code>decoy_database</code></td>
-<td>Existing target-decoy FASTA used by search and validation.</td>
-</tr>
-<tr>
-<td><code>msfragger_executable</code></td>
-<td>Separately obtained MSFragger JAR.</td>
-</tr>
-<tr>
-<td><code>diatracer_executable</code></td>
-<td>diaTracer JAR, required for <code>.d</code> input.</td>
-</tr>
-<tr>
-<td><code>bruker_lib_dir</code></td>
-<td>MSFragger <code>ext/bruker</code> directory containing <code>libtimsdata-2-21-0-4.so</code>, required for <code>.d</code> input.</td>
-</tr>
-<tr>
-<td><code>validate_ProteomicPSM.protloom_project_yaml</code></td>
-<td>Required only for the ProtLoom route. The metapipeline supplies its <code>samples</code> section from the CSV.</td>
+<td>Required for SCIEX <code>.wiff</code> acquisitions: the path to the companion <code>.wiff.scan</code> file. Leave it empty for other formats, or omit the column if there are no WIFF files.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="protloom-project-yaml">ProtLoom project YAML</h3>
-<p>Start from <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA/blob/add8640f3586a1f426e1c3abaf4a54086925affe/config/protloom-project.example.yaml">config/protloom-project.example.yaml</a>. Provide <code>schema_version: 1</code>, <code>annotations</code> with a unique <code>annotation_id</code> and existing GTF file for each annotation, and <code>database.output_fasta</code> and <code>database.output_entries_tsv</code> pointing to existing files. Set the database decoy and contaminant markers to match the root pipeline parameters. Include <code>fasta_sources</code> when this YAML also describes the database sources used by ProtLoom <code>buildDB</code>; validation uses the built database outputs and annotations.</p>
-<p>Do not maintain a <code>samples</code> section in this input file. The metapipeline checks each sample's CSV <code>annotation_id</code> against <code>annotations</code>, writes <code>protloom-project.generated.yaml</code> under the output <code>manifests/</code> directory, and passes that file to <code>validate-ProteomicPSM</code>. If the input YAML contains an older <code>samples</code> section, the generated section is replaced with the CSV mapping. Relative database, GTF, and FASTA source paths are resolved against the original YAML location before the generated file is written.</p>
+<p>The first four columns are required, and their values must not be empty. Additional columns are allowed but ignored.</p>
+<div class="admonition warning">
+<p class="admonition-title">Give technical replicates unique sample names</p>
+<p><strong>Files with the same <code>sample_name</code> are treated as one sample.</strong> Their search results are combined, false discovery rate (FDR) control is performed at the sample level, and the final quantitation matrix contains one column per sample. For technical replicates, use unique names such as <code>sample_01_rep1</code> and <code>sample_01_rep2</code> so that they remain separate samples in the analysis and output. For a fractionated technical replicate, use its unique name for all of its fractions.</p>
+</div>
+<h3 id="unfractionated-experiments">Unfractionated experiments</h3>
+<p>Use one row per sample, with a shared fraction identifier:</p>
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path
+sample_01,1,human,/data/sample_01.raw
+sample_02,1,human,/data/sample_02.raw
+</code></pre>
+<h3 id="fractionated-experiments">Fractionated experiments</h3>
+<p>Repeat each sample name across its fractions, and use consistent identifiers for corresponding fractions across samples:</p>
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path
+sample_01,1,human,/data/sample_01_fraction_1.mzML
+sample_01,2,human,/data/sample_01_fraction_2.mzML
+sample_02,1,human,/data/sample_02_fraction_1.mzML
+sample_02,2,human,/data/sample_02_fraction_2.mzML
+</code></pre>
+<p>Each sample/fraction pair must be unique. The pipeline detects fractionation when the table contains more than one distinct fraction identifier. It uses these assignments during analysis and combines the fraction-level quantitative results into sample-level outputs. Give biological and technical replicates different sample names; fraction identifiers should describe fractions of the same sample.</p>
+<h3 id="acquisition-paths-and-filenames">Acquisition paths and filenames</h3>
+<p>You can use absolute paths, as in the examples above, or paths relative to the directory containing the CSV. For example, if the CSV is <code>/project/inputs/acquisitions.csv</code>, a <code>path</code> value of <code>../data/sample_01.raw</code> refers to <code>/project/data/sample_01.raw</code>. All listed files and directories must exist and be accessible during the run. List each acquisition path only once.</p>
+<p>For identifiers, use letters, numbers, underscores, and hyphens, starting with a letter or number. This convention works for both file inputs and Bruker data.</p>
+<p>For acquisition files, avoid extra dots before the extension: <code>sample_01.raw</code> is valid, but <code>sample.01.raw</code> is rejected. Use distinct filenames across samples, even when the files live in different directories. File names may repeat across fractions of the same sample; the conversion stage adds fraction suffixes when needed. Bruker <code>.d</code> directory names must be unique across all acquisitions. Giving every acquisition a distinct name is the simplest approach.</p>
+<p>Use either acquisition files or Bruker <code>.d</code> directories throughout one CSV; the pipeline does not accept a mixture of these two input paths in one run. File-format support depends on the selected conversion tool.</p>
+<h3 id="sciex-wiff-files">SCIEX WIFF files</h3>
+<p>Supply both the <code>.wiff</code> file and its companion <code>.wiff.scan</code> file:</p>
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path,scan
+sample_01,1,human,/data/sample_01.wiff,/data/sample_01.wiff.scan
+sample_02,1,human,/data/sample_02.wiff,/data/sample_02.wiff.scan
+</code></pre>
+<p>The companion must have the same filename as the acquisition with <code>.scan</code> appended. Its path can also be relative to the CSV directory.</p>
+<h3 id="bruker-diapasef-acquisitions">Bruker diaPASEF acquisitions</h3>
+<p>Point to the complete <code>.d</code> directory, keeping its contents together:</p>
+<pre><code class="language-csv">sample_name,fraction_id,annotation_id,path
+sample_01,1,human,/data/sample_01.d
+sample_02,1,human,/data/sample_02.d
+</code></pre>
+<p>The pipeline reconstructs spectra for identification and library generation, while DIA-NN uses the original <code>.d</code> acquisitions for quantitation. Keep those directories available throughout the analysis.</p>
+<h2 id="protein-sequence-database">Protein sequence database</h2>
+<h3 id="choose-a-reference-proteome">Choose a reference proteome</h3>
+<p>For a typical experiment, start with the <strong>gene-centric UniProt reference proteome</strong> for the species you are studying. Use the canonical protein FASTA. For human and mouse, expect <strong>about 20,000 proteins</strong> before adding contaminants and decoys. UniProt distributes additional isoform sequences separately in files ending in <code>_additional.fasta.gz</code>. See the <a href="https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/README">UniProt reference proteome file descriptions</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Species</th>
+<th>Reference proteome</th>
+<th>Canonical protein FASTA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human</td>
+<td><code>UP000005640</code></td>
+<td><a href="https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz">UP000005640_9606.fasta.gz</a></td>
+</tr>
+<tr>
+<td>Mouse</td>
+<td><code>UP000000589</code></td>
+<td><a href="https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000000589/UP000000589_10090.fasta.gz">UP000000589_10090.fasta.gz</a></td>
+</tr>
+</tbody>
+</table>
+<p>For example, download and decompress the human reference proteome:</p>
+<pre><code class="language-bash">curl -fL -o UP000005640_9606.fasta.gz \
+    https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz
+gunzip UP000005640_9606.fasta.gz
+</code></pre>
+<p>Keep a record of the UniProt release and download date so you can identify the exact database used in your analysis. Choose or extend the target sequence set to match your experiment if it includes multiple species or proteins absent from the reference proteome.</p>
+<h3 id="add-contaminants-and-generate-decoys">Add contaminants and generate decoys</h3>
+<p>The pipeline requires a <strong>combined target-decoy FASTA</strong>, containing both the proteins you want to identify and decoy sequences used to estimate false discoveries. We also recommend adding common contaminant sequences so that peptides from laboratory contaminants can be assigned to those proteins.</p>
+<p><a href="https://github.com/TheBoutrosLab/package-MSPtools">MSPtools</a> can prepare this database in one step.</p>
+<div class="admonition tip">
+<p class="admonition-title">No separate cRAP download needed</p>
+<p>MSPtools bundles the cRAP contaminant sequences. Use <code>--include-crap</code> to add them and generate their decoys along with the reference-protein decoys.</p>
+</div>
+<p>After installing MSPtools, run:</p>
+<pre><code class="language-bash">msptools FASTA CreateDecoyDatabase \
+    --input-path UP000005640_9606.fasta \
+    --output-path UP000005640_9606-decoy_contam.fasta \
+    --include-crap \
+    --decoy-prefix DECOY_ \
+    --contam-prefix CONTAM_
+</code></pre>
+<p>Start from a target-only FASTA. The resulting <code>UP000005640_9606-decoy_contam.fasta</code> contains the reference proteins, contaminants, and decoys for both. By default, MSPtools reverses protein sequences while preserving an initial methionine. The command shows its default prefixes, <code>DECOY_</code> and <code>CONTAM_</code>, explicitly. The pipeline defaults to <code>CONTAMINANT_</code> for contaminants, so update that setting as shown below.</p>
+<h3 id="match-the-database-markers-in-your-run-configuration">Match the database markers in your run configuration</h3>
+<p>Set <code>decoy_database</code> to the generated FASTA and check all four marker settings. For the command above, keep the default <code>decoy_string</code>, <code>decoy_position</code>, and <code>contam_position</code>, and change <code>contam_string</code> to <code>CONTAM_</code>. The matching configuration is:</p>
+<pre><code class="language-groovy">params {
+    decoy_database = '/path/to/UP000005640_9606-decoy_contam.fasta'
+    decoy_string = 'DECOY_'
+    decoy_position = 'prefix'
+    contam_string = 'CONTAM_'
+    contam_position = 'prefix'
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>decoy_string</code></td>
+<td>The text marking decoy accessions, such as <code>DECOY_</code>.</td>
+</tr>
+<tr>
+<td><code>decoy_position</code></td>
+<td>Where the decoy marker occurs. The current MSFragger workflow requires <code>prefix</code>.</td>
+</tr>
+<tr>
+<td><code>contam_string</code></td>
+<td>The text marking contaminant accessions. The pipeline defaults to <code>CONTAMINANT_</code>; use <code>CONTAM_</code> for the example above.</td>
+</tr>
+<tr>
+<td><code>contam_position</code></td>
+<td>Where the contaminant marker occurs: <code>prefix</code> or <code>suffix</code>. Use <code>prefix</code> for the MSPtools command above.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Match the markers in your FASTA</p>
+<p><strong>These settings must match the markers in your FASTA accessions.</strong> A prefix appears at the beginning of the accession; a suffix appears at the end. With the example above, a contaminant accession begins with <code>CONTAM_</code>, and its decoy begins with <code>DECOY_CONTAM_</code>. Changing a pipeline setting does not rewrite the FASTA headers.</p>
+</div>
+<p>Edit the matching settings in your copy of the pipeline's template, keeping its existing <code>includeConfig</code> statements and final <code>methods.setup()</code> call.</p>
+<h2 id="before-you-run">Before you run</h2>
+<ul>
+<li>Check that every acquisition and any required WIFF companion file is accessible from the execution environment.</li>
+<li>Check that each sample/fraction pair and acquisition path appears only once, and that annotations agree across fractions of a sample.</li>
+<li>Point <code>input_csv</code> to the completed CSV and <code>decoy_database</code> to the combined target-decoy FASTA.</li>
+<li>Confirm that the decoy and contaminant marker strings and positions match the database you generated.</li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../quick-start/" class="btn btn-neutral float-left" title="Quick start"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../parameters/" class="btn btn-neutral float-right" title="Parameters">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../installation/" class="btn btn-neutral float-left" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configuration/" class="btn btn-neutral float-right" title="Configuring an analysis">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -180,14 +343,14 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/TheBoutrosLab/SpectroMesa-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/metapipeline-DIA" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     
-      <span><a href="../quick-start/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../installation/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../parameters/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../configuration/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -195,6 +358,7 @@ sample_02,1,reference,/data/sample_02.wiff,/data/sample_02.wiff.scan
     <script>var base_url = "..";</script>
     <script src="../js/theme_extra.js"></script>
     <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
       <script src="../js/version-select.js"></script>
     <script>
         jQuery(function () {
