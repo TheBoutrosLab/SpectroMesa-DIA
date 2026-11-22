@@ -17,6 +17,7 @@ PIPELINE_DIAGRAMS = {
 
 
 def _source(config, relative_path):
+    """Locate an original pipeline flowchart and report missing submodules."""
     root = Path(config.config_file_path).resolve().parent
     source = root / "external" / relative_path
     if not source.is_file():
@@ -28,10 +29,12 @@ def _source(config, relative_path):
 
 
 def _root(config):
+    """Return the repository directory containing the MkDocs configuration."""
     return Path(config.config_file_path).resolve().parent
 
 
 def _external_file(config, destination, source):
+    """Expose a repository file at its destination in the generated site."""
     # File.generated requires MkDocs 1.6; the publishing action uses 1.5.3.
     file = File(destination, config.docs_dir, config.site_dir, config.use_directory_urls)
     file.abs_src_path = str(source)
@@ -39,6 +42,7 @@ def _external_file(config, destination, source):
 
 
 def on_config(config):
+    """Keep a single Home entry when the publishing action extends navigation."""
     # The publishing action prepends its own Home entry to our navigation.
     # Keep one Home in the same position in both local and publishing builds.
     config.nav = [{"Home": "index.md"}] + [
@@ -49,6 +53,7 @@ def on_config(config):
 
 
 def on_page_read_source(page, config):
+    """Render Home from README with documentation links and its source URL."""
     if page.file.src_uri != "index.md":
         return None
     readme = (_root(config) / "README.md").read_text(encoding="utf-8")
@@ -64,6 +69,7 @@ def on_page_read_source(page, config):
 
 
 def on_files(files, config):
+    """Include README, the license, and original submodule flowcharts in the site."""
     # Use README even when the publishing action has generated docs/index.md.
     existing = files.get_file_from_path("index.md")
     if existing is not None:
@@ -81,6 +87,7 @@ def on_files(files, config):
 
 
 def on_serve(server, config, builder):
+    """Rebuild the preview when README, the license, or a source diagram changes."""
     server.watch(str(_root(config) / "README.md"), builder)
     server.watch(str(_root(config) / "LICENSE"), builder)
     for relative_path in PIPELINE_DIAGRAMS.values():
