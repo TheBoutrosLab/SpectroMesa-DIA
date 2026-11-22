@@ -304,3 +304,7 @@ work/
 *.temp
 *.xlk
 *.~vsd*
+
+# Documentation branding
+!docs/logo_large.png
+!docs/logo_small.png

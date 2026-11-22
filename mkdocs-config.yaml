@@ -1,0 +1,45 @@
+site_name: SpectroMesa-DIA
+site_description: Documentation for the SpectroMesa-DIA proteomics pipeline.
+repo_url: https://github.com/TheBoutrosLab/metapipeline-DIA
+edit_uri_template: edit/main/docs/{path}
+
+docs_dir: docs
+site_dir: site
+
+# Keep local plans and build materials out of the documentation site.
+exclude_docs: |
+  /_build/
+
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+  - Overview: overview.md
+  - Installation: installation.md
+  - Preparing inputs: inputs.md
+  - Configuring an analysis: configuration.md
+  - Running and resuming: execution.md
+  - Understanding results: results.md
+  - Running tests: testing.md
+  - Pipeline reference:
+      - Shared parameters: parameters.md
+      - convert-MSData: pipelines/conversion.md
+      - reconstruct-ProteomicMSMS: pipelines/reconstruction.md
+      - search-ProteomicDIA: pipelines/search.md
+      - validate-ProteomicPSM: pipelines/validation.md
+      - generate-ProteomicSpectralLibrary: pipelines/library.md
+      - quantitate-ProteomicDIA: pipelines/quantitation.md
+      - qc-ProteomicDIA: pipelines/qc.md
+      - ProteoVault: pipelines/proteovault.md
+
+# Use README for Home and original flowcharts from the pipeline submodules.
+hooks:
+  - mkdocs_hooks.py
+
+plugins:
+  - search
+
+markdown_extensions:
+  - tables
+  - admonition

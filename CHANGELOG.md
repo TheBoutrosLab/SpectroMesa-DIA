@@ -4,6 +4,14 @@ All notable changes to SpectroMesa-DIA are documented here. The format follows [
 
 ## [Unreleased]
 
+### Added
+
+- Add the SpectroMesa-DIA documentation site with installation, input preparation, configuration, execution, results, testing, and individual pipeline references (2026-11-21).
+
+### Changed
+
+- Use the minimal README as the documentation home page and build pipeline figures directly from recursively checked-out submodules.
+
 ## [1.6.3] - 2026-11-20
 
 ### Added

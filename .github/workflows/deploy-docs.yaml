@@ -16,4 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # The original pipeline flowcharts are read from the checked-out submodules.
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.BL_SBP_REPO_READ_TOKEN_YP }}
+          persist-credentials: false
+
       - uses: theboutroslab/tool-generate-docs@v1
+        with:
+          readme: README.md
+          mkdocs_config: mkdocs-config.yaml
