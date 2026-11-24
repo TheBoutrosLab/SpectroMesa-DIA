@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # The original pipeline flowcharts are read from the checked-out submodules.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
           token: ${{ secrets.BL_SBP_REPO_READ_TOKEN_YP }}
